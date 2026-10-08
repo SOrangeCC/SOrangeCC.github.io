@@ -1,0 +1,48 @@
+---
+import type { TagCount } from '../lib/blog';
+import { tagKey } from '../lib/blog';
+
+interface Props {
+  tags: TagCount[];
+  total: number;
+  /** 'all' 或某个标签的 tagKey，用于标记当前分类。 */
+  active: string;
+}
+
+const { tags, total, active } = Astro.props;
+---
+
+<nav class="filter-bar" aria-label="文章分类">
+  <a href="/blog/" aria-current={active === 'all' ? 'true' : undefined}>全部<span class="count">{total}</span></a>
+  {
+    tags.map(({ tag, count }) => (
+      <a
+        href={`/tags/${tagKey(tag)}/`}
+        aria-current={active === tagKey(tag) ? 'true' : undefined}
+      >
+        {tag}
+        <span class="count">{count}</span>
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .count::before {
+    content: '（';
+  }
+
+  .count::after {
+    content: '）';
+  }
+
+  .count {
+    margin-inline-start: 0.15em;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  a:hover .count {
+    color: var(--accent-ink);
+  }
+</style>

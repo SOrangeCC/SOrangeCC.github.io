@@ -1,0 +1,36 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectRow from '../../components/ProjectRow.astro';
+import { site } from '../../config/site';
+import { projects } from '../../data/projects';
+
+const pageTitle = '项目';
+---
+
+<Layout
+  title={`${pageTitle} · ${site.title}`}
+  description="TODO：项目页的 meta description，一两句话说明这里列出的是什么类型的项目。"
+>
+  <header class="page-header">
+    <h1 class="page-title">{pageTitle}</h1>
+    <p class="lede">
+      TODO：用一两句话交代这些项目的共同点，例如你主要做什么方向、如何挑选放进列表。
+      数据在 <code>src/data/projects.ts</code> 中维护。
+    </p>
+  </header>
+
+  {
+    projects.length > 0 ? (
+      <>
+        <h2 class="visually-hidden">项目列表</h2>
+        <ol class="entry-list entry-list--projects">
+          {projects.map((project) => (
+            <ProjectRow project={project} />
+          ))}
+        </ol>
+      </>
+    ) : (
+      <p class="empty">项目列表为空，请在 src/data/projects.ts 中添加。</p>
+    )
+  }
+</Layout>

@@ -1,0 +1,25 @@
+---
+title: '示例文章：MDX 能力检查'
+description: '这篇示例用来确认 .mdx 文件能够参与构建：正文里包含 JavaScript 表达式与数组渲染。'
+pubDate: 2026-10-05
+tags: ['示例']
+---
+
+这个项目同时支持 `.md` 和 `.mdx`。Markdown 够用时就用 Markdown；需要在正文里插入逻辑或组件时，把文件扩展名换成 `.mdx`。
+
+下面这段是 MDX 独有的能力：在 Markdown 中直接写 JavaScript。
+
+export const stack = ['Astro', 'TypeScript', '原生 CSS'];
+
+文章里用到的技术栈由一个数组渲染出来：
+
+<ul>
+  {stack.map((name) => (
+    <li>{name}</li>
+  ))}
+</ul>
+
+表达式也会求值：`2 ** 10` 等于 {2 ** 10}。
+
+需要注意两点：MDX 里的 HTML 属性要写成 `className`，例如
+<span className="meta">这行用了 className</span>；另外纯 Markdown 文章如果不需要这些能力，不必使用 MDX。

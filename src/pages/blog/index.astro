@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostRow from '../../components/PostRow.astro';
+import TagFilter from '../../components/TagFilter.astro';
+import { site } from '../../config/site';
+import { getPosts, getTags, groupByYear } from '../../lib/blog';
+
+const pageTitle = '博客';
+const posts = await getPosts();
+const tags = await getTags();
+const groups = groupByYear(posts);
+---
+
+<Layout
+  title={`${pageTitle} · ${site.title}`}
+  description="TODO：博客页的 meta description，说明你在这里写什么主题的文章。"
+>
+  <header class="page-header">
+    <h1 class="page-title">{pageTitle}</h1>
+    <p class="lede">
+      TODO：一句话说明这个博客的主题范围。文章是 <code>src/content/blog/</code> 下的
+      Markdown 或 MDX 文件，frontmatter 里的 <code>tags</code> 会自动成为下方的分类。
+    </p>
+  </header>
+
+  <TagFilter tags={tags} total={posts.length} active="all" />
+
+  {
+    groups.length > 0 ? (
+      groups.map(({ year, posts: yearPosts }) => (
+        <section class="section section--archive">
+          <h2 class="section-title">{year}</h2>
+          <ol class="entry-list entry-list--posts">
+            {yearPosts.map((post) => (
+              <PostRow post={post} />
+            ))}
+          </ol>
+        </section>
+      ))
+    ) : (
+      <p class="empty">
+        还没有文章。在 <code>src/content/blog/</code> 下新建 <code>.md</code> 文件即可发布。
+      </p>
+    )
+  }
+</Layout>

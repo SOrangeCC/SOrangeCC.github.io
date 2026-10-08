@@ -1,0 +1,22 @@
+---
+import type { Post } from '../lib/blog';
+import { formatDate } from '../lib/format';
+import TagList from './TagList.astro';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+---
+
+<li>
+  <p class="when">{formatDate(post.data.pubDate)}</p>
+  <div>
+    <h3>
+      <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+    </h3>
+    <p class="summary">{post.data.description}</p>
+    <TagList tags={post.data.tags} />
+  </div>
+</li>

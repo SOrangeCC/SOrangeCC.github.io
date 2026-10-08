@@ -1,0 +1,21 @@
+---
+import { tagKey } from '../lib/blog';
+
+interface Props {
+  tags: string[];
+}
+
+const { tags } = Astro.props;
+---
+
+{
+  tags.length > 0 && (
+    <ul class="tag-list">
+      {tags.map((tag) => (
+        <li>
+          <a href={`/tags/${tagKey(tag)}/`}>{tag}</a>
+        </li>
+      ))}
+    </ul>
+  )
+}

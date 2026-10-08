@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { site } from '../config/site';
+
+interface Props {
+  /** 当前页面标题；首页传站点名本身。 */
+  title: string;
+  description?: string;
+  ogType?: 'website' | 'article';
+  /** 仅用于 <body> 上的排版微调钩子。 */
+  bodyClass?: string;
+  /** 搜索页、404 等不应被索引的页面设为 true。 */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = site.description,
+  ogType = 'website',
+  bodyClass,
+  noindex = false,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.url.origin).href;
+// 404 这类页面不该被索引，也就不该声明自己的规范地址。
+const indexed = !noindex;
+---
+
+<!doctype html>
+<html lang={site.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {indexed && <link rel="canonical" href={canonicalURL} />}
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {indexed && <meta property="og:url" content={canonicalURL} />}
+    <meta name="twitter:card" content="summary" />
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fcfbf8" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141311" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+    <div class="page">
+      <SiteHeader />
+      <main id="main">
+        <slot />
+      </main>
+      <SiteFooter />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+---
+import type { Project } from '../data/projects';
+import { statusLabels } from '../data/projects';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<li>
+  <p class="when">{project.year}</p>
+  <div>
+    <h3>{project.name}</h3>
+    <p class="summary">{project.summary}</p>
+    {
+      project.tags.length > 0 && (
+        <ul class="tag-list">
+          {project.tags.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+  <div class="where">
+    <p>{statusLabels[project.status]}</p>
+    {
+      project.links.length > 0 && (
+        <p>
+          {project.links.map((link) => (
+            <a href={link.href}>{link.label}</a>
+          ))}
+        </p>
+      )
+    }
+  </div>
+</li>
+
+<style>
+  /* 细分类列的排版沿用 global.css 里的 .where；这里只负责列内的堆叠。 */
+  .where {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .where p {
+    margin: 0;
+  }
+
+  .where a + a::before {
+    content: '/';
+    margin-inline: 0.5em;
+    color: var(--muted);
+  }
+</style>

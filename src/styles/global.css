@@ -1,0 +1,877 @@
+/* ==========================================================================
+   Design tokens
+   Editorial system: two type families (serif for reading, mono for meta),
+   a paper/ink palette, hairline rules instead of cards, no shadows.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* Type */
+  --font-text: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+    "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia,
+    "Times New Roman", serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  --font-meta: ui-monospace, "SF Mono", SFMono-Regular, "Cascadia Mono", Consolas,
+    "Liberation Mono", Menlo, monospace;
+
+  --step--2: 0.8125rem;
+  --step--1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-0: clamp(1.0625rem, 1.02rem + 0.2vw, 1.1875rem);
+  --step-1: clamp(1.3rem, 1.22rem + 0.4vw, 1.55rem);
+  --step-2: clamp(1.65rem, 1.48rem + 0.85vw, 2.15rem);
+  --step-3: clamp(2.1rem, 1.78rem + 1.6vw, 3rem);
+
+  --leading-text: 1.72;
+  /* 中文方块字满铺字框，标题行高需要比西文更宽松。 */
+  --leading-tight: 1.3;
+
+  /* Measure */
+  --measure: 42rem;
+  --page: 54rem;
+  --gutter: clamp(1.25rem, 0.5rem + 3vw, 3rem);
+  --gap-block: clamp(3rem, 2rem + 5vw, 5.5rem);
+
+  /* Colour */
+  --paper: #fcfbf8;
+  --ink: #1b1a17;
+  --muted: #6b665d;
+  --rule: #e3dfd5;
+  --rule-strong: #1b1a17;
+  --accent: #a13c2b;
+  --accent-ink: #7c2c1e;
+  --selection: #ecdfc9;
+  --code-bg: #f3f0e9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --paper: #141311;
+    --ink: #e9e5dc;
+    --muted: #9c9588;
+    --rule: #2f2c26;
+    --rule-strong: #e9e5dc;
+    --accent: #e38a6d;
+    --accent-ink: #f0a486;
+    --selection: #3b3226;
+    --code-bg: #1d1b18;
+  }
+}
+
+/* ==========================================================================
+   Reset
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--step-0);
+  line-height: var(--leading-text);
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+picture,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-ui);
+  /* 560 在 Windows 黑体上取常规字重，避免大标题被渲染成海报式粗体。 */
+  font-weight: 560;
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+ul,
+ol {
+  padding-inline-start: 1.35em;
+}
+
+li {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--selection);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+a:not([class]) {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--accent) 45%, transparent);
+}
+
+a:not([class]):hover {
+  color: var(--accent);
+  text-decoration-color: currentcolor;
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: var(--gutter);
+  z-index: 10;
+  padding: 0.5rem 0.9rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  text-decoration: none;
+  transform: translateY(-120%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* Mono meta line: dates, tags, counts. */
+.meta {
+  font-family: var(--font-meta);
+  font-size: var(--step--2);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+}
+
+.meta a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+}
+
+.meta a:hover {
+  color: var(--accent-ink);
+  border-bottom-color: var(--accent);
+}
+
+/* ==========================================================================
+   Page shell
+   ========================================================================== */
+
+.page {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  max-width: var(--page);
+  min-height: 100vh;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.page > main {
+  padding-block: var(--gap-block);
+}
+
+/* 表格、代码块等内容的固有宽度不能把网格列撑破（否则整页出现横向滚动）。 */
+.page > * {
+  min-inline-size: 0;
+}
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  padding-block: 1.5rem 1.25rem;
+  border-block-start: 3px solid var(--rule-strong);
+  border-block-end: 1px solid var(--rule);
+}
+
+.wordmark {
+  font-family: var(--font-ui);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.wordmark:hover {
+  color: var(--accent-ink);
+}
+
+.site-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem clamp(0.9rem, 0.5rem + 1.6vw, 1.75rem);
+  list-style: none;
+  padding: 0;
+}
+
+.site-nav a {
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  color: var(--muted);
+  text-decoration: none;
+  padding-block-end: 0.15rem;
+  border-block-end: 1px solid transparent;
+}
+
+.site-nav a:hover {
+  color: var(--ink);
+  border-block-end-color: var(--ink);
+}
+
+.site-nav a[aria-current='page'] {
+  color: var(--ink);
+  border-block-end-color: var(--accent);
+}
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  padding-block: 1.5rem 2.5rem;
+  border-block-start: 1px solid var(--rule);
+}
+
+.site-footer .meta {
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+
+/* ==========================================================================
+   Sections & headings
+   ========================================================================== */
+
+.section + .section {
+  margin-block-start: var(--gap-block);
+}
+
+.section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-block-end: 1.75rem;
+  font-family: var(--font-meta);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.section-title::after {
+  content: '';
+  flex: 1 1 auto;
+  border-block-start: 1px solid var(--rule);
+  transform: translateY(-0.35em);
+}
+
+.section-title a {
+  text-decoration: none;
+  color: var(--muted);
+}
+
+.section-title a:hover {
+  color: var(--accent-ink);
+}
+
+.page-title {
+  font-size: var(--step-2);
+}
+
+.lede {
+  max-width: var(--measure);
+  color: var(--muted);
+  margin-block-start: 0.75rem;
+}
+
+/* ==========================================================================
+   Home
+   ========================================================================== */
+
+.home-intro {
+  max-width: var(--measure);
+}
+
+.home-intro h1 {
+  font-size: var(--step-3);
+}
+
+.home-intro .statement {
+  margin-block-start: 1.5rem;
+  font-size: var(--step-1);
+  line-height: 1.5;
+}
+
+.home-intro p + p {
+  margin-block-start: 1.1rem;
+}
+
+.home-intro .placeholder-note {
+  margin-block-start: 1.75rem;
+  padding-inline-start: 1rem;
+  border-inline-start: 2px solid var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.contact-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin-block-start: 1.75rem;
+}
+
+/* ==========================================================================
+   Entry lists (projects, posts) — hairline rows, never cards
+   ========================================================================== */
+
+.entry-list {
+  list-style: none;
+  padding: 0;
+  border-block-end: 1px solid var(--rule);
+}
+
+.entry-list > li {
+  display: grid;
+  gap: 0.2rem 1.5rem;
+  padding-block: 1.5rem;
+  border-block-start: 1px solid var(--rule);
+}
+
+.entry-list .when {
+  font-family: var(--font-meta);
+  font-size: var(--step--2);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  padding-block-start: 0.35rem;
+}
+
+.entry-list h3 {
+  font-size: var(--step-1);
+}
+
+.entry-list h3 a {
+  text-decoration: none;
+}
+
+/* Stretched link: whole row clickable, keyboard-reachable via the title link. */
+.entry-list--posts h3 a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.entry-list > li {
+  position: relative;
+}
+
+.entry-list h3 a:hover {
+  color: var(--accent-ink);
+}
+
+.entry-list .summary {
+  max-width: var(--measure);
+  font-size: var(--step--1);
+  line-height: 1.65;
+  color: var(--muted);
+  margin-block-start: 0.3rem;
+}
+
+.entry-list .where {
+  font-family: var(--font-meta);
+  font-size: var(--step--2);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-block-start: 0.4rem;
+}
+
+.entry-list .where a {
+  color: var(--muted);
+  text-decoration: none;
+  border-block-end: 1px solid var(--rule);
+}
+
+.entry-list .where a:hover {
+  color: var(--accent-ink);
+  border-block-end-color: var(--accent);
+}
+
+@media (min-width: 44rem) {
+  .entry-list > li {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 0.25rem 2rem;
+  }
+
+  .entry-list--projects > li {
+    grid-template-columns: 4.5rem minmax(0, 1fr) 7.5rem;
+  }
+}
+
+/* ==========================================================================
+   Tags — plain text separated by slashes, not chips
+   ========================================================================== */
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.6rem;
+  list-style: none;
+  padding: 0;
+  margin-block-start: 0.6rem;
+  font-family: var(--font-meta);
+  font-size: var(--step--2);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tag-list > li + li::before {
+  content: '/';
+  margin-inline-end: 0.6rem;
+  color: var(--rule);
+}
+
+.tag-list a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tag-list a:hover {
+  color: var(--accent-ink);
+}
+
+/* Filter status on /blog/ and category pages. */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1.25rem;
+  margin-block: 1.5rem 2.5rem;
+  padding-block-end: 1rem;
+  border-block-end: 1px solid var(--rule);
+}
+
+.filter-bar a {
+  font-family: var(--font-meta);
+  font-size: var(--step--2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.filter-bar a:hover {
+  color: var(--accent-ink);
+}
+
+.filter-bar a[aria-current='true'] {
+  color: var(--ink);
+  border-block-end: 1px solid var(--accent);
+}
+
+/* ==========================================================================
+   Article
+   ========================================================================== */
+
+.article-header {
+  max-width: var(--measure);
+  margin-block-end: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+}
+
+.article-header h1 {
+  font-size: var(--step-3);
+  margin-block-start: 0.6rem;
+}
+
+.article-header .meta {
+  margin-block-start: 1.25rem;
+}
+
+.article-footer {
+  max-width: var(--measure);
+  margin-block-start: 3.5rem;
+  padding-block-start: 1.5rem;
+  border-block-start: 1px solid var(--rule);
+}
+
+.nav-link {
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: var(--accent-ink);
+}
+
+/* ==========================================================================
+   Prose — Markdown / MDX body
+   ========================================================================== */
+
+.prose {
+  max-width: var(--measure);
+  /* 长 URL 或无空格长串在 320px 下也不能顶破版面。 */
+  overflow-wrap: break-word;
+}
+
+.prose > * + * {
+  margin-block-start: 1.3em;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  margin-block-start: 2.4em;
+  margin-block-end: 0.7em;
+  scroll-margin-block-start: 2rem;
+}
+
+.prose h2 {
+  font-size: var(--step-1);
+}
+
+.prose h3 {
+  font-size: var(--step-0);
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  letter-spacing: 0;
+}
+
+.prose blockquote {
+  padding-inline-start: 1.35rem;
+  border-inline-start: 2px solid var(--accent);
+  font-style: italic;
+  color: var(--muted);
+}
+
+.prose blockquote p + p {
+  margin-block-start: 0.9em;
+}
+
+.prose :is(ul, ol) {
+  padding-inline-start: 1.5em;
+}
+
+.prose li + li {
+  margin-block-start: 0.45em;
+}
+
+.prose li::marker {
+  color: var(--muted);
+}
+
+code {
+  font-family: var(--font-meta);
+  font-size: 0.86em;
+  background: var(--code-bg);
+  padding: 0.1em 0.3em;
+  overflow-wrap: break-word;
+}
+
+.prose pre {
+  padding: 1.25rem;
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  overflow-x: auto;
+  font-size: var(--step--1);
+  line-height: 1.6;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.prose hr {
+  border: 0;
+  border-block-start: 1px solid var(--rule);
+  margin-block: 2.6em;
+}
+
+.prose figure {
+  margin-block-start: 1.8em;
+}
+
+.prose figcaption {
+  margin-block-start: 0.6rem;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+}
+
+.prose :is(th, td) {
+  text-align: start;
+  padding: 0.5rem 0.75rem;
+  border-block-end: 1px solid var(--rule);
+  /* anywhere 会参与固有宽度计算，让表格在 320px 下也能收缩。 */
+  overflow-wrap: anywhere;
+}
+
+.prose th {
+  font-weight: 600;
+  border-block-end-color: var(--ink);
+}
+
+/* ==========================================================================
+   Empty states, 404
+   ========================================================================== */
+
+.empty {
+  max-width: var(--measure);
+  padding-block: 2.5rem;
+  border-block: 1px solid var(--rule);
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.not-found h1 {
+  font-size: var(--step-3);
+}
+
+.not-found p {
+  max-width: var(--measure);
+  margin-block-start: 1.25rem;
+}
+
+.not-found .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-block-start: 2.5rem;
+}
+
+/* ==========================================================================
+   Page headers & fact list
+   ========================================================================== */
+
+.page-header {
+  max-width: var(--measure);
+  margin-block-end: clamp(2.5rem, 1.8rem + 3vw, 4.5rem);
+}
+
+.page-header .lede {
+  margin-block-start: 1.25rem;
+}
+
+.section--archive {
+  margin-block-start: 2.5rem;
+}
+
+.section--archive + .section--archive {
+  margin-block-start: var(--gap-block);
+}
+
+.fact-list {
+  max-width: var(--measure);
+  margin-block: 0 clamp(2.5rem, 1.8rem + 3vw, 4rem);
+  border-block-start: 1px solid var(--rule);
+  border-block-end: 1px solid var(--rule);
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+}
+
+.fact-list > div {
+  padding-block: 0.9rem;
+}
+
+.fact-list > div + div {
+  border-block-start: 1px solid var(--rule);
+}
+
+.fact-list dt {
+  font-family: var(--font-meta);
+  font-size: var(--step--2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.fact-list dd {
+  margin: 0;
+  margin-block-start: 0.15rem;
+}
+
+.fact-list dd a + a::before {
+  content: '/';
+  margin-inline: 0.5em;
+  color: var(--muted);
+}
+
+@media (min-width: 34rem) {
+  .fact-list > div {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: 0.1rem 1.5rem;
+    align-items: baseline;
+  }
+
+  .fact-list dd {
+    margin-block-start: 0;
+  }
+}
+
+/* ==========================================================================
+   Touch targets (手机与小平板)
+   负外边距保证放大的可点区域不会把行高撑开。
+   ========================================================================== */
+
+@media (max-width: 40rem) {
+  .site-nav a,
+  .wordmark,
+  .section-title a,
+  .filter-bar a,
+  .tag-list a,
+  .fact-list dd a,
+  .where a,
+  .meta a,
+  .nav-link,
+  .actions a {
+    display: inline-block;
+    padding-block: 0.6rem;
+    margin-block: -0.6rem;
+  }
+
+  .site-nav ul {
+    gap: 0.1rem clamp(0.9rem, 2vw, 1.5rem);
+  }
+}
+
+/* ==========================================================================
+   Narrow screens
+   ========================================================================== */
+
+@media (max-width: 30rem) {
+  /* 表格让单元格换行，而不是横向滚动 —— 手机上看更省力。 */
+  .prose :is(th, td) {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.95em;
+  }
+
+  .prose pre {
+    padding: 1rem 0.85rem;
+  }
+
+  .entry-list > li {
+    padding-block: 1.35rem;
+  }
+
+  .site-header {
+    padding-block: 1.25rem 1rem;
+  }
+}
+
+/* ==========================================================================
+   Print
+   ========================================================================== */
+
+@media print {
+  .site-header,
+  .site-footer,
+  .skip-link,
+  .filter-bar,
+  .article-footer {
+    display: none;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .page {
+    max-width: none;
+  }
+}

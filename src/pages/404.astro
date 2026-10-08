@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { nav, site } from '../config/site';
+
+const links = [{ label: '首页', href: '/' }, ...nav];
+---
+
+<Layout title={`页面不存在 · ${site.title}`} description="404：这个地址下没有页面。" noindex>
+  <section class="not-found">
+    <p class="meta">错误 404</p>
+    <h1>这个地址下没有页面。</h1>
+    <p>
+      可能是内容被移动过，或者链接末尾多了字符。下面的入口都是可用的；
+      如果是你常用的地址失效了，欢迎通过页脚的联系方式告诉我。
+    </p>
+    <nav class="actions" aria-label="站点主要页面">
+      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+    </nav>
+  </section>
+</Layout>
+
+<style>
+  .actions a {
+    font-family: var(--font-meta);
+    font-size: var(--step--1);
+    letter-spacing: 0.08em;
+    color: var(--accent-ink);
+    text-decoration: none;
+    border-block-end: 1px solid var(--rule);
+    padding-block-end: 0.15rem;
+  }
+
+  .actions a:hover {
+    border-block-end-color: var(--accent);
+  }
+</style>

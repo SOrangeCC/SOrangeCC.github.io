@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PostRow from '../components/PostRow.astro';
+import ProjectRow from '../components/ProjectRow.astro';
+import { site, social } from '../config/site';
+import { getFeaturedProjects } from '../data/projects';
+import { getPosts } from '../lib/blog';
+
+const featuredProjects = getFeaturedProjects(3);
+const recentPosts = (await getPosts()).slice(0, 3);
+---
+
+<Layout title={site.title}>
+  <section class="section home-intro">
+    <!-- TODO: 替换下面三行为你的一句话定位，例如「工程师 · 城市」。 -->
+    <p class="meta">TODO 你的角色 · TODO 所在城市</p>
+    <!-- TODO: 开场白应当是一句完整的陈述，而不是「你好，欢迎访问我的网站」。 -->
+    <h1>用一句话说清楚你现在在做什么。</h1>
+    <p class="placeholder-note">
+      以上为占位文案。首页文字来自 <code>src/config/site.ts</code>（站点描述、导航、社交链接）和
+      <code>src/pages/index.astro</code>（本页正文）。请替换为你真实的选择与经历，不要保留编造的内容。
+    </p>
+    <p class="contact-line meta">
+      {social.map((link) => <a href={link.href}>{link.label}</a>)}
+    </p>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><a href="/projects/">精选项目</a></h2>
+    {
+      featuredProjects.length > 0 ? (
+        <ol class="entry-list entry-list--projects">
+          {featuredProjects.map((project) => (
+            <ProjectRow project={project} />
+          ))}
+        </ol>
+      ) : (
+        <p class="empty">项目数据为空，请在 <code>src/data/projects.ts</code> 中填写。</p>
+      )
+    }
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><a href="/blog/">近期文章</a></h2>
+    {
+      recentPosts.length > 0 ? (
+        <ol class="entry-list entry-list--posts">
+          {recentPosts.map((post) => (
+            <PostRow post={post} />
+          ))}
+        </ol>
+      ) : (
+        <p class="empty">
+          还没有文章。在 <code>src/content/blog/</code> 中新建 Markdown 文件即可。
+        </p>
+      )
+    }
+  </section>
+</Layout>

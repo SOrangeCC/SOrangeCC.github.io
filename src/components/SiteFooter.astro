@@ -1,0 +1,30 @@
+---
+import { site, social } from '../config/site';
+
+const thisYear = new Date().getFullYear();
+const copyrightYears =
+  thisYear > site.copyrightStartYear ? `${site.copyrightStartYear}–${thisYear}` : String(thisYear);
+---
+
+<footer class="site-footer">
+  <p class="meta">© {copyrightYears} {site.author}</p>
+  <ul class="meta footer-links">
+    {
+      social.map((link) => (
+        <li>
+          <a href={link.href}>{link.label}</a>
+        </li>
+      ))
+    }
+  </ul>
+</footer>
+
+<style>
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    list-style: none;
+    padding: 0;
+  }
+</style>

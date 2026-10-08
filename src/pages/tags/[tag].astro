@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostRow from '../../components/PostRow.astro';
+import TagFilter from '../../components/TagFilter.astro';
+import { site } from '../../config/site';
+import { getPosts, getPostsByTag, getTags, tagKey } from '../../lib/blog';
+
+export async function getStaticPaths() {
+  const tags = await getTags();
+  return tags.map(({ tag }) => ({
+    params: { tag: tagKey(tag) },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props;
+const [tagPosts, allPosts, allTags] = await Promise.all([
+  getPostsByTag(tag),
+  getPosts(),
+  getTags(),
+]);
+
+const pageTitle = `「${tag}」分类`;
+---
+
+<Layout
+  title={`${pageTitle} · ${site.title}`}
+  description={`TODO：「${tag}」分类下的文章列表。这是自动生成的分类页，可以在这里补一句该主题的说明。`}
+>
+  <header class="page-header">
+    <h1 class="page-title">{tag}</h1>
+    <p class="lede">
+      TODO：这里是「{tag}」分类下的文章，共 {tagPosts.length} 篇。分类来自文章 frontmatter 的
+      <code>tags</code> 字段。
+    </p>
+  </header>
+
+  <TagFilter tags={allTags} total={allPosts.length} active={tagKey(tag)} />
+
+  <section class="section section--archive">
+    <h2 class="section-title">全部文章</h2>
+    <ol class="entry-list entry-list--posts">
+      {tagPosts.map((post) => <PostRow post={post} />)}
+    </ol>
+  </section>
+</Layout>

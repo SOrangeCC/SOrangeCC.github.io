@@ -1,0 +1,83 @@
+---
+import { render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import TagList from '../../components/TagList.astro';
+import { site } from '../../config/site';
+import { getPosts } from '../../lib/blog';
+import { formatDate } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const posts = await getPosts();
+const index = posts.findIndex((entry) => entry.id === post.id);
+const newer = index > 0 ? posts[index - 1] : undefined;
+const older = index < posts.length - 1 ? posts[index + 1] : undefined;
+
+const publishedOn = formatDate(post.data.pubDate);
+const updatedOn = post.data.updatedDate ? formatDate(post.data.updatedDate) : undefined;
+---
+
+<Layout
+  title={`${post.data.title} · ${site.title}`}
+  description={post.data.description}
+  ogType="article"
+>
+  <article>
+    <header class="article-header">
+      <p class="meta"><a href="/blog/">← 返回博客</a></p>
+      <h1>{post.data.title}</h1>
+      <p class="meta">
+        发布于 {publishedOn}
+        {updatedOn && ` · 更新于 ${updatedOn}`}
+      </p>
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <footer class="article-footer">
+      {
+        post.data.tags.length > 0 && (
+          <div class="footer-tags">
+            <span class="meta">分类</span>
+            <TagList tags={post.data.tags} />
+          </div>
+        )
+      }
+      <nav class="post-nav" aria-label="上一篇文章、下一篇文章">
+        {newer && <a class="nav-link" href={`/blog/${newer.id}/`} rel="prev">← 较新：{newer.data.title}</a>}
+        {older && <a class="nav-link" href={`/blog/${older.id}/`} rel="next">→ 较早：{older.data.title}</a>}
+      </nav>
+    </footer>
+  </article>
+</Layout>
+
+<style>
+  .footer-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 1rem;
+    margin-block-end: 2rem;
+  }
+
+  .footer-tags .tag-list {
+    margin-block-start: 0;
+  }
+
+  .post-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+</style>

@@ -1,0 +1,45 @@
+name: 部署到 GitHub Pages
+
+on:
+  # main 分支每次推送后重新构建并发布
+  push:
+    branches: [main]
+  # 也允许在 Actions 页面手动触发一次发布
+  workflow_dispatch:
+
+# checkout 需要读代码，deploy-pages 需要写 Pages 并签发 OIDC 令牌
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只保留一次发布任务，进行中的部署不被取消
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v7
+
+      # 该 action 负责安装依赖、执行 npm run build、并把 dist 上传为 Pages 产物。
+      # node-version 与本地开发环境（Node 24）保持一致，Astro 7 要求 Node >= 22.12。
+      - name: 安装依赖、构建并上传产物
+        uses: withastro/action@v6
+        with:
+          node-version: 24
+          package-manager: npm@latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 发布到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

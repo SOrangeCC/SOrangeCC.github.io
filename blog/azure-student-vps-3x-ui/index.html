@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Azure 学生优惠自建节点教程：从申请订阅到全平台可用 · SmallOrange - 个人站</title><meta name="description" content="用 Azure for Students 免费额度自建专属节点的完整教程：申请学生订阅、创建日本 VPS、安装 3x-ui 配置 VLESS+Reality，以及 Windows/macOS/iOS/Android 四端客户端导入，附 4 个真实踩坑记录"><link rel="canonical" href="https://sorangecc.github.io/blog/azure-student-vps-3x-ui/"><meta property="og:type" content="article"><meta property="og:site_name" content="SmallOrange - 个人站"><meta property="og:title" content="Azure 学生优惠自建节点教程：从申请订阅到全平台可用 · SmallOrange - 个人站"><meta property="og:description" content="用 Azure for Students 免费额度自建专属节点的完整教程：申请学生订阅、创建日本 VPS、安装 3x-ui 配置 VLESS+Reality，以及 Windows/macOS/iOS/Android 四端客户端导入，附 4 个真实踩坑记录"><meta property="og:url" content="https://sorangecc.github.io/blog/azure-student-vps-3x-ui/"><meta name="twitter:card" content="summary"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#fcfbf8"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141311"><link rel="icon" type="image/png" sizes="64x64" href="/favicon.png"><link rel="apple-touch-icon" href="/logo.png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/Layout.iVC_FCZY.css"><style>.footer-tags[data-astro-cid-jo55ryrt]{flex-wrap:wrap;align-items:baseline;gap:.35rem 1rem;margin-block-end:2rem;display:flex}.footer-tags[data-astro-cid-jo55ryrt] .tag-list[data-astro-cid-jo55ryrt]{margin-block-start:0}.post-nav[data-astro-cid-jo55ryrt]{flex-direction:column;gap:.75rem;display:flex}
+</style></head><body><a class="skip-link" href="#main">跳到主要内容</a><div class="page"><header class="site-header"><a class="wordmark" href="/"><img class="logo" src="/logo.png" alt="" width="256" height="256">SmallOrange</a><nav class="site-nav" aria-label="主导航"><ul><li><a href="/projects/">项目</a></li><li><a href="/blog/" aria-current="page">博客</a></li><li><a href="/stickers/">表情包</a></li><li><a href="/about/">关于</a></li></ul></nav></header><main id="main"><article data-astro-cid-jo55ryrt><header class="article-header" data-astro-cid-jo55ryrt><p class="meta" data-astro-cid-jo55ryrt><a href="/blog/" data-astro-cid-jo55ryrt>← 返回博客</a></p><h1 data-astro-cid-jo55ryrt>Azure 学生优惠自建节点教程：从申请订阅到全平台可用</h1><p class="meta" data-astro-cid-jo55ryrt>发布于 2026/10/25</p></header><div class="prose" data-astro-cid-jo55ryrt><blockquote>
+<p>一台自己的 VPS，一个自己的节点，全设备可用，不与他人共享带宽。</p>
+<p>本教程记录我从零开始的全过程：申请 Azure 学生订阅 → 创建日本 VPS → 安装 3x-ui 面板 → 配置 VLESS+Reality → 四个平台的客户端接入。文末附 4 个真实踩坑记录，都是亲手撞过并修好的。</p>
+</blockquote>
+<p>本教程用到的入口：</p>
+<p>🔗 Azure 学生优惠：<a href="https://azure.microsoft.com/zh-cn/free/students">https://azure.microsoft.com/zh-cn/free/students</a></p>
+<p>🔗 3x-ui 面板（GitHub）：<a href="https://github.com/MHSanaei/3x-ui">https://github.com/MHSanaei/3x-ui</a></p>
+<p>🔗 v2rayN（Windows 客户端）：<a href="https://github.com/2dust/v2rayN">https://github.com/2dust/v2rayN</a></p>
+<p>🔗 v2rayNG（Android 客户端）：<a href="https://github.com/2dust/v2rayNG">https://github.com/2dust/v2rayNG</a></p>
+<hr>
+<h2 id="一方案总览">一、方案总览</h2>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>选择</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VPS</td>
+<td>Azure 虚拟机，日本东部，B1s 规格</td>
+<td>学生订阅额度覆盖；日本离得近、延迟低</td>
+</tr>
+<tr>
+<td>管理面板</td>
+<td>3x-ui</td>
+<td>开源、中文界面、自带订阅和分享链接</td>
+</tr>
+<tr>
+<td>节点协议</td>
+<td>VLESS + TCP + Reality</td>
+<td>无需域名和证书；伪装成正常 HTTPS 流量</td>
+</tr>
+<tr>
+<td>客户端</td>
+<td>Xray 内核系（v2rayN / V2Box / Streisand / v2rayNG）</td>
+<td>兼容性最好；<strong>Clash 系内核连不上，见踩坑实录</strong></td>
+</tr>
+</tbody>
+</table>
+<p>一个重要提醒放在最前面：<strong>这个方案的客户端只能选 Xray 内核系，不要用任何 Clash 系客户端</strong>（Clash Verge、ClashX、FlClash、Stash 等）。原因是 mihomo（Clash 系内核）目前无法完成新版 Xray 的 Reality 认证，官方明确不修（mihomo issue <a href="https://github.com/MetaCubeX/mihomo/issues/2967">#2967</a>、<a href="https://github.com/MetaCubeX/mihomo/issues/2998">#2998</a>）。我在这上面耗了一整个下午，详见踩坑实录。</p>
+<hr>
+<h2 id="二申请-azure-学生优惠">二、申请 Azure 学生优惠</h2>
+<p>Azure for Students 面向高校学生提供 12 个月免费额度（具体金额与条款以官方页面实时显示为准），<strong>不需要信用卡</strong>，用学校邮箱完成学生认证即可。</p>
+<ol>
+<li>打开 🔗 <a href="https://azure.microsoft.com/zh-cn/free/students">https://azure.microsoft.com/zh-cn/free/students</a> ，点「免费开始使用」；</li>
+<li>用微软账号登录（没有就现场注册一个）；</li>
+<li>按页面引导完成学生身份验证——一般通过学校邮箱或学籍信息核验，由 SheerID 提供验证服务；</li>
+<li>验证通过后订阅即生效，登录 <a href="https://portal.azure.com">Azure 门户</a> 就能看到自己的订阅。</li>
+</ol>
+<p>认证不通过的常见处理：换浏览器或清除 Cookie 重试；确认学校邮箱拼写正确；确认学校在验证服务覆盖范围内。以 Azure 页面提示为准，这里不展开。</p>
+<hr>
+<h2 id="三创建-vps">三、创建 VPS</h2>
+<h3 id="1-创建虚拟机">1. 创建虚拟机</h3>
+<p>登录 <a href="https://portal.azure.com">portal.azure.com</a> → 搜索「虚拟机」→「创建」→「虚拟机」，按这个表填：</p>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>填什么</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>区域</td>
+<td>Japan East</td>
+<td>离国内近，延迟低</td>
+</tr>
+<tr>
+<td>镜像</td>
+<td>Ubuntu Server 24.04 LTS</td>
+<td>3x-ui 对 Ubuntu 支持最好</td>
+</tr>
+<tr>
+<td>大小</td>
+<td>B1s（1 vCPU / 1 GiB 内存）</td>
+<td>跑代理绰绰有余，额度消耗小</td>
+</tr>
+<tr>
+<td>管理员账号</td>
+<td>SSH 密钥或密码均可</td>
+<td>记住用户名（默认 <code>azureuser</code>）</td>
+</tr>
+<tr>
+<td>入站端口</td>
+<td>允许 SSH (22)</td>
+<td>其余端口后面手动加</td>
+</tr>
+</tbody>
+</table>
+<p>点「查看 + 创建」→「创建」，等一两分钟虚拟机就绪，在概述页<strong>记下公网 IP 地址</strong>。</p>
+<h3 id="2-放行端口nsg-网络安全组">2. 放行端口（NSG 网络安全组）</h3>
+<p>Azure 的虚拟机默认只开了 22 端口，别的端口一律静默丢包（表现为连接超时），必须手动放行：</p>
+<ol>
+<li>门户左侧「虚拟机」→ 选中你的虚拟机 →「网络设置」；</li>
+<li>点「添加入站端口规则」，一条规则可以写多个端口：目标端口范围填 <code>2233,443</code>（2233 给面板用，443 给节点用），协议 TCP，操作「允许」，优先级 310，名称随意（如 <code>Allow_Proxy</code>）；</li>
+<li>保存即生效，不用重启虚拟机。</li>
+</ol>
+<p>注意从这里进（虚拟机 → 网络设置），而不是直接搜「网络安全组」进去——NSG 有网卡和子网两层，从虚拟机页面进去会自动改对地方。</p>
+<hr>
+<h2 id="四安装-3x-ui-面板">四、安装 3x-ui 面板</h2>
+<h3 id="1-ssh-登录">1. SSH 登录</h3>
+<p>Windows 10/11 自带 ssh，直接在终端里执行：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">ssh</span><span style="color:#9ECBFF"> azureuser@你的公网IP</span></span></code></pre>
+<h3 id="2-一键安装脚本">2. 一键安装脚本</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">bash</span><span style="color:#9ECBFF"> &lt;(</span><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -Ls</span><span style="color:#9ECBFF"> https://raw.githubusercontent.com/MHSanaei/3x-ui/master/install.sh)</span></span></code></pre>
+<p>安装过程中会依次让你设置：<strong>用户名、密码、面板端口</strong>（建议 <code>2233</code>），并自动生成一个随机的网页访问路径。全部记下来——面板地址形如 <code>http://你的IP:2233/随机路径/</code>。</p>
+<h3 id="3-登录面板">3. 登录面板</h3>
+<p>浏览器打开面板地址，用刚设置的用户名密码登录。能看到中文界面就说明面板装好了。</p>
+<p>安全提醒：面板是纯 HTTP 明文传输，密码和节点信息不要在不可信网络下登录查看；面板地址和密码等同于服务器的钥匙，<strong>不要发给任何人、不要发到公开场合</strong>。</p>
+<hr>
+<h2 id="五配置节点vless--reality">五、配置节点（VLESS + Reality）</h2>
+<h3 id="1-添加入站">1. 添加入站</h3>
+<p>面板 →「入站列表」→「+ 添加入站」，关键项按这个表填，其余保持默认：</p>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>填什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>备注</td>
+<td>随意，如 <code>Japan-443</code></td>
+</tr>
+<tr>
+<td>协议</td>
+<td>vless</td>
+</tr>
+<tr>
+<td>端口</td>
+<td><strong>443</strong></td>
+</tr>
+<tr>
+<td>传输</td>
+<td>tcp</td>
+</tr>
+<tr>
+<td>安全</td>
+<td>reality</td>
+</tr>
+<tr>
+<td>目标(SNI)</td>
+<td><code>www.microsoft.com:443</code></td>
+</tr>
+</tbody>
+</table>
+<p>Reality 的密钥对面板会自动生成，不需要域名和证书。端口<strong>务必用 443</strong>：Reality 伪装成正常 HTTPS 流量，跑在 443 上最合理，也最不容易被针对（我在 8080 上跑了一天就被墙了端口，见踩坑实录）。</p>
+<h3 id="2-两个必改的隐藏参数重点">2. 两个必改的隐藏参数（重点）</h3>
+<p>在入站编辑页点「高级配置」→「全部」子标签，在 JSON 里搜到并修改这两项：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#9ECBFF">"minClientVer"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"1.8.2"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">"maxTimediff"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">60000</span><span style="color:#E1E4E8">,</span></span></code></pre>
+<ul>
+<li><code>minClientVer</code>：Xray 26.7.11 起默认拒绝低于 26.3.27 的客户端，很多客户端会被莫名拒之门外，显式写上就恢复兼容；</li>
+<li><code>maxTimediff</code>：26.10.x 把 <code>0</code> 处理成<strong>零时钟容忍</strong>，服务器和你的电脑时钟差几秒就会连接失败，改成 60000（允许 60 秒偏差）一劳永逸。</li>
+</ul>
+<p>改完点保存；如果首页 Xray 状态没有自动重启，手动点一下「重启 Xray」。</p>
+<h3 id="3-复制分享链接">3. 复制分享链接</h3>
+<p>入站列表 → 该入站的客户端 → 点分享/二维码图标，复制形如 <code>vless://...</code> 的链接。所有设备都用这一条链接。</p>
+<hr>
+<h2 id="六四个平台的客户端">六、四个平台的客户端</h2>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th>推荐 App</th>
+<th>获取方式</th>
+<th>费用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows</td>
+<td>v2rayN</td>
+<td>GitHub Releases 下载</td>
+<td>免费</td>
+</tr>
+<tr>
+<td>macOS</td>
+<td>V2Box</td>
+<td>App Store</td>
+<td>免费</td>
+</tr>
+<tr>
+<td>iOS</td>
+<td>Streisand 或 V2Box</td>
+<td>App Store</td>
+<td>免费</td>
+</tr>
+<tr>
+<td>Android</td>
+<td>v2rayNG</td>
+<td>GitHub Releases 下载 APK</td>
+<td>免费</td>
+</tr>
+</tbody>
+</table>
+<p>共同操作：把 <code>vless://</code> 链接传到设备上（微信文件传输助手 / AirDrop / 备忘录同步）→ 客户端里「从剪贴板导入」→ 选中节点 → 开启系统代理或 VPN 开关。</p>
+<p><strong>Windows（v2rayN）</strong>：下载解压后运行 <code>v2rayN.exe</code> → 主界面 Ctrl+V 导入 → 选中节点测延迟 → 左下角「路由」选「绕过大陆」→「系统代理」选「自动配置系统代理」。</p>
+<p><strong>macOS / iOS（V2Box / Streisand）</strong>：App Store 安装（国区搜不到就换外区 Apple ID）→ 复制链接后在 App 里从剪贴板导入 → 选中节点启动 → 路由分流里选绕过大陆的预设。</p>
+<p><strong>Android（v2rayNG）</strong>：GitHub 下载 APK 安装 → 复制链接后在 App 里从剪贴板导入 → 选中节点 → 底部开关启动 → 路由选「绕过大陆」。</p>
+<hr>
+<h2 id="七踩坑实录每条都真实修好过">七、踩坑实录（每条都真实修好过）</h2>
+<ol>
+<li><strong>非 443 端口跑 Reality，一天后被墙</strong>。症状是该端口连接全部超时、同 IP 其他端口正常。GFW 会针对「IP:端口」选择性封锁，非标准端口上反复的异常握手极易触发。解法：节点放 443。</li>
+<li><strong>Clash 系客户端全部连不上</strong>。无论什么版本、什么指纹，Reality 认证都被拒。这是 mihomo 与新版 Xray 的已知不兼容，官方 wontfix。解法：换 Xray 内核客户端。</li>
+<li><strong>节点参数全对却认证失败</strong>。Xray 26.7.11+ 默认拒绝低版本客户端。解法：入站里显式设置 <code>minClientVer</code>。</li>
+<li><strong>本地测试通过、远程连不上</strong>。新版 Xray 把 <code>maxTimediff: 0</code> 处理成零时钟容忍，服务器与本地时钟差几秒就失败。解法：改成 <code>60000</code>。</li>
+</ol>
+<hr>
+<h2 id="八日常维护">八、日常维护</h2>
+<ul>
+<li><strong>流量与状态</strong>：面板首页能看到每个客户端的流量和在线状态；Azure 门户「成本管理」里看额度消耗。</li>
+<li><strong>更新 Xray</strong>：面板「Xray 更新」入口可以升降级内核版本；升级后如果节点异常，对照第五节的两个隐藏参数检查一遍入站配置。</li>
+<li><strong>备份</strong>：面板设置里有数据库备份，定期导出一份。</li>
+<li><strong>订阅服务（可选）</strong>：面板设置 →「订阅」里启用后（默认端口 2090，记得在 NSG 放行），每个客户端会有一条订阅链接，多设备填订阅链接可以自动同步参数。</li>
+</ul>
+<hr>
+<h2 id="九常见问题">九、常见问题</h2>
+<p><strong>浏览器报 ERR_PROXY_CONNECTION_FAILED？</strong>
+客户端的内核没跑起来，多半是没有选中节点。先在客户端列表里单击选中节点（高亮），再开系统代理。</p>
+<p><strong>能上国内网站、国外打不开？</strong>
+路由没有选「绕过大陆」预设；或者同时开了两个代理软件互相打架——只保留一个。</p>
+<p><strong>客户端测延迟一直 Timeout？</strong>
+按顺序检查：Azure NSG 是否放行了 443 → 客户端参数是否和分享链接一致（尤其端口）→ 入站里 <code>minClientVer</code> 和 <code>maxTimediff</code> 是否按第五节设置。</p>
+<p><strong>学生认证一直不通过？</strong>
+确认学校邮箱可用、学校在覆盖范围内，换浏览器重试；具体以 Azure 页面提示为准。</p>
+<hr>
+<p>最后一句：节点链接和面板密码是服务器的全部钥匙，仅供自用，妥善保管，遵守所在地法律法规。</p>
+</div><footer class="article-footer" data-astro-cid-jo55ryrt><div class="footer-tags" data-astro-cid-jo55ryrt><span class="meta" data-astro-cid-jo55ryrt>分类</span><ul class="tag-list"><li><a href="/tags/azure/">Azure</a></li><li><a href="/tags/vps/">VPS</a></li><li><a href="/tags/教程/">教程</a></li><li><a href="/tags/学生优惠/">学生优惠</a></li></ul></div><nav class="post-nav" aria-label="上一篇文章、下一篇文章" data-astro-cid-jo55ryrt><a class="nav-link" href="/blog/google-ai-student-offer/" rel="next" data-astro-cid-jo55ryrt>→ 较早：Google AI 学生优惠领取教程：大学生免费使用 Gemini AI</a></nav></footer></article></main><footer class="site-footer" data-astro-cid-nns7i3if><p class="meta" data-astro-cid-nns7i3if>© 2026 SmallOrange</p><ul class="meta footer-links" data-astro-cid-nns7i3if><li data-astro-cid-nns7i3if><a href="https://github.com/SOrangeCC" data-astro-cid-nns7i3if>GitHub</a></li><li data-astro-cid-nns7i3if><a href="https://x.com/SmallOrangeCC" data-astro-cid-nns7i3if>X</a></li><li data-astro-cid-nns7i3if><a href="https://t.me/SOrangeCC" data-astro-cid-nns7i3if>Telegram</a></li><li data-astro-cid-nns7i3if><a href="https://space.bilibili.com/661491085" data-astro-cid-nns7i3if>Bilibili</a></li><li data-astro-cid-nns7i3if><a href="https://qm.qq.com/q/JzzVtIT8wS" data-astro-cid-nns7i3if>QQ</a></li><li data-astro-cid-nns7i3if><a href="mailto:sorangecc@gmail.com" data-astro-cid-nns7i3if>sorangecc@gmail.com</a></li></ul></footer></div></body></html>

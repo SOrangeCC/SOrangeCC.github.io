@@ -1,0 +1,3936 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>第4章 线性变换 · 思维导图与知识清单</title>
+<meta name="description" content="线性代数 A（五学分）第4章知识点总结：交互式思维导图、48 个知识点清单、掌握度勾选与 A4 打印。">
+<script>
+  try {
+    if (localStorage.getItem('la-ch4-theme-v1') === 'dark') {
+      document.documentElement.dataset.theme = 'dark';
+    }
+  } catch (e) {}
+</script>
+<style>
+:root {
+  --paper: #f4f0e8;
+  --paper-2: #eae4d8;
+  --card: #fffcf6;
+  --card-2: #faf6ed;
+  --ink: #1f2a33;
+  --ink-2: #45525f;
+  --muted: #7c8792;
+  --line: #ddd4c5;
+  --line-strong: #c8bdab;
+  --accent: #c96f43;
+  --accent-ink: #8e4422;
+  --dot: rgba(50, 62, 74, 0.11);
+  --shadow-sm: 0 1px 2px rgba(31, 42, 51, 0.05), 0 5px 16px rgba(31, 42, 51, 0.045);
+  --shadow-md: 0 12px 34px rgba(31, 42, 51, 0.12);
+  --sidebar-w: 380px;
+  --topbar-h: 68px;
+  --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", SimSun, serif;
+  --sans: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", "Cascadia Code", Consolas, "SFMono-Regular", monospace;
+}
+
+[data-theme="dark"] {
+  --paper: #14191f;
+  --paper-2: #1b222a;
+  --card: #1f2730;
+  --card-2: #242d37;
+  --ink: #eae4d8;
+  --ink-2: #b9c2cb;
+  --muted: #87929e;
+  --line: #303b46;
+  --line-strong: #40505e;
+  --accent: #e08a5c;
+  --accent-ink: #f0b18c;
+  --dot: rgba(220, 230, 240, 0.075);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 18px 46px rgba(0, 0, 0, 0.38);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+button, input { font: inherit; color: inherit; }
+button { border: 0; background: none; padding: 0; cursor: pointer; }
+a { color: inherit; }
+::selection { background: color-mix(in srgb, var(--accent) 28%, transparent); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+[hidden] { display: none !important; }
+
+/* ---------- shell ---------- */
+.app {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.topbar {
+  flex: 0 0 var(--topbar-h);
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 22px;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: relative;
+  z-index: 40;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.seal {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--ink);
+  color: var(--paper);
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: 9px;
+  line-height: 1.15;
+  letter-spacing: 0.1em;
+  text-align: center;
+  flex: 0 0 auto;
+}
+
+.brand-text { min-width: 0; }
+.brand-text h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.brand-text p {
+  margin: 3px 0 0;
+  font-size: 10.5px;
+  color: var(--muted);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper-2);
+  flex: 0 0 auto;
+}
+.tab {
+  padding: 7px 13px;
+  border-radius: 7px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  transition: color 0.18s, box-shadow 0.18s;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--ink); }
+.tab.active {
+  background: var(--card);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(31, 42, 51, 0.08);
+}
+
+.top-actions {
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.search {
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+.search svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.search input {
+  width: 210px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--ink);
+  padding: 0 11px 0 31px;
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s, width 0.2s;
+}
+.search input::placeholder { color: var(--muted); }
+.search input:focus {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  flex: 0 0 auto;
+}
+.icon-btn:hover {
+  background: var(--card);
+  border-color: var(--line);
+  color: var(--ink);
+}
+.icon-btn svg { width: 16px; height: 16px; }
+.icon-btn.wide {
+  width: auto;
+  padding: 0 10px;
+  gap: 6px;
+  font-size: 11.5px;
+}
+.icon-btn.wide svg { width: 14px; height: 14px; }
+
+#side-toggle { display: none; }
+
+/* ---------- workspace ---------- */
+.workspace {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  position: relative;
+}
+
+/* ---------- map ---------- */
+.map-pane {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.map-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  background-image: radial-gradient(var(--dot) 1.1px, transparent 1.1px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+}
+.map-viewport.dragging { cursor: grabbing; }
+.map-viewport::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 20%, color-mix(in srgb, var(--accent) 5%, transparent), transparent 34%),
+    radial-gradient(circle at 82% 70%, color-mix(in srgb, var(--ink) 4%, transparent), transparent 38%);
+  z-index: 0;
+}
+
+.map-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.connectors {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+}
+.connectors path {
+  fill: none;
+  stroke-linecap: round;
+}
+.connectors circle { opacity: 0.55; }
+
+.node-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.center-card {
+  position: absolute;
+  width: 300px;
+  height: 136px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 84% 10%, rgba(217, 119, 69, 0.18), transparent 42%),
+    linear-gradient(145deg, #26313c, #151b21);
+  color: #f7f1e5;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 18px 46px rgba(20, 28, 36, 0.22);
+  padding: 19px 22px;
+  text-align: left;
+  overflow: hidden;
+  z-index: 3;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.center-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 56px rgba(20, 28, 36, 0.28);
+}
+.center-card::after {
+  content: "04";
+  position: absolute;
+  right: -4px;
+  bottom: -30px;
+  font-family: var(--serif);
+  font-size: 104px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.055);
+  pointer-events: none;
+}
+.center-kicker {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.17em;
+  color: #dd9a70;
+  text-transform: uppercase;
+}
+.center-title {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  margin: 8px 0 5px;
+  line-height: 1.2;
+}
+.center-sub {
+  font-size: 11px;
+  line-height: 1.55;
+  color: rgba(247, 241, 229, 0.63);
+  max-width: 245px;
+}
+.center-line {
+  position: absolute;
+  left: 22px;
+  bottom: 16px;
+  width: 32px;
+  height: 2px;
+  background: #d97745;
+  border-radius: 2px;
+}
+
+.branch {
+  position: absolute;
+  border-radius: 13px;
+  border: 1px solid color-mix(in srgb, var(--bc) 28%, var(--line));
+  background: color-mix(in srgb, var(--bc) 7%, var(--card));
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 11px 0 13px;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition:
+    left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+  overflow: hidden;
+}
+.branch::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--bc);
+}
+.branch:hover {
+  background: color-mix(in srgb, var(--bc) 12%, var(--card));
+  border-color: color-mix(in srgb, var(--bc) 45%, var(--line));
+  box-shadow: var(--shadow-md);
+}
+.branch .b-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--bc);
+  background: color-mix(in srgb, var(--bc) 10%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--bc) 22%, transparent);
+  border-radius: 5px;
+  padding: 3px 5px;
+  flex: 0 0 auto;
+}
+.b-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.b-title {
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+.b-sub {
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.b-count {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--bc);
+  background: color-mix(in srgb, var(--bc) 11%, var(--card));
+  border-radius: 999px;
+  padding: 3px 6px;
+  min-width: 26px;
+  text-align: center;
+}
+
+.leaf {
+  position: absolute;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  padding: 6px 26px 6px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  justify-content: center;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition:
+    left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.18s,
+    background 0.18s,
+    box-shadow 0.18s,
+    transform 0.15s,
+    opacity 0.2s;
+  overflow: hidden;
+}
+.leaf::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 18px;
+  transform: translateY(-50%);
+  border-radius: 0 3px 3px 0;
+  background: var(--bc);
+}
+.leaf:hover {
+  border-color: color-mix(in srgb, var(--bc) 52%, var(--line));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+.leaf.selected {
+  border-color: var(--bc);
+  background: color-mix(in srgb, var(--bc) 5%, var(--card));
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--bc) 17%, transparent),
+    var(--shadow-sm);
+}
+.leaf.mastered { background: color-mix(in srgb, var(--bc) 6%, var(--card)); }
+.leaf.mastered .l-title { color: var(--ink-2); }
+.leaf .l-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.leaf .l-title {
+  font-size: 15.5px;
+  font-weight: 650;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.leaf .l-brief {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.l-tag {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 8px;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: var(--bc);
+  background: color-mix(in srgb, var(--bc) 9%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--bc) 18%, transparent);
+  border-radius: 4px;
+  padding: 0 4px;
+}
+.leaf .check {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 12px;
+  height: 12px;
+  color: var(--bc);
+  opacity: 0.9;
+}
+
+/* ---------- map chrome ---------- */
+.map-hint,
+.map-status {
+  position: absolute;
+  z-index: 10;
+  font-size: 10.5px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 11px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.map-hint { top: 16px; left: 18px; }
+.map-status {
+  left: 18px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.map-status .dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+.map-status b {
+  color: var(--ink-2);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.map-actions {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  gap: 6px;
+}
+.map-actions button {
+  font-size: 10.5px;
+  color: var(--ink-2);
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 6px 9px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.18s, color 0.18s;
+}
+.map-actions button:hover { background: var(--card); color: var(--ink); }
+
+.zoom-controls {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
+}
+.zoom-controls button {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink-2);
+  transition: background 0.15s, color 0.15s;
+}
+.zoom-controls button:hover { background: var(--paper-2); color: var(--ink); }
+.zoom-controls button svg { width: 13px; height: 13px; }
+.zoom-controls .sep { height: 1px; background: var(--line); margin: 1px 3px; }
+
+/* ---------- sidebar ---------- */
+.sidebar {
+  width: var(--sidebar-w);
+  flex: 0 0 var(--sidebar-w);
+  border-left: 1px solid var(--line);
+  background: var(--card);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  position: relative;
+  z-index: 20;
+}
+.side-inner {
+  padding: 25px 25px 44px;
+}
+.side-close {
+  display: none;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  z-index: 2;
+}
+.side-close:hover { color: var(--ink); background: var(--paper-2); }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+.side-title {
+  font-family: var(--serif);
+  font-size: 25px;
+  font-weight: 650;
+  line-height: 1.28;
+  letter-spacing: 0.015em;
+  margin: 8px 0 10px;
+}
+.side-lede {
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  margin: 0 0 18px;
+}
+
+.thread {
+  margin: 0 0 20px;
+  padding: 16px 15px 2px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.thread-step {
+  display: grid;
+  grid-template-columns: 25px 1fr;
+  gap: 10px;
+  position: relative;
+  padding-bottom: 15px;
+}
+.thread-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 27px;
+  bottom: 1px;
+  width: 1px;
+  background: var(--line-strong);
+}
+.thread-num {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--accent-ink);
+}
+.thread-step h4 {
+  margin: 1px 0 3px;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--ink);
+}
+.thread-step p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 22px;
+}
+.pill {
+  font-size: 10.5px;
+  color: var(--ink-2);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 9px;
+}
+
+.side-section-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 24px 0 9px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.side-section-title::after {
+  content: "";
+  height: 1px;
+  background: var(--line);
+  flex: 1;
+}
+
+.route {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.route li { border-bottom: 1px solid var(--line); }
+.route button {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 9px 1px;
+  text-align: left;
+  transition: padding-left 0.18s, color 0.18s;
+}
+.route button:hover { padding-left: 4px; }
+.route .n {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent-ink);
+  width: 25px;
+  flex: 0 0 auto;
+}
+.route .rt {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  flex: 1;
+  min-width: 0;
+}
+.route .rd {
+  font-size: 10px;
+  color: var(--muted);
+  max-width: 105px;
+  text-align: right;
+  line-height: 1.35;
+}
+
+.pitfalls {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: pit;
+}
+.pitfalls li {
+  counter-increment: pit;
+  position: relative;
+  padding: 0 0 10px 22px;
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+.pitfalls li::before {
+  content: counter(pit, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--accent-ink);
+}
+
+.progress-card {
+  margin-top: 20px;
+  padding: 14px 15px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.progress-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.progress-top span {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.progress-top b {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-ink);
+  font-variant-numeric: tabular-nums;
+}
+.progress-bar {
+  height: 5px;
+  margin-top: 9px;
+  background: var(--line);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 0.35s ease;
+}
+.progress-foot {
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.link-btn {
+  color: var(--accent-ink);
+  font-size: 10px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.source-note {
+  margin: 18px 0 0;
+  font-size: 9.5px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+/* ---------- detail ---------- */
+.detail-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 4px 6px 4px 2px;
+  transition: color 0.18s, background 0.18s;
+}
+.back-btn:hover { color: var(--ink); background: var(--paper-2); }
+.back-btn svg { width: 12px; height: 12px; }
+.detail-ref {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  text-align: right;
+  line-height: 1.4;
+}
+.detail-tagrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.03em;
+  color: var(--bc, var(--accent-ink));
+  background: color-mix(in srgb, var(--bc, var(--accent)) 9%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--bc, var(--accent)) 20%, transparent);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+.section-chip {
+  font-size: 10px;
+  color: var(--muted);
+}
+.detail h2 {
+  font-family: var(--serif);
+  font-size: 23px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  margin: 0 0 10px;
+}
+.detail-one {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  margin: 0 0 14px;
+}
+.formula {
+  margin: 0 0 15px;
+  padding: 12px 13px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--bc, var(--accent));
+  border-radius: 7px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.75;
+  color: var(--ink-2);
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+.formula sup,
+.formula sub { font-size: 0.72em; line-height: 0; }
+.detail-points {
+  margin: 0 0 16px;
+  padding: 0 0 0 16px;
+  font-size: 12px;
+  line-height: 1.78;
+  color: var(--ink-2);
+}
+.detail-points li { margin: 5px 0; padding-left: 2px; }
+.detail-points li::marker { color: var(--bc, var(--accent)); }
+.tip {
+  margin: 0 0 16px;
+  padding: 12px 13px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--accent) 7%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--accent) 17%, var(--line));
+}
+.tip span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin-bottom: 5px;
+}
+.tip p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+.detail-ref-line {
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.detail-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+}
+.master-btn {
+  flex: 1;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink-2);
+  font-size: 11.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+.master-btn:hover { border-color: var(--bc, var(--accent)); }
+.master-btn svg { width: 13px; height: 13px; }
+.master-btn.is-mastered {
+  color: var(--bc, var(--accent));
+  border-color: color-mix(in srgb, var(--bc, var(--accent)) 38%, var(--line));
+  background: color-mix(in srgb, var(--bc, var(--accent)) 9%, var(--card));
+  font-weight: 600;
+}
+.nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--ink-2);
+  background: var(--card);
+  transition: background 0.18s, color 0.18s;
+}
+.nav-btn:hover { background: var(--paper-2); color: var(--ink); }
+.nav-btn svg { width: 14px; height: 14px; }
+.nav-btn:disabled { opacity: 0.35; cursor: default; }
+
+/* ---------- list view ---------- */
+.list-pane {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  background: var(--paper);
+  padding: 34px 46px 90px;
+  scroll-behavior: smooth;
+}
+.list-doc {
+  max-width: 940px;
+  margin: 0 auto;
+}
+.list-head {
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+.list-head .eyebrow { margin-bottom: 8px; }
+.list-head h1 {
+  font-family: var(--serif);
+  font-size: 33px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  margin: 0 0 10px;
+}
+.list-head .list-lede {
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  max-width: 690px;
+  margin: 0 0 16px;
+}
+.list-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+}
+.list-actions button {
+  font-size: 10.5px;
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 6px;
+  padding: 6px 9px;
+  transition: background 0.18s, color 0.18s;
+}
+.list-actions button:hover { background: var(--paper-2); color: var(--ink); }
+.list-actions .spacer { flex: 1; }
+.list-progress {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.sec {
+  margin: 0 0 34px;
+  scroll-margin-top: 16px;
+}
+.sec-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--bc);
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+.sec-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--bc);
+  padding-top: 3px;
+  flex: 0 0 auto;
+}
+.sec-title-wrap { flex: 1; min-width: 0; }
+.sec-head h2 {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 650;
+  line-height: 1.35;
+  margin: 0;
+}
+.sec-head .sec-brief {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.sec-progress {
+  flex: 0 0 auto;
+  text-align: right;
+  min-width: 54px;
+}
+.sec-progress b {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.sec-progress .mini-bar {
+  width: 54px;
+  height: 3px;
+  background: var(--line);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.sec-progress .mini-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--bc);
+  border-radius: 99px;
+  transition: width 0.3s;
+}
+
+.leaf-row {
+  position: relative;
+  margin: 9px 0 0;
+  padding: 14px 16px 14px 18px;
+  border: 1px solid var(--line);
+  border-left: 3px solid color-mix(in srgb, var(--bc) 55%, var(--line));
+  border-radius: 10px;
+  background: var(--card);
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+}
+.leaf-row:hover {
+  border-color: color-mix(in srgb, var(--bc) 38%, var(--line));
+  box-shadow: var(--shadow-sm);
+}
+.leaf-row.is-mastered {
+  background: color-mix(in srgb, var(--bc) 3.5%, var(--card));
+}
+.leaf-row.is-mastered .row-title { color: var(--ink-2); }
+.row-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.row-title {
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.4;
+  margin: 0;
+}
+.row-brief {
+  font-size: 10.5px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.row-master {
+  margin-left: auto;
+  font-size: 9.5px;
+  color: var(--muted);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 3px 6px;
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
+  white-space: nowrap;
+}
+.row-master:hover { color: var(--bc); border-color: var(--line); background: var(--paper); }
+.row-master.is-mastered { color: var(--bc); font-weight: 600; }
+.row-one {
+  margin: 7px 0 0;
+  font-size: 12px;
+  line-height: 1.78;
+  color: var(--ink-2);
+}
+.row-more {
+  margin-top: 9px;
+}
+.row-more summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  font-size: 9.5px;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 1px dashed var(--line-strong);
+  padding-bottom: 1px;
+  transition: color 0.18s;
+}
+.row-more summary::-webkit-details-marker { display: none; }
+.row-more summary:hover { color: var(--bc); }
+.row-more summary::after {
+  content: "+";
+  font-family: var(--mono);
+  font-size: 10px;
+}
+.row-more[open] summary::after { content: "−"; }
+.row-body {
+  margin-top: 11px;
+  padding-top: 11px;
+  border-top: 1px solid var(--line);
+}
+.row-body .formula {
+  margin-bottom: 11px;
+  font-size: 11px;
+}
+.row-body .detail-points {
+  font-size: 11.5px;
+  margin-bottom: 11px;
+}
+.row-body .tip { margin-bottom: 10px; }
+.row-body .detail-ref-line { padding-top: 9px; }
+.print-check { display: none; }
+
+/* ---------- search pop ---------- */
+.search-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 350px;
+  max-height: min(440px, 62vh);
+  overflow-y: auto;
+  padding: 5px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  box-shadow: var(--shadow-md);
+  z-index: 80;
+}
+.search-item {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 9px;
+  border-radius: 7px;
+  text-align: left;
+  transition: background 0.15s;
+}
+.search-item:hover { background: var(--paper-2); }
+.si-num {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--bc);
+  width: 24px;
+  padding-top: 2px;
+  flex: 0 0 auto;
+}
+.si-main { min-width: 0; flex: 1; }
+.si-t {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.si-b {
+  display: block;
+  font-size: 9.5px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.search-empty {
+  padding: 16px 10px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translate(-50%, 12px);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 11.5px;
+  line-height: 1.5;
+  padding: 8px 13px;
+  border-radius: 7px;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 200;
+  max-width: 88vw;
+  text-align: center;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- scrim ---------- */
+.scrim {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 20, 0.34);
+  z-index: 25;
+  backdrop-filter: blur(2px);
+}
+.scrim.show { display: block; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1280px) {
+  :root { --sidebar-w: 348px; }
+  .search input { width: 178px; }
+  .brand-text p { display: none; }
+}
+
+@media (max-width: 1080px) {
+  .topbar { gap: 12px; padding: 0 16px; }
+  .brand-text h1 { font-size: 16px; }
+  .tab { padding: 7px 10px; }
+  .icon-btn.wide span { display: none; }
+  .icon-btn.wide { width: 34px; padding: 0; }
+  .search input { width: 150px; }
+}
+
+@media (max-width: 980px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(390px, 92vw);
+    transform: translateX(102%);
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: -18px 0 46px rgba(10, 15, 20, 0.18);
+    z-index: 60;
+  }
+  .sidebar.open { transform: none; }
+  .side-close { display: grid; place-items: center; }
+  #side-toggle { display: inline-flex; }
+}
+
+@media (max-width: 760px) {
+  :root { --topbar-h: auto; }
+  .app { height: 100dvh; }
+  .topbar {
+    height: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand actions"
+      "tabs search";
+    align-items: center;
+    padding: 9px 12px;
+    gap: 8px 10px;
+  }
+  .brand { grid-area: brand; flex: initial; }
+  .seal { width: 34px; height: 34px; border-radius: 9px; font-size: 8px; }
+  .brand-text h1 { font-size: 14px; }
+  .top-actions { margin-left: 0; gap: 3px; }
+  .tabs { grid-area: tabs; order: initial; justify-self: start; }
+  .top-actions { grid-area: actions; margin-left: 0; }
+  .search { grid-area: search; order: initial; flex: 1; min-width: 0; width: 100%; margin-left: 0; }
+  .search input { width: 100%; }
+  .wide-only { display: none !important; }
+  .map-hint {
+    display: block;
+    top: 10px;
+    left: 10px;
+    font-size: 9px;
+    padding: 5px 8px;
+  }
+  .map-status { left: 10px; bottom: 10px; font-size: 9.5px; }
+  .zoom-controls { right: 10px; bottom: 10px; }
+  .map-actions { top: 10px; right: 10px; }
+  .list-pane { padding: 22px 14px 70px; }
+  .list-head h1 { font-size: 26px; }
+  .list-head .list-lede { font-size: 12px; }
+  .sec-head { padding: 13px 14px; gap: 10px; }
+  .sec-head h2 { font-size: 18px; }
+  .sec-progress { display: none; }
+  .leaf-row { padding: 12px 13px 12px 14px; }
+  .row-brief { flex: 1 1 100%; margin-left: 0; }
+  .row-master {
+    margin-left: 0;
+    padding: 4px 8px;
+    border-color: var(--line);
+    background: var(--card);
+    color: var(--ink-2);
+  }
+  .search-pop {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: calc(var(--topbar-h) + 54px);
+    width: auto;
+    max-height: 56vh;
+  }
+  .side-inner { padding: 22px 20px 40px; }
+  .side-close { top: 10px; right: 10px; }
+}
+
+@media (max-width: 420px) {
+  .brand-text h1 { max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+  .tab { padding: 6px 8px; font-size: 11.5px; }
+  .icon-btn { width: 31px; height: 31px; }
+  .map-actions button { padding: 5px 7px; font-size: 9.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- print ---------- */
+.print-only { display: none; }
+
+@media print {
+  @page { size: A4; margin: 14mm 14mm 16mm; }
+
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+    color: #1b2228 !important;
+  }
+  .app { height: auto; display: block; overflow: visible; }
+  .topbar, .map-pane, .sidebar, .scrim, .toast, .search-pop,
+  .map-hint, .map-status, .zoom-controls, .map-actions,
+  .list-actions, .row-master, .side-close { display: none !important; }
+  .workspace { display: block; }
+  .list-pane {
+    display: block !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+  .list-doc { max-width: none; }
+  .print-only { display: block !important; }
+  .print-head {
+    margin: 0 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid #222;
+  }
+  .print-head .print-kicker {
+    font-family: var(--mono);
+    font-size: 8pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #555;
+  }
+  .print-head h1 {
+    font-family: var(--serif);
+    font-size: 22pt;
+    margin: 5px 0 4px;
+  }
+  .print-head p { font-size: 9pt; color: #555; margin: 0; }
+
+  .list-head { display: none; }
+  .sec { margin-bottom: 14px; }
+  .sec-head {
+    padding: 8px 10px;
+    border: 1px solid #bbb;
+    border-top: 2.5pt solid var(--bc);
+    background: #fff !important;
+    box-shadow: none;
+    break-after: avoid;
+  }
+  .sec-head h2 { font-size: 14pt; }
+  .sec-head .sec-brief { font-size: 8.5pt; color: #666; }
+  .sec-progress { display: none; }
+  .leaf-row {
+    margin-top: 6px;
+    padding: 8px 10px 9px 11px;
+    border: 1px solid #ccc;
+    border-left: 2.5pt solid var(--bc);
+    background: #fff !important;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+  .row-title { font-size: 10.5pt; }
+  .row-brief { font-size: 8pt; color: #666; }
+  .row-one { font-size: 9pt; line-height: 1.6; color: #333; }
+  .row-more { margin-top: 5px; }
+  .row-more summary { display: none; }
+  .row-more > .row-body { display: block !important; }
+  .row-body { margin-top: 5px; padding-top: 6px; border-top: 1px dashed #ccc; }
+  .row-body .formula {
+    padding: 6px 8px;
+    font-size: 8.5pt;
+    background: #f7f7f5 !important;
+    border: 1px solid #ddd;
+    border-left: 2pt solid var(--bc);
+  }
+  .row-body .detail-points { font-size: 8.8pt; line-height: 1.55; margin-bottom: 6px; }
+  .row-body .tip { padding: 6px 8px; background: #faf6f0 !important; border: 1px solid #e3d8c8; margin-bottom: 6px; }
+  .row-body .tip span { font-size: 7pt; }
+  .row-body .tip p { font-size: 8.5pt; line-height: 1.5; }
+  .row-body .detail-ref-line { font-size: 7.5pt; color: #777; padding-top: 4px; }
+  .print-check {
+    display: inline-block;
+    width: 9pt;
+    height: 9pt;
+    border: 1px solid #999;
+    border-radius: 1.5pt;
+    margin-right: 6px;
+    vertical-align: -1pt;
+  }
+  .detail-points li::marker { color: #333; }
+  .tag { color: #444 !important; background: #f2f2f2 !important; border-color: #ccc !important; }
+}
+
+/* ---------- app runtime additions ---------- */
+.center-kicker,
+.center-title,
+.center-sub { display: block; }
+
+.map-canvas.js-anim .leaf,
+.map-canvas.js-anim .branch,
+.map-canvas.js-anim .center-card { transition: none !important; }
+
+body.list-mode .sidebar { display: none !important; }
+
+.search-item.is-active { background: var(--paper-2); }
+
+.leaf-row.flash {
+  animation: row-flash 1.15s ease;
+}
+@keyframes row-flash {
+  0%, 100% { box-shadow: none; }
+  22% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--bc) 24%, transparent); border-color: var(--bc); }
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="seal" aria-hidden="true">LA<br>04</div>
+      <div class="brand-text">
+        <h1>线性代数 · 第4章</h1>
+        <p>变换 · 矩阵 · 相似 · 特征值 · 对角化 · 最小多项式</p>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="视图切换">
+      <button class="tab active" type="button" role="tab" aria-selected="true" data-view="map" id="tab-map">思维导图</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-view="list" id="tab-list">知识清单</button>
+    </div>
+
+    <div class="search">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.4"/><path d="m12.8 12.8 4 4"/></svg>
+      <input id="search-input" type="search" placeholder="搜索知识点…" autocomplete="off" aria-label="搜索知识点" aria-controls="search-pop" aria-expanded="false">
+      <div class="search-pop" id="search-pop" role="region" aria-label="搜索结果" hidden></div>
+    </div>
+
+    <div class="top-actions">
+      <button class="icon-btn wide" type="button" id="btn-export" title="导出 Markdown 笔记" aria-label="导出 Markdown 笔记">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v8.4"/><path d="m6.6 8.2 3.4 3.4 3.4-3.4"/><path d="M3.8 15.8h12.4"/></svg>
+        <span class="wide-only">Markdown</span>
+      </button>
+      <button class="icon-btn" type="button" id="btn-print" title="打印 / 另存为 PDF" aria-label="打印或另存为 PDF">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7V3.6h8V7"/><rect x="3" y="7" width="14" height="6.4" rx="1.4"/><path d="M6 11h8v5.4H6z"/></svg>
+      </button>
+      <button class="icon-btn" type="button" id="btn-theme" title="切换深色" aria-label="切换深色主题"></button>
+      <button class="icon-btn" type="button" id="side-toggle" title="打开章节导览" aria-label="打开章节导览">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3.6" width="14" height="12.8" rx="1.6"/><path d="M12.2 3.6v12.8"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="map-pane" id="map-pane" aria-label="第4章思维导图">
+      <div class="map-viewport" id="map-viewport">
+        <div class="map-canvas" id="map-canvas">
+          <svg class="connectors" id="connectors" aria-hidden="true"></svg>
+          <div class="node-layer" id="node-layer"></div>
+        </div>
+      </div>
+      <div class="map-hint">滚轮缩放 · 拖拽平移 · 点击节点头展开</div>
+      <div class="map-actions">
+        <button type="button" id="btn-expand-all">全部展开</button>
+        <button type="button" id="btn-collapse-all">收起</button>
+      </div>
+      <div class="map-status">
+        <span class="dot"></span><span><b id="stat-sections">8</b> 节</span>
+        <span class="dot"></span><span><b id="stat-leaves">48</b> 个知识点</span>
+        <span class="dot"></span><span>已掌握 <b id="stat-mastered">0</b></span>
+        <span class="dot"></span><span id="zoom-readout">100%</span>
+      </div>
+      <div class="zoom-controls" aria-label="缩放控制">
+        <button type="button" id="zoom-in" title="放大" aria-label="放大">+</button>
+        <button type="button" id="zoom-out" title="缩小" aria-label="缩小">−</button>
+        <div class="sep" aria-hidden="true"></div>
+        <button type="button" id="zoom-fit" title="适应视图" aria-label="适应视图">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.4H3.4V7M13 3.4h3.6V7M7 16.6H3.4V13M13 16.6h3.6V13"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <aside class="sidebar" id="sidebar" aria-label="章节导览与知识点详情">
+      <button class="side-close" type="button" id="side-close" aria-label="关闭导览">×</button>
+      <div class="side-inner" id="side-inner"></div>
+    </aside>
+
+    <section class="list-pane" id="list-pane" aria-label="知识清单" hidden>
+      <div class="list-doc">
+        <div class="print-only print-head">
+          <div class="print-kicker">LINEAR ALGEBRA A · CHAPTER 04</div>
+          <h1>第4章 线性变换 · 知识点清单</h1>
+          <p>从线性变换走到它的矩阵：相似、特征值与特征向量、对角化、零化与最小多项式 · 共 48 个知识点</p>
+        </div>
+
+        <div class="list-head">
+          <p class="eyebrow">CHAPTER 04 · CHECKLIST</p>
+          <h1>第4章 线性变换</h1>
+          <p class="list-lede">按教材 4.1–4.8 的顺序整理。每一条先给出一句话结论，展开后是核心公式、推导要点与易错提醒；勾选「标记掌握」可以在本机记录复习进度。</p>
+          <div class="list-actions">
+            <button type="button" id="list-expand">展开全部细节</button>
+            <button type="button" id="btn-export-list">导出 Markdown</button>
+            <button type="button" id="btn-print-list">打印 / 存为 PDF</button>
+            <span class="spacer"></span>
+            <span class="list-progress" id="list-progress">已掌握 0 / 48</span>
+          </div>
+        </div>
+
+        <div id="list-sections"></div>
+      </div>
+    </section>
+
+    <div class="scrim" id="scrim"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const CHAPTER = {
+  kicker: '线性代数 A · 五学分教材',
+  title: '第4章 线性变换',
+  subtitle: '一个几何对象，两套语言',
+  lede: '第3章说明一切 n 维空间都同构于 ℝⁿ；本章把「变换」这件事也翻译成矩阵：取定一组基，线性变换就对应一个方阵，换基就是相似。于是要找最简单的矩阵，就落到特征值与特征向量、相似对角化，最后用最小多项式给出更锋利的判别。',
+  thread: [
+    {
+      n: '01',
+      t: '建对应',
+      d: '取定基，线性变换 φ ↔ 方阵 A：φ(α) 的坐标 = A·α 的坐标。L(V) 与 Mₙ(ℝ) 是同构，还保乘法与求逆。'
+    },
+    {
+      n: '02',
+      t: '换基',
+      d: '同一变换换一组基，矩阵变成 B = P⁻¹AP，这就是相似。秩、行列式、迹、特征多项式都是相似不变量。'
+    },
+    {
+      n: '03',
+      t: '求最简',
+      d: '最简的相似代表是对角阵。可对角化 ⟺ 凑够 n 个无关特征向量 ⟺ 每个重根的重数相等 ⟺ 最小多项式无重根。'
+    }
+  ],
+  route: [
+    { num: '4.1', title: '线性变换的定义及性质', desc: '保线性运算、例子群、像与核、维数公式' },
+    { num: '4.2', title: '线性变换的矩阵', desc: '基下的矩阵、坐标像、变换运算、同构' },
+    { num: '4.3', title: '相似矩阵', desc: 'B = P⁻¹AP、等价关系、相似不变量' },
+    { num: '4.4', title: '特征值与特征向量', desc: '特征子空间、特征多项式、降阶定理' },
+    { num: '4.5', title: '相似对角化', desc: '两种重数、判别定理、对角化步骤' },
+    { num: '4.6', title: '零化多项式与最小多项式', desc: 'Hamilton-Cayley、最小多项式、无重根判别' },
+    { num: '4.7', title: '特征值的应用：PageRank', desc: '随机矩阵、稳定分布、特征向量排序' },
+    { num: '4.8', title: '附录：多项式代数', desc: '带余除法、整除、贝祖等式、互素' }
+  ],
+  pitfalls: [
+    '线性变换的乘法不交换：(φ+ψ)² = φ²+2φψ+ψ² 只在 φψ = ψφ 时成立，平方差、二项式公式都不能乱用。',
+    '相似 ⟹ 秩、行列式、迹都相等，但逆命题不成立；相似必等价，等价（同秩）却远不一定相似。',
+    '特征向量必须非零，特征值可以是 0；求特征向量是解 (λ₀E − A)x = 0 的非零解，别把零向量写进答案。',
+    '实矩阵的特征值未必是实数：90° 旋转的特征多项式是 λ² + 1，在 ℝ 上没有特征值，讨论重数时要把 A 看成复矩阵。',
+    '几何重数 ≤ 代数重数；单根必然相等，所以判别对角化只需检查重根。有 n 个不同特征值 ⟹ 可对角化，但反过来不成立（Eₙ 特征值全同仍可对角化）。',
+    'P 的列顺序必须与对角阵 Λ 的对角元顺序一一对应；顺序写乱，P⁻¹AP 就不是你算出的那个 Λ。',
+    'Hamilton-Cayley 只保证特征多项式零化 A，它未必是「最小」的；判对角化必须用最小多项式，用特征多项式会误判。',
+    'PageRank 的稳定分布满足 π = Pᵀπ，是 Pᵀ 属于特征值 1 的特征向量；写成 Pπ = π 就把行列方向弄反了。'
+  ]
+};
+
+const BRANCHES = [
+  {
+    id: 'b41',
+    num: '4.1',
+    title: '线性变换的定义及性质',
+    short: '定义、例子、像与核',
+    color: '#3F6F9F',
+    side: 'left',
+    brief: '保持线性运算的映射',
+    leaves: [
+      {
+        id: 'l41-1',
+        title: '线性映射与线性变换',
+        brief: '先加后映、先乘后映都一样',
+        tag: '定义 4.1',
+        one: '若映射 φ 保加法且保数乘，就称 φ 是线性映射；从 V 到 V 自身的线性映射称为 V 上的线性变换，到 ℝ 的称为线性函数。',
+        formula: 'φ(α + β) = φα + φβ，φ(λα) = λφα',
+        points: [
+          '两条合起来就是「保线性运算」：先做线性运算再映射，与先映射再做线性运算，结果相同。',
+          '例 4.1 的旋转变换是 ℝ² 上线性变换的几何原型；本章主线就是研究它与矩阵的联系。',
+          '例 4.2：取定基后「向量 → 坐标」是 V → ℝⁿ 的线性映射，其实就是第3章的同构映射。',
+          '例 4.3：给定 n 阶方阵 A，x ↦ Ax 是 ℝⁿ 上的线性变换——这是本章最重要的例子。'
+        ],
+        tip: '判别是否线性只需验两条：可加性与齐次性。任一条不成立（如含平移、含平方）就不是线性变换。',
+        ref: '§4.1.1–4.1.2'
+      },
+      {
+        id: 'l41-2',
+        title: '一批常用例子',
+        brief: '矩阵空间、多项式、函数',
+        tag: '例 4.5–4.9',
+        one: '左乘、右乘、伴随（交换子）变换，迹函数，微商算子，定积分算子，数乘变换，都是线性变换。',
+        formula: 'L_{A}(X) = AX，R_{A}(X) = XA，ad_{A}(X) = XA − AX',
+        points: [
+          '例 4.5：在 Mₙ(ℝ) 上取定 A，可得左乘变换、右乘变换与伴随变换，都是线性变换。',
+          '例 4.6：迹函数 Tr 是 Mₙ(ℝ) 上的线性函数（值在 ℝ 里），这是由矩阵迹的性质来的。',
+          '例 4.7：微商算子 d/dx 在 ℝ[x] 与 ℝₙ[x] 上是线性变换；例 4.8 的积分算子在 C[a,b] 上也是。',
+          '例 4.9：取定 λ，数乘变换 a ↦ λa 是线性变换；λ = 1 得恒等变换，λ = 0 得零变换。'
+        ],
+        tip: '「线性」这个词在这里的含义就是这两条运算律，和「图像是直线」无关；例 4.10 会看到二者在 ℝ 上恰好重合。',
+        ref: '§4.1.2 · 例 4.5–4.9'
+      },
+      {
+        id: 'l41-3',
+        title: '线性映射的四条性质',
+        brief: '保零、保负、保组合、保相关',
+        tag: '性质 (1)–(4) / 命题 4.1',
+        one: '线性映射保零元、保负元、保线性组合，并把线性相关的向量组仍映成线性相关的向量组。',
+        formula: 'φ(0) = 0，φ(−α) = −φα，φ(Σ λ_{i}α_{i}) = Σ λ_{i}φα_{i}',
+        points: [
+          '第 (4) 条的逆命题不成立：无关组映出去完全可能变相关（例如零变换把一切都映成 0）。',
+          '命题 4.1 是第 (3) 条的矩阵版：若 (β₁,…,βₘ) = (α₁,…,αₘ)P，则 (φβ₁,…,φβₘ) = (φα₁,…,φαₘ)P。',
+          '实际算变换时几乎都在用命题 4.1：只要知道基向量的像，任何向量的像都能按系数线性拼出来。'
+        ],
+        tip: '「保相关」而不是「保无关」，是这一节最容易记反的一条；单射才能保住无关性（4.2 节会用到）。',
+        ref: '§4.1.3'
+      },
+      {
+        id: 'l41-4',
+        title: '基的像决定线性变换',
+        brief: '指定基往哪走，变换就定了',
+        tag: '定理 4.2 / 例 4.10–4.11',
+        one: '给定 n 维空间 V 的一个基 α₁,…,αₙ 和任意 n 个向量 β₁,…,βₙ，存在唯一的线性变换 φ 使 φαᵢ = βᵢ。',
+        formula: 'φ(α_{i}) = β_{i} (i = 1,…,n) ⟹ φ 唯一存在',
+        points: [
+          '存在性靠定义 φ(x₁α₁+…+xₙαₙ) = x₁β₁+…+xₙβₙ；唯一性来自每个向量按基的表示唯一。',
+          '例 4.10：ℝ 上的线性变换全由 f(1) = b 决定，即 f(x) = bx，图像是过原点、斜率为 b 的直线。',
+          '所以「线性变换」正是微积分里「线性齐次函数」的推广，而不是「图像是直线」的函数。',
+          '例 4.11：ℝⁿ 上每个线性变换都有 x ↦ Ax 的形式，A 的第 j 列就是 φ(eⱼ)。'
+        ],
+        tip: '想构造一个线性变换，只需在基上随意指定像；想在基上指定的像不满足要求时（如要求单射），再回头检查。',
+        ref: '§4.1.3 · 定理 4.2'
+      },
+      {
+        id: 'l41-5',
+        title: '像空间与核空间',
+        brief: '从变换身上长出两个子空间',
+        tag: '§4.1.4',
+        one: 'φ(V) 记作 Im(φ)，是 V 的子空间，称像空间；φ 把零映回去的那批向量 Ker(φ) 也是子空间，称核空间。',
+        formula: 'Im(φ) = { φα : α ∈ V }，Ker(φ) = { α ∈ V : φα = 0 }',
+        points: [
+          '验子空间：0 = φ(0) 在 Im 里、也在 Ker 里；再验加法与数乘封闭即可。',
+          'Im(φ) 用来判满射，Ker(φ) 用来判单射，这是它们的全部用处所在。',
+          'Ker(φ) = {0} 时称 φ 是单射的核；核越大，变换「压掉」的维数越多。'
+        ],
+        tip: 'Im 与 Ker 都是 V 的子空间，不是「像的集合与定义域」这种笼统说法；写答案时要写出基与维数。',
+        ref: '§4.1.4'
+      },
+      {
+        id: 'l41-6',
+        title: '单射满射的判据',
+        brief: '看像与核就够了',
+        tag: '定理 4.3',
+        one: 'φ 是满射 ⟺ Im(φ) = V；φ 是单射 ⟺ Ker(φ) = {0}。',
+        formula: '满射 ⟺ Im(φ) = V ｜ 单射 ⟺ Ker(φ) = { 0 }',
+        points: [
+          '满射那条几乎是定义；单射用「φα₁ = φα₂ ⟹ α₁ − α₂ ∈ Ker」双向推出。',
+          '于是判一个变换是否可逆，只要算它的像与核。',
+          '例 4.14 的微分算子不是单射，因为 Ker 里装着全部常函数。'
+        ],
+        tip: '有限维时单射、满射、双射三者等价（推论 4.5），但在无限维空间里单而不满、满而不单都存在。',
+        ref: '§4.1.4 · 定理 4.3'
+      },
+      {
+        id: 'l41-7',
+        title: '维数公式',
+        brief: '像的维数加核的维数等于总维数',
+        tag: '定理 4.4 / 推论 4.5 / 例 4.12',
+        one: '有限维空间上的线性变换满足 dim Im(φ) + dim Ker(φ) = dim V。',
+        formula: 'dim Im(φ) + dim Ker(φ) = dim V',
+        points: [
+          '几何证明：取 Ker 的基扩充成 V 的基，被扩充出去那几个向量的像正好构成 Im 的基。',
+          '推论 4.5：有限维时 单射 ⟺ 满射 ⟺ 双射（因为 dim Im = dim V 与 dim Ker = 0 等价）。',
+          '例 4.12 把公式落到矩阵上：φ(x) = Ax 时 Ker(φ) = Null(A)，基础解系就是核的基，dim Ker = n − r。',
+          '同一例中 Im(φ) = C(A) 是列空间，列向量组的极大无关组是像空间的基，dim Im = r(A)。'
+        ],
+        tip: '「秩—零度定理」是本公式的别名；算核时别忘了解空间维数是 n − r(A)，不是 r(A)。',
+        ref: '§4.1.4 · 定理 4.4'
+      }
+    ]
+  },
+  {
+    id: 'b42',
+    num: '4.2',
+    title: '线性变换的矩阵',
+    short: '基下的矩阵',
+    color: '#2E7D74',
+    side: 'left',
+    brief: '取定一组基，把变换写成方阵',
+    leaves: [
+      {
+        id: 'l42-1',
+        title: '变换在基下的矩阵',
+        brief: '第 j 列是第 j 个基向量的像的坐标',
+        tag: '定义 4.2',
+        one: '设 φ(α₁,…,αₙ) = (α₁,…,αₙ)A，这个 n 阶方阵 A 就称为线性变换 φ 在基 α₁,…,αₙ 下的矩阵。',
+        formula: '(φ(α_{1}),…,φ(α_{n})) = (α_{1},…,α_{n})A',
+        points: [
+          '写法与第3章的基变换公式完全同构：把基看成一个「形式的行向量」，A 右乘上去。',
+          'A 的第 j 列 = φαⱼ 在这组基下的坐标，所以只要会写基向量的像，矩阵立刻成形。',
+          '矩阵依赖基的选取：换一组基，同一个变换的矩阵就变（这正是 4.3 节的主题）。'
+        ],
+        tip: '「按列排」是这里的命门：把坐标写成行按行排，得到的会是 Aᵀ，后面所有计算都会跟着错。',
+        ref: '§4.2.1 · 定义 4.2'
+      },
+      {
+        id: 'l42-2',
+        title: '坐标像 = 矩阵乘坐标',
+        brief: '交换图 4.5 说的就是这件事',
+        tag: '定理 4.6',
+        one: '若 φ 在基下的矩阵是 A，向量 α 的坐标是 x，则 φα 的坐标就是 Ax。',
+        formula: 'α ↔ x ⟹ φ(α) ↔ Ax',
+        points: [
+          '这条定理把「抽象变换」完全翻译成「乘一个矩阵」，取定基后 V ≅ ℝⁿ 且 φ 对应 A。',
+          '于是研究线性变换的问题，一律可以搬回矩阵去算，反过来也成立。',
+          '例 4.13：ℝⁿ 上 x ↦ Ax 这个变换，在自然基下的矩阵恰好就是 A 本身。'
+        ],
+        tip: '定理 4.6 是本章的「翻译词典」；凡遇到「求变换的某性质」，先换成「求其矩阵的对应性质」。',
+        ref: '§4.2.1 · 定理 4.6'
+      },
+      {
+        id: 'l42-3',
+        title: '三个求矩阵的样板',
+        brief: '微分、左乘、自然基',
+        tag: '例 4.14–4.15',
+        one: '微分算子在 1, x, x² 下的矩阵是上移一格的幂零阵；左乘变换在 E₁₁,E₁₂,E₂₁,E₂₂ 下的矩阵是 4 阶方阵。',
+        formula: 'N = [0 1 0 / 0 0 2 / 0 0 0]，d/dx ↔ N',
+        points: [
+          '例 4.14：d(1)=0、d(x)=1、d(x²)=2x，三列坐标拼出 N；N 不可逆。',
+          'N 不可逆正对应「微分算子不是单射」：Ker 是常函数，非零。',
+          '例 4.15：A 可逆时左乘变换 X ↦ AX 的矩阵 B 也可逆，对应变换既单又满。',
+          '矩阵的可逆性与变换的单满性互相印证，这是定理 4.6 的直接后果。'
+        ],
+        tip: '给「算子」求矩阵时，逐个算基向量的像、写出坐标、按列排；不要试图直接猜整个矩阵。',
+        ref: '§4.2.1 · 例 4.14–4.15'
+      },
+      {
+        id: 'l42-4',
+        title: '变换的加法、数乘与乘法',
+        brief: '乘法用合成来定义',
+        tag: '定义 4.3',
+        one: '线性变换可以逐点相加、按数倍乘，乘法定义为映射的合成；这些运算的结果仍是线性变换。',
+        formula: '(φ + ψ)(α) = φα + ψα，(λφ)(α) = λφα，(φψ)(α) = φ(ψα)',
+        points: [
+          '全体线性变换记作 L(V)，在上述加法与数乘下构成线性空间。',
+          '由乘法可定义幂 φᵐ，进而对多项式 f(λ) 定义变换的多项式 f(φ)；若 f = g·h，则 f(φ) = g(φ)h(φ)。',
+          '和矩阵乘法一样，变换的乘法不满足交换律，常见乘法公式不能随便套用。',
+          '与矩阵运算严格对应：φ ↔ A、ψ ↔ B 时，φ+ψ ↔ A+B、φψ ↔ AB。'
+        ],
+        tip: 'φψ 读作「先 ψ 后 φ」，与第3章附录里映射乘法的约定一致；顺序弄反，AB 与 BA 就换了。',
+        ref: '§4.2.2 · 定义 4.3'
+      },
+      {
+        id: 'l42-5',
+        title: '可逆线性变换',
+        brief: '存在逆变换，等价于双射',
+        tag: '定义 4.4',
+        one: '若存在 ψ 使 φψ = ψφ = id，则称 φ 可逆，ψ 是唯一的逆 φ⁻¹；可逆 ⟺ Im(φ) = V 且 Ker(φ) = {0}。',
+        formula: 'φ 可逆 ⟺ φ 是同构映射 ⟺ Im(φ) = V ∧ Ker(φ) = { 0 }',
+        points: [
+          '可逆时能定义负整数幂 φ⁻ᵐ，从而含负指数幂的多项式 f(φ) 也有意义。',
+          '有限维下由推论 4.5，单射、满射任一条即可推出可逆。',
+          '多项式的性质对含负幂的情形同样成立，这在 4.6 节判对角化时会用到。'
+        ],
+        tip: '「可逆线性变换」与「变换的矩阵可逆」是一回事（定理 4.7），两个说法可以随意互换。',
+        ref: '§4.2.2 · 定义 4.4'
+      },
+      {
+        id: 'l42-6',
+        title: 'L(V) 与 Mₙ(ℝ) 同构',
+        brief: '这个对应保加法、保乘、保逆',
+        tag: '定理 4.7',
+        one: '取定基后，「求矩阵」的映射 φ ↦ A 是线性空间 L(V) 到 Mₙ(ℝ) 的同构，并且保乘法与求逆。',
+        formula: 'φ ↔ A，ψ ↔ B ⟹ φ+ψ ↔ A+B，φψ ↔ AB，(φ^{−1}) ↔ A^{−1}',
+        points: [
+          '由同构得 dim L(V) = (dim V)² = n²，即 ℝ 上 n 维空间的线性变换一共有 n² 个自由度。',
+          '证明要点：单射靠「基的像相同则变换相同」，满射靠定理 4.2 的存在性。',
+          '这条定理是整个「用矩阵研究变换」路线的合法性证明。'
+        ],
+        tip: '「保乘法」意味着任何关于矩阵的恒等式，都可以翻译成变换的恒等式，反之亦然。',
+        ref: '§4.2.2 · 定理 4.7'
+      }
+    ]
+  },
+  {
+    id: 'b43',
+    num: '4.3',
+    title: '相似矩阵',
+    short: '换基与不变量',
+    color: '#6B5B95',
+    side: 'left',
+    brief: '换一组基，矩阵怎么变',
+    leaves: [
+      {
+        id: 'l43-1',
+        title: '相似的定义',
+        brief: 'B = P⁻¹AP',
+        tag: '定义 4.5',
+        one: '若存在可逆阵 P 使 B = P⁻¹AP，就称 A 与 B 相似。',
+        formula: 'B = P^{−1}AP (P 可逆) ⟺ A 与 B 相似',
+        points: [
+          '来源：同一变换在不同基下的矩阵必然相似——设 (β) = (α)P，则由 (φα)P = (φβ) 算出 B = P⁻¹AP。',
+          '相似是一种特殊的等价：等价的矩阵只要求同秩，相似的要求强得多。',
+          '记号方向要固定：B 在左、P⁻¹ 在左、P 在右，写成 B = PAP⁻¹ 是另一种约定，别混用。'
+        ],
+        tip: '相似是「同一对象换坐标」，等价是「同秩就行」；做判断题时先问这是哪一种关系。',
+        ref: '§4.3.1 · 定义 4.5'
+      },
+      {
+        id: 'l43-2',
+        title: '相似的几何意义',
+        brief: '相似 ⟺ 同一变换的两张面孔',
+        tag: '定理 4.8',
+        one: '两个 n 阶方阵相似 ⟺ 它们是同一个 n 维线性空间上某个线性变换在不同基下的矩阵。',
+        formula: 'A ∼ B ⟺ ∃ φ ∈ L(V)，A、B 分别是 φ 在两组基下的矩阵',
+        points: [
+          '充分性由基变换直接算出；必要性取定一组基、定出 φ，再用 P 造出另一组基。',
+          '这条定理说明「相似不变量」就是「线性变换本身的性质」，与坐标无关。',
+          '于是想给变换找最简单的矩阵，等价于在相似类里找最简代表——本章的核心问题。'
+        ],
+        tip: '判断两个矩阵是否相似，比看不变量更难；但「不相似」往往用一个不变量不同就能否掉。',
+        ref: '§4.3.1 · 定理 4.8'
+      },
+      {
+        id: 'l43-3',
+        title: '相似是等价关系',
+        brief: '自反、对称、传递',
+        tag: '定理 4.10',
+        one: '矩阵的相似关系满足自反性、对称性与传递性，因此把全体 n 阶方阵划分为相似类。',
+        formula: 'A ∼ A；A ∼ B ⟹ B ∼ A；A ∼ B ∧ B ∼ C ⟹ A ∼ C',
+        points: [
+          '自反：A = E⁻¹AE。对称：B = P⁻¹AP ⟹ A = PB P⁻¹ = (P⁻¹)⁻¹BP⁻¹。',
+          '传递：B = P⁻¹AP、C = Q⁻¹BQ ⟹ C = (PQ)⁻¹A(PQ)。',
+          '传递那一步的复合顺序是 (PQ)，不是 (QP)——这是最容易写错的地方。'
+        ],
+        tip: '「相似类」里的成员共享一切相似不变量；本章最后要找的就是每个类里最简单的那个代表。',
+        ref: '§4.3.2 · 定理 4.10'
+      },
+      {
+        id: 'l43-4',
+        title: '相似不变量',
+        brief: '秩、行列式、迹都不变',
+        tag: '定理 4.11',
+        one: '若 A 与 B 相似，则 r(A) = r(B)、|A| = |B|、Tr(A) = Tr(B)。',
+        formula: 'B = P^{−1}AP ⟹ R(A) = R(B)，|A| = |B|，Tr(A) = Tr(B)',
+        points: [
+          '秩不变来自「可逆阵乘法不改变秩」；行列式与迹由 |P⁻¹AP| = |A|、Tr(P⁻¹AP) = Tr(AP) 得出。',
+          '逆命题不成立：E₂ 与 B = [1 1 / 0 1] 的秩、行列式、迹全同，但 B 不与 E₂ 相似。',
+          '相似必等价（同秩），等价远不一定相似——这是两个概念的严格强弱关系。'
+        ],
+        tip: '用不变量「否定相似」很快；想肯定相似，必须真的找出可逆阵 P。',
+        ref: '§4.3.2 · 定理 4.11'
+      },
+      {
+        id: 'l43-5',
+        title: '变换的秩、行列式与迹',
+        brief: '定义在矩阵上，但与基无关',
+        tag: '定义 4.6–4.7 / 定理 4.9',
+        one: '把线性变换的秩、行列式、迹定义为它任一矩阵的对应量；由相似不变性，这些定义与基的选取无关。',
+        formula: 'r(φ) = r(A) = dim Im(φ)，Tr(φ) = Tr(A)，det(φ) = |A|',
+        points: [
+          '定理 4.9 给出几何解释：dim Im(φ) = r(A)，dim Ker(φ) = n − r(A)（零度）。',
+          '代数计算完全归结到例 4.12：像空间对应列空间，核空间对应零空间。',
+          '这套「先取矩阵定义、再证与基无关」的写法，是本章反复使用的套路。'
+        ],
+        tip: '零度 dim Ker(φ) 就是「被压掉的维数」；秩 + 零度 = n，与定理 4.4 是同一句话。',
+        ref: '§4.3.2 · 定义 4.6–4.7'
+      },
+      {
+        id: 'l43-6',
+        title: '用矩阵算像与核',
+        brief: '例 4.16 与对角化的预告',
+        tag: '例 4.16–4.17',
+        one: '写出变换在某基下的矩阵 A，像与核就化为求 A 的列空间与 Ax = 0 的解空间，再回到原空间取对应向量。',
+        formula: 'Im(φ) = Span{φα_{i}} ↔ C(A)，Ker(φ) ↔ Null(A)',
+        points: [
+          '例 4.16：微分算子在 ℝ₂[x] 的矩阵 N 满足 r(N) = 2，故 dim Im = 2、dim Ker = 1，且 Im = ℝ₁[x]、Ker = 常函数。',
+          '例 4.17：给出可逆阵 P 使 P⁻¹AP = diag(1, 1, 4)，即换一组基后矩阵变得极简单。',
+          '教材在此追问「这组基是怎么找到的」，答案就是下一节的特征向量。'
+        ],
+        tip: '算出的基础解系是坐标，必须再乘回基向量组 (α₁,…,αₙ) 才是空间里真正的向量。',
+        ref: '§4.3.2 · 例 4.16–4.17'
+      }
+    ]
+  },
+  {
+    id: 'b44',
+    num: '4.4',
+    title: '特征值与特征向量',
+    short: '特征多项式与算法',
+    color: '#B07A2E',
+    side: 'left',
+    brief: '变换只沿着某些直线伸缩',
+    leaves: [
+      {
+        id: 'l44-1',
+        title: '特征值与特征向量',
+        brief: '方向不变，只做伸缩',
+        tag: '定义 4.9',
+        one: '若存在非零向量 α 使 φα = λ₀α，则 λ₀ 是 φ 的特征值，α 是属于 λ₀ 的特征向量。',
+        formula: 'φ(α) = λ_{0}α，α ≠ 0',
+        points: [
+          '几何意义：特征向量所在的直线被变换保持在自己内部，只是按 λ₀ 伸缩。',
+          '同一特征值的特征向量不唯一：α 是特征向量，则 kα（k ≠ 0）也是。',
+          '特征向量必须非零；λ₀ 可以为 0，此时 φα = 0 说明 α 落在核里。'
+        ],
+        tip: '「非零」这一条最容易失分：把零向量写成特征向量，整题判错。',
+        ref: '§4.4.1 · 定义 4.9'
+      },
+      {
+        id: 'l44-2',
+        title: '特征子空间',
+        brief: '把零向量补进来就成了空间',
+        tag: '定义 4.10 / 定理 4.12',
+        one: '属于 λ₀ 的全部特征向量加上零向量构成子空间 Ker(φ − λ₀id)，称为 λ₀ 的特征子空间。',
+        formula: 'λ_{0} 是特征值 ⟺ V_{λ₀} ≠ { 0 } ⟺ dim V_{λ₀} ≥ 1',
+        points: [
+          '补上零向量的动机：这样就能用线性代数的语言（维数、基）来数「有几个无关特征向量」。',
+          '特征子空间的基就是属于 λ₀ 的「最多」线性无关特征向量组。',
+          '判 λ₀ 是不是特征值，从此只需验这个特征子空间是否非零。'
+        ],
+        tip: '特征子空间装的是「方向」，不是单个向量；写答案时给基，别只给一个向量。',
+        ref: '§4.4.1 · 定义 4.10'
+      },
+      {
+        id: 'l44-3',
+        title: '几何与代数的对应',
+        brief: '变换的特征值 = 矩阵的特征值',
+        tag: '定义 4.11 / 命题 4.13',
+        one: '方阵 A 的特征值与特征向量由 Ax = λ₀x 定义；变换 φ 与它的矩阵 A 有完全相同的特征值，特征向量按坐标一一对应。',
+        formula: 'Ax = λ_{0}x ⟺ (λ_{0}E − A)x = 0 有非零解',
+        points: [
+          '命题 4.13：λ₀ 是 φ 的特征值 ⟺ λ₀ 是 A 的特征值；α = (α₁,…,αₙ)x 是 φ 的特征向量 ⟺ x 是 A 的特征向量。',
+          '这条对应是「先算矩阵的特征值，再回到原空间写向量」的理论依据。',
+          '所以求特征值这件事，从此彻底变成一个行列式问题。'
+        ],
+        tip: '矩阵的特征向量是坐标列；要写成 V 里的向量，必须再左乘基向量组 (α₁,…,αₙ)。',
+        ref: '§4.4.1–4.4.2 · 命题 4.13'
+      },
+      {
+        id: 'l44-4',
+        title: '特征多项式与算法',
+        brief: '把「存在 x」换成「有根」',
+        tag: '定义 4.12 / 命题 4.14',
+        one: 'f(λ) = |λE − A| 是 n 次首一多项式，称为 A 的特征多项式；λ₀ 是特征值 ⟺ f(λ₀) = 0。',
+        formula: 'f(λ) = |λE − A|，λ_{0} 是特征值 ⟺ f(λ_{0}) = 0',
+        points: [
+          '求法两步：先解 f(λ) = 0 得全部特征值；再对每个 λ₀ 解 (λ₀E − A)x = 0 求基础解系。',
+          '求线性变换的特征向量则多一步：先取基写出矩阵 A，算完再回到原空间。',
+          'f(λ) 在 ℝ 中未必有根，但在 ℂ 中必有 n 个根（重根按重数计），故常把 A 视为复矩阵。'
+        ],
+        tip: '特征多项式用 |λE − A| 还是 |A − λE| 只差一个符号 (−1)ⁿ；教材取前者以保证首一。',
+        ref: '§4.4.2 · 定义 4.12'
+      },
+      {
+        id: 'l44-5',
+        title: '四个典型例子',
+        brief: '有实无实、只有零、对角元',
+        tag: '例 4.18–4.21',
+        one: '旋转没有实特征值；微分算子只有零特征值；对角阵的特征值就是对角元；一般矩阵要老实解方程组。',
+        formula: 'diag(λ_{1},…,λ_{n})：特征值即对角元',
+        points: [
+          '例 4.18：90° 旋转的特征多项式是 λ² + 1，无实根，故在 ℝ 上没有特征值与特征向量（复数域上有 ±i）。',
+          '例 4.19：ℝ₂[x] 上的微商变换特征值只有 0，属于 0 的特征向量只能是非零常函数。',
+          '例 4.20：对角阵与纯量阵的特征值一目了然，这是「最简矩阵」的价值所在。',
+          '例 4.21：3 阶算例得特征值 1, 1, 4；λ = 1 有两个无关特征向量，λ = 4 有一个。'
+        ],
+        tip: '「没有特征值」是相对数域说的；同一矩阵在 ℝ 上没有、在 ℂ 上一定有，答题要写清范围。',
+        ref: '§4.4.2 · 例 4.18–4.21'
+      },
+      {
+        id: 'l44-6',
+        title: '降阶定理',
+        brief: '把大矩阵的特征多项式降阶',
+        tag: '命题 4.15 / 例 4.22',
+        one: '设 A 为 m×n、B 为 n×m（m ≥ n），则 | λEₘ − AB | 等于 λ 的 (m−n) 次幂乘以 | λEₙ − BA |。',
+        formula: '|λE_{m} − AB| = λ^{m−n} |λE_{n} − BA|',
+        points: [
+          '证明思路：λ = 1 时用分块阵的初等变换证 |E−AB| = |E−BA|，再对一般 λ 用多项式恒等。',
+          '配合满秩分解 A = HL，可把 n 阶特征多项式化成 r 阶的那一个（r = 秩）。',
+          '例 4.22：秩为 1 的矩阵写成 ααᵀ，特征多项式立刻变成 λⁿ⁻¹(λ − αᵀα)，特征值一目了然。'
+        ],
+        tip: '秩 1 矩阵的特征值是「一个 αᵀα，其余全为 0」；这个捷径在求幂、判对角化时极常用。',
+        ref: '§4.4.2 · 命题 4.15'
+      },
+      {
+        id: 'l44-7',
+        title: '特征值的整体信息',
+        brief: '和等于迹，积等于行列式',
+        tag: '命题 4.16–4.17 / 定义 4.13',
+        one: '相似矩阵有相同特征多项式；设 λ₁,…,λₙ 是全部复特征值，则 Σλᵢ = Tr(A)，Πλᵢ = |A|。',
+        formula: 'λ_{1} + ⋯ + λ_{n} = Tr(A)，λ_{1}λ_{2}⋯λ_{n} = |A|',
+        points: [
+          '命题 4.16：B = P⁻¹AP ⟹ |λE − B| = |P⁻¹(λE − A)P| = |λE − A|，故特征值是相似不变量。',
+          '于是可以定义线性变换的特征多项式（取任一矩阵的），与基无关。',
+          '两条恒等式来自特征多项式的系数：一次项系数是 −Tr，常数项是 (−1)ⁿ|A|。',
+          '校验利器：算完特征值先加一加、乘一乘，与迹和行列式对不上就一定有错。'
+        ],
+        tip: '这两式是免费的检查工具，也是「已知部分特征值求其余」的标准入口。',
+        ref: '§4.4.3 · 命题 4.16–4.17'
+      }
+    ]
+  },
+  {
+    id: 'b45',
+    num: '4.5',
+    title: '相似对角化',
+    short: '重数与判别',
+    color: '#4C5F9E',
+    side: 'right',
+    brief: '什么时候能相似到对角阵',
+    leaves: [
+      {
+        id: 'l45-1',
+        title: '可对角化与反例',
+        brief: '不是每个变换都能对角化',
+        tag: '定义 4.8 / 例 4.23',
+        one: '若存在一组基使变换的矩阵是对角阵（等价地，矩阵可相似到对角阵），就称它可对角化。',
+        formula: '∃ P 可逆，P^{−1}AP = diag(λ_{1},…,λ_{n})',
+        points: [
+          '变换可对角化 ⟺ 它的任一矩阵可对角化，所以几何与代数两种说法等价。',
+          '例 4.23：对角元全为 1 的上三角阵不可对角化——若可对角化则相似于 Eₙ，而只有 Eₙ 与 Eₙ 相似。',
+          '这个反例说明必须给出判别法，不能默认「有特征值就能对角化」。'
+        ],
+        tip: '「相似于对角阵」的对角元必是它的特征值（含重数）；对角化后想核对，就数特征值。',
+        ref: '§4.5 · 定义 4.8'
+      },
+      {
+        id: 'l45-2',
+        title: '凑够 n 个无关特征向量',
+        brief: '最本质的判别',
+        tag: '定理 4.18',
+        one: 'φ（或 A）可对角化 ⟺ 它有 n 个线性无关的特征向量；此时对角阵的对角元就是对应的特征值。',
+        formula: 'P = (x_{1},…,x_{n}) 可逆 ⟹ P^{−1}AP = diag(λ_{1},…,λ_{n})',
+        points: [
+          'P 的第 i 列是特征向量 xᵢ，Λ 的第 i 个对角元是它对应的 λᵢ，顺序必须配套。',
+          '判定思路分两步：先对每个特征值找最多的无关特征向量，再在它们的并里取极大无关组。',
+          '这条定理把对角化完全归约成「数无关特征向量的个数」。'
+        ],
+        tip: '把特征向量按列排成 P 时，若某列写成了零向量或漏了一个，P 就不可逆，验算 P⁻¹AP 会失败。',
+        ref: '§4.5 · 定理 4.18'
+      },
+      {
+        id: 'l45-3',
+        title: '代数重数与几何重数',
+        brief: '根的重数与特征子空间的维数',
+        tag: '定义 4.14 / 命题 4.19',
+        one: '特征值在特征多项式中的重数称代数重数；其特征子空间的维数（= n − r(λ₀E − A)）称几何重数，后者不超过前者。',
+        formula: '1 ≤ 几何重数 = n − R(λ_{0}E − A) ≤ 代数重数',
+        points: [
+          '变换与它的矩阵对同一特征值给出相同的两种重数，所以可以混着算。',
+          '「几何 ≤ 代数」的证明：把特征子空间的基扩充成全空间的基，矩阵分块后特征多项式含因子 (λ₀ − λ) 的砾次。',
+          '单根时两种重数都只能是 1，天然相等。'
+        ],
+        tip: '几何重数是「能凑出的无关特征向量个数」，代数重数是「特征多项式里占几个名额」；名额占不满就不可对角化。',
+        ref: '§4.5.1 · 定义 4.14'
+      },
+      {
+        id: 'l45-4',
+        title: '不同特征值互不干扰',
+        brief: '特征子空间之和是直和',
+        tag: '命题 4.20 / 推论 4.21–4.22',
+        one: '两两不同的特征值对应的特征子空间之和是直和；于是属于不同特征值的无关特征向量合起来仍无关。',
+        formula: 'V_{λ₁} + V_{λ₂} + ⋯ + V_{λₛ} 是直和',
+        points: [
+          '证明用 Vandermonde 行列式：对和式反复作用 φ，得到系数矩阵可逆，故各分量为零。',
+          '推论 4.21：把每个特征值的一组无关特征向量并起来（无交并），整体仍线性无关。',
+          '推论 4.22（充分条件）：若特征多项式有 n 个互不相同的根，则必可对角化。',
+          '逆命题不成立：Eₙ 的特征值全相同，照样可对角化。'
+        ],
+        tip: '「n 个不同特征值」是好用的快速判别，但只是充分条件；重根情形必须回到重数比较。',
+        ref: '§4.5.1 · 命题 4.20'
+      },
+      {
+        id: 'l45-5',
+        title: '重数判别定理',
+        brief: '每个特征值两种重数相等',
+        tag: '定理 4.23–4.24 / 例 4.24–4.25',
+        one: '设特征多项式可分解为一次因式之积，则可对角化 ⟺ 每个特征值的代数重数 = 几何重数 ⟺ 各特征子空间的维数加起来等于 n。',
+        formula: '可对角化 ⟺ m_{i} = dim V_{λᵢ} (对每个 i) ⟺ Σ dim V_{λᵢ} = n',
+        points: [
+          '必要性：无关特征向量按所属特征值分组，每组个数不超过该特征的几何重数。',
+          '充分性：把各特征子空间的基并起来，由直和性质得 n 个无关特征向量。',
+          '实际只需检查重根：单根自动满足，重根要算 r(λ₀E − A)。',
+          '例 4.24：λ = 2 是二重根但 r(2E − A) = 1，几何重数 2 = 代数重数，可对角化。例 4.25：微商算子 λ = 0 代数 3、几何 1，不可对角化。'
+        ],
+        tip: '「只需查重根」这条简化能省一半计算；但前提是先确认特征多项式确实分解成了一次因式之积。',
+        ref: '§4.5.2 · 定理 4.23'
+      },
+      {
+        id: 'l45-6',
+        title: '对角化的完整操作',
+        brief: '五步走完并会验算',
+        tag: '§4.5 综合',
+        one: '求特征多项式得特征值 → 逐个解 (λ₀E − A)x = 0 得基础解系 → 凑够 n 个则按列排成 P → 写出同序的 Λ → 验 P⁻¹AP = Λ。',
+        formula: 'AP = PΛ ⟺ P^{−1}AP = Λ',
+        points: [
+          '验算用 AP = PΛ 比真的求 P⁻¹ 快得多：逐列比较即可。',
+          '特征向量整体乘非零常数、同一特征值内作线性组合，都仍是特征向量，所以 P 不唯一。',
+          '对角阵 Λ 由 A 唯一决定（到排列而言），但 P 有无穷多个。',
+          '若凑不齐 n 个，就到此为止并结论「不可对角化」，不必硬找 P。'
+        ],
+        tip: '最常见的失分点是 P 与 Λ 的顺序不一致；先把 (xᵢ, λᵢ) 成对写下来再排矩阵。',
+        ref: '§4.5 · 习题 1'
+      }
+    ]
+  },
+  {
+    id: 'b46',
+    num: '4.6',
+    title: '零化多项式与最小多项式',
+    short: '最小多项式',
+    color: '#4F7D56',
+    side: 'right',
+    brief: '换一把更锋利的尺子',
+    leaves: [
+      {
+        id: 'l46-1',
+        title: 'Hamilton-Cayley 定理',
+        brief: '把矩阵代回自己的特征多项式',
+        tag: '定理 4.25 / 例 4.26',
+        one: '设 f(λ) 是线性变换 φ（或方阵 A）的特征多项式，则 f(φ) = 0（或 f(A) = O）。',
+        formula: 'f(λ) = |λE − A| ⟹ f(A) = O',
+        points: [
+          '例 4.26（二阶显式）：A = [a b / c d]，f(λ) = λ² − (a+d)λ + (ad − bc)，故 A² − (a+d)A + (ad−bc)E = O。',
+          '用途之一：A 的高次幂可以降到低次，Aⁿ 写成 αA + βE，求幂、求逆都省事。',
+          'A 可逆时由常数项非零可直接解出 A⁻¹ 的表达式。',
+          '证明在本章附录 4.8.2，思路是先把复方阵三角化再对阶数归纳。'
+        ],
+        tip: '定理说的是「特征多项式零化矩阵」，不是「特征多项式是最小的」；两者差别正是本节剩下的内容。',
+        ref: '§4.6.1 · 定理 4.25'
+      },
+      {
+        id: 'l46-2',
+        title: '零化多项式与最小多项式',
+        brief: '次数最低的首一零化多项式',
+        tag: '定义 4.15',
+        one: '若非零多项式 f 使 f(A) = O，称 f 是 A 的零化多项式；其中次数最低的首一零化多项式 m(λ) 称为 A 的最小多项式。',
+        formula: 'm_{A}(λ) = 次数最低的首一零化多项式，唯一',
+        points: [
+          '存在性由 Hamilton-Cayley 保证（特征多项式就是候选），首一性保证唯一。',
+          '零化多项式必为正次数多项式，最小多项式亦然。',
+          '例：Eₙ 的特征多项式是 (λ−1)ⁿ，但最小多项式只是 λ − 1——特征多项式常常「过大」。'
+        ],
+        tip: '「首一」这个约定不能省：否则 λ−1 与 2λ−2 都算最小，唯一性就没了。',
+        ref: '§4.6.2 · 定义 4.15'
+      },
+      {
+        id: 'l46-3',
+        title: '一次最小多项式 ⟺ 纯量阵',
+        brief: '最简单的两种情形',
+        tag: '例 4.27–4.28',
+        one: 'n 阶方阵的最小多项式是一次多项式 ⟺ 它是纯量阵 λ₀E。',
+        formula: 'm_{A}(λ) = λ − λ_{0} ⟺ A = λ_{0}E',
+        points: [
+          '由 m(A) = O 直接得 A − λ₀E = O，反之纯量阵显然被 λ − λ₀ 零化。',
+          '例 4.28 的做法：找 E、A、A² 的一个线性关系，得到一个二次零化多项式 λ² − 3λ + 2。',
+          '再由它整除特征多项式、且两者同根，锁定最小多项式。'
+        ],
+        tip: '「找 E, A, A² 的线性关系」直观但计算量大，只适合低阶；通用做法见下一叶。',
+        ref: '§4.6.2 · 例 4.27–4.28'
+      },
+      {
+        id: 'l46-4',
+        title: '最小多项式整除一切零化多项式',
+        brief: '这是它「最小」的真正含义',
+        tag: '命题 4.26 / 例 4.29',
+        one: 'f(λ) 是 A 的零化多项式 ⟺ 最小多项式 m(λ) 整除 f(λ)；特别地 m(λ) 整除特征多项式。',
+        formula: 'm_{A}(λ) ∣ f(λ) ⟺ f(A) = O，且 m_{A}(λ) ∣ f_{A}(λ)',
+        points: [
+          '证明用带余除法：f = qm + r，代入 A 得 r(A) = O；由 deg r < deg m 与最小性得 r = 0。',
+          '因此只要先找到一个「合适的」零化多项式，最小多项式必然是它的一个首一因式，候选立刻有限。',
+          '例 4.29：幂等阵 A² = A 被 λ² − λ 零化，故最小多项式只能是 λ、λ − 1 或 λ(λ − 1)。'
+        ],
+        tip: '用整除关系求最小多项式的顺序：列候选（特征多项式的因式）→ 逐个代入检验 → 取次数最低且成立者。',
+        ref: '§4.6.2 · 命题 4.26'
+      },
+      {
+        id: 'l46-5',
+        title: '相似不变量与所含特征值',
+        brief: '最小多项式含全部特征值',
+        tag: '推论 4.27 / 命题 4.28',
+        one: '相似矩阵有相同的最小多项式；若特征多项式分解为 Π(λ − λᵢ) 的 mᵢ 次幂，则最小多项式形如 Π(λ − λᵢ) 的 kᵢ 次幂，其中 1 ≤ kᵢ ≤ mᵢ。',
+        formula: 'm_{A}(λ) = Π(λ − λ_{i})^{kᵢ}，1 ≤ k_{i} ≤ m_{i}',
+        points: [
+          '推论 4.27 的证明：B = P⁻¹AP ⟹ m_B(A) = O ⟹ m_A | m_B，对称地 m_B | m_A，两者首一故相等。',
+          '命题 4.28 的下界 kᵢ ≥ 1 用反证：若某个 λ₁ 不出现，取它的特征向量代入即得矛盾。',
+          '所以最小多项式与特征多项式有完全相同的根，只是重数可能更低。'
+        ],
+        tip: '「同根、重数可能不同」是理解本节全部判别的钥匙；对角化判据正是靠重数降到 1。',
+        ref: '§4.6.2 · 推论 4.27'
+      },
+      {
+        id: 'l46-6',
+        title: '求最小多项式的常用方法',
+        brief: '先列候选，再代入检验',
+        tag: '例 4.30–4.31',
+        one: '由特征多项式列出所有可能的一次因式组合，从次数低的开始代入 A 检验，第一个让结果为零的便是最小多项式。',
+        formula: '候选：Π(λ − λ_{i})^{kᵢ}，k_{i} = 1,…,m_{i}',
+        points: [
+          '例 4.30：特征多项式 (λ−1)(λ−2)²，候选只有 (λ−1)(λ−2) 与 (λ−1)(λ−2)²；算得前者已是零化多项式，故它就是最小多项式。',
+          '例 4.31：对角阵的每个互异特征值 λᵢ 对应一个标量块 λᵢE（块大小 mᵢ），其最小多项式是 (λ−λ₁)⋯(λ−λₛ)，每个因式只出现一次。',
+          '分块对角阵的最小多项式是各块最小多项式的最小公倍式。'
+        ],
+        tip: '检验 (A−λ₁E)(A−λ₂E) 是否为零，比解方程组快；但矩阵阶数高时要当心乘法量。',
+        ref: '§4.6.2 · 例 4.30–4.31'
+      },
+      {
+        id: 'l46-7',
+        title: '无重根 ⟺ 可对角化',
+        brief: '比查特征向量更快的判别',
+        tag: '定理 4.29 / 例 4.32–4.35',
+        one: '线性变换（或方阵）可对角化 ⟺ 它的最小多项式是互不相同的一次因式的乘积，即最小多项式无重根。',
+        formula: '可对角化 ⟺ m_{A}(λ) = (λ − λ_{1})⋯(λ − λ_{s})，λ_{i} 两两不同',
+        points: [
+          '必要性：可对角化则相似于对角阵，而对角阵的最小多项式无重根，相似保持最小多项式。',
+          '充分性：把最小多项式拆成互素因子，用贝祖等式造出投影，得 V 等于各特征子空间之和。',
+          '例 4.34：幂等阵被 λ(λ−1) 零化，故必可对角化，且相似于 diag(E_r, O)，r = 秩。',
+          '例 4.35：非零幂零阵的最小多项式是 λʳ（r ≥ 2），有重根，故不可对角化。'
+        ],
+        tip: '判别对角化有三条等价路：数无关特征向量、比两种重数、看最小多项式有无重根；哪条算得快用哪条。',
+        ref: '§4.6.3 · 定理 4.29'
+      }
+    ]
+  },
+  {
+    id: 'b47',
+    num: '4.7',
+    title: '特征值的应用：PageRank',
+    short: 'PageRank 算法',
+    color: '#B05C47',
+    side: 'right',
+    brief: '搜索排名就是一个特征向量',
+    leaves: [
+      {
+        id: 'l47-1',
+        title: '算法的核心思想',
+        brief: '重要性由引用者决定',
+        tag: '§4.7',
+        one: '一个网页的重要性由指向它的网页的数量与质量共同决定；用长期随机跳转的访问频率来刻画这种重要性。',
+        formula: 'PageRank(i) ∝ 长期访问网页 i 的概率',
+        points: [
+          '把网页引用关系画成有向图：节点是网页，箭头表示从一个页面链接到另一个页面。',
+          '假想一个随机上网者：随机出发，在当前页面等概率选一个链接跳转，不断重复。',
+          '长期来看访问概率趋于一个稳定分布，这个分布就是网页重要性得分。'
+        ],
+        tip: '「被重要网页引用」比「被很多网页引用」更值钱，这个递归关系正是矩阵乘法的天然场景。',
+        ref: '§4.7'
+      },
+      {
+        id: 'l47-2',
+        title: '转移概率矩阵',
+        brief: '每一列的和都是 1',
+        tag: '§4.7',
+        one: '用矩阵 P 表示页面之间的跳转概率，P 的第 i 列给出「从网页 i 出发到各网页的概率」，因此每列元素之和为 1，称为随机矩阵。',
+        formula: 'P_{ij} = Pr(下一页 = j ｜ 当前页 = i)，Σ_{i} P_{ij} = 1',
+        points: [
+          '例如图 4.7 的四个网页 A、B、C、D，A 链接到 B 与 C 各占一半，则第 1 列相应为 1/2。',
+          '列和为 1 意味着 Pᵀ 有特征值 1，这正是稳定分布存在的原因。',
+          '把引用关系写成矩阵，就把一个「排名问题」变成了线性代数问题。'
+        ],
+        tip: '约定是「列随机」：概率按列排。若改用行随机（每行和为 1），后面的转置就要跟着换掉。',
+        ref: '§4.7'
+      },
+      {
+        id: 'l47-3',
+        title: '稳定分布即特征向量',
+        brief: 'π = Pᵀπ',
+        tag: '§4.7',
+        one: '稳定访问概率 π 满足「再跳转一次仍是自己」，即 π = Pᵀπ，所以 π 是 Pᵀ 属于特征值 1 的特征向量。',
+        formula: 'π = P^{T}π，π_{1} + π_{2} + ⋯ + π_{n} = 1',
+        points: [
+          '解 (Pᵀ − E)π = 0 得特征向量方向，再用概率之和为 1 归一化，即得唯一确定的 π。',
+          'π 的各元素大小直接给出网页重要性排序，这就是经典 PageRank 算法。',
+          '整个流程：引用图 → 转移矩阵 → 求特征值 1 的特征向量 → 归一化 → 排序。'
+        ],
+        tip: '归一化条件 Σπᵢ = 1 不能忘，否则只得到「方向」而得不到具体得分。',
+        ref: '§4.7'
+      },
+      {
+        id: 'l47-4',
+        title: '示例与结论',
+        brief: '四个网页的排序',
+        tag: '§4.7 示例计算',
+        one: '对图 4.7 的四网页例子算得稳定分布约为 (0.286, 0.143, 0.500, 0.071)，即 C 最重要、A 次之、B 再次、D 最不重要。',
+        formula: 'π ≈ (0.286, 0.143, 0.500, 0.071)^{T}',
+        points: [
+          'C 被 A、B、D 三个网页引用，因此得分最高，符合直观预期。',
+          'D 没有任何网页指向它，得分最低，说明「只出不进」的页面在排名里吃亏。',
+          '教材小结的三句话：引用关系用转移矩阵表示；求长期稳定概率即求特征值 1 的特征向量；特征向量元素大小给出排序。'
+        ],
+        tip: '这个简化模型不含阻尼因子与悬挂节点处理；真实搜索引擎在此之上还做了修正。',
+        ref: '§4.7 · 示例计算'
+      }
+    ]
+  },
+  {
+    id: 'b48',
+    num: '4.8',
+    title: '附录：多项式代数',
+    short: '多项式代数与 H-C 证明',
+    color: '#7A6A55',
+    side: 'right',
+    brief: '把多项式当数来除、来求公因式',
+    leaves: [
+      {
+        id: 'l48-1',
+        title: '一元多项式与运算',
+        brief: '次数、首项、首一',
+        tag: '定义 4.16–4.17',
+        one: '实数域上一元多项式写成 aₙxⁿ + ⋯ + a₁x + a₀，最高次项系数非零时该次数记为 deg(f)；零多项式的次数约定为 −∞。',
+        formula: 'deg(f + g) ≤ max{deg f, deg g}，deg(fg) = deg f + deg g',
+        points: [
+          '同次项系数全相等才叫两个多项式相等；首项系数为 1 的多项式称首一多项式。',
+          '加法与乘法按系数逐项定义；f ≠ 0、g ≠ 0 时 fg ≠ 0，故可以做次数比较。',
+          '本章的「特征多项式」「最小多项式」都是这套语言的实例。'
+        ],
+        tip: 'deg(0) = −∞ 这个约定让「deg(fg) = deg f + deg g」在含零多项式时也不出问题。',
+        ref: '§4.8.1 · 定义 4.16–4.17'
+      },
+      {
+        id: 'l48-2',
+        title: '带余除法与整除',
+        brief: '除到余式次数变小',
+        tag: '定理 4.30–4.31 / 定义 4.18',
+        one: '对 f 与非零 g，存在唯一的 q 与 r 使 f = qg + r 且 deg(r) < deg(g)；g 整除 f ⟺ 余式为零。',
+        formula: 'f(x) = q(x)g(x) + r(x)，deg(r) < deg(g)',
+        points: [
+          'q 称商、r 称余式；余式为 0 时记 g | f，g 称 f 的因式，f 称 g 的倍式。',
+          '命题 4.32(1)：f(a) = 0 ⟺ (x − a) 整除 f——这正是「特征值是特征多项式的根」的依据。',
+          '其余三条：互相整除只差非零常数倍、整除可传递、g 整除各 fᵢ 则整除它们的任意多项式组合。'
+        ],
+        tip: '带余除法是整个多项式理论的算法基础，辗转相除就是它的反复使用。',
+        ref: '§4.8.1 · 定理 4.30–4.31'
+      },
+      {
+        id: 'l48-3',
+        title: '最大公因式与贝祖等式',
+        brief: '辗转相除造出组合表示',
+        tag: '定义 4.19 / 定理 4.33',
+        one: '任意两个多项式都有最大公因式 d，且可表为 d = u(x)f(x) + v(x)g(x)，这就是贝祖等式。',
+        formula: 'd(x) = (f, g) = u(x)f(x) + v(x)g(x)',
+        points: [
+          '最大公因式在相差非零常数倍的意义下唯一；约定取首一的，记 (f, g) 或 gcd。',
+          '证明用辗转相除：余式次数严格下降，有限步后终止，最后一个非零余式即最大公因式。',
+          '回代消去各余式就得到 u 与 v 的存在性，同时给出求法。',
+          '多个多项式的最大公因式与贝祖等式同样成立。'
+        ],
+        tip: '贝祖等式在 4.6 节判对角化时被直接使用：把互素因子组合起来分解整个空间。',
+        ref: '§4.8.1 · 定理 4.33'
+      },
+      {
+        id: 'l48-4',
+        title: '互素',
+        brief: '最大公因式是 1',
+        tag: '定义 4.20 / 定理 4.34',
+        one: '若 (f, g) = 1，称 f 与 g 互素，即除零次多项式外没有别的公因式。',
+        formula: 'f 与 g 互素 ⟺ ∃ u, v 使 u(x)f(x) + v(x)g(x) = 1',
+        points: [
+          '判定定理把「互素」变成一个可操作的等式：能凑出 1 就互素。',
+          '多个多项式互素指它们的最大公因式为 1，同样有对应的贝祖等式。',
+          '互素是因式分解讨论中最常用的「无关」关系，类似两个数没有公共质因子。'
+        ],
+        tip: '「互素」不等于「没有根」，而是「没有公共根」；两个多项式公共根恰好对应公因式的次数。',
+        ref: '§4.8.1 · 定理 4.34'
+      },
+      {
+        id: 'l48-5',
+        title: 'Hamilton-Cayley 定理的证明',
+        brief: '先三角化，再对阶归纳',
+        tag: '§4.8.2',
+        one: '把方阵视为复矩阵，用「任一复方阵都可相似于上三角阵，对角元即全部特征值」，再对阶数归纳证明 f(A) = O。',
+        formula: 'A = P diag(λ_{1},…,λ_{n})P^{−1}（上三角情形） ⟹ f(A) = O',
+        points: [
+          'n = 1 时显然；设结论对 n−1 成立，把 A 相似成上三角 B 后按分块计算。',
+          '关键等式 f(A) = P f(B) P⁻¹，故只需证 f(B) = O，而 f(B) 是上三角阵的分块乘积。',
+          '特征多项式与数域无关，所以可以放心地在复数域上完成证明。',
+          '关于线性变换的版本由矩阵版本直接推出。'
+        ],
+        tip: '这个证明依赖「复方阵可三角化」，该结论在第5章之前由总习题给出；记不住结论时可用二阶显式验证。',
+        ref: '§4.8.2'
+      }
+    ]
+  }
+];
+
+
+'use strict';
+
+(() => {
+  /* ================= data ================= */
+  const BRANCH_BY_ID = new Map(BRANCHES.map(b => [b.id, b]));
+  const ALL_LEAVES = [];
+  BRANCHES.forEach((b, bi) => {
+    b.leaves.forEach((l, li) => {
+      ALL_LEAVES.push(Object.assign({}, l, {
+        branchId: b.id,
+        branchNum: b.num,
+        branchTitle: b.title,
+        branchShort: b.short,
+        color: b.color,
+        side: b.side,
+        localIndex: li,
+        globalIndex: ALL_LEAVES.length
+      }));
+    });
+  });
+  const LEAF_BY_ID = new Map(ALL_LEAVES.map(l => [l.id, l]));
+  const PREVIEW = 2;
+  const TOTAL = ALL_LEAVES.length;
+
+  /* ================= storage ================= */
+  const LS_MASTERED = 'la-ch4-mastered-v1';
+  const LS_THEME = 'la-ch4-theme-v1';
+  const LS_VIEW = 'la-ch4-view-v1';
+
+  function readLS(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function writeLS(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* private mode */ }
+  }
+  function loadMastered() {
+    try {
+      const raw = readLS(LS_MASTERED);
+      const arr = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(arr)) return new Set();
+      return new Set(arr.filter(id => LEAF_BY_ID.has(id)));
+    } catch (e) { return new Set(); }
+  }
+
+  const state = {
+    view: readLS(LS_VIEW) === 'list' || readLS(LS_VIEW) === 'map'
+      ? readLS(LS_VIEW)
+      : (window.innerWidth < 900 ? 'list' : 'map'),
+    expanded: new Set(),
+    selectedId: null,
+    guideMode: 'chapter',
+    guideBranch: null,
+    mastered: loadMastered(),
+    theme: readLS(LS_THEME) === 'dark' ? 'dark' : 'light',
+    viewport: { x: 0, y: 0, scale: 1 },
+    isFit: true,
+    sidebarOpen: false
+  };
+
+  /* ================= helpers ================= */
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+  const esc = (value) => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[ch]));
+  const plain = (value) => String(value == null ? '' : value).replace(/<[^>]*>/g, '');
+  const mathHTML = (value) => esc(value)
+    .replace(/\^\{([^{}]+)\}/g, '<sup>$1</sup>')
+    .replace(/_\{([^{}]+)\}/g, '<sub>$1</sub>')
+    .replace(/\^([A-Za-z0-9θ])/g, '<sup>$1</sup>')
+    .replace(/_([A-Za-z0-9θ])/g, '<sub>$1</sub>');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReduced = reducedMotion;
+
+  const ICON = {
+    search: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.4"/><path d="m12.8 12.8 4 4"/></svg>',
+    moon: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.8 6.8 0 0 1 7.6 3.8a6.8 6.8 0 1 0 8.6 8.6Z"/></svg>',
+    sun: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 1.8v1.7M10 16.5v1.7M1.8 10h1.7M16.5 10h1.7M4.2 4.2l1.2 1.2M14.6 14.6l1.2 1.2M15.8 4.2l-1.2 1.2M5.4 14.6l-1.2 1.2"/></svg>',
+    printer: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7V3.6h8V7"/><rect x="3" y="7" width="14" height="6.4" rx="1.4"/><path d="M6 11h8v5.4H6z"/></svg>',
+    download: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v8.4"/><path d="m6.6 8.2 3.4 3.4 3.4-3.4"/><path d="M3.8 15.8h12.4"/></svg>',
+    panel: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3.6" width="14" height="12.8" rx="1.6"/><path d="M12.2 3.6v12.8"/></svg>',
+    fit: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.4H3.4V7M13 3.4h3.6V7M7 16.6H3.4V13M13 16.6h3.6V13"/></svg>',
+    left: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.4 4.6 7 10l5.4 5.4"/></svg>',
+    right: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.6 4.6 13 10l-5.4 5.4"/></svg>',
+    check: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4.6 10.3 3.4 3.4 7.4-7.4"/></svg>'
+  };
+
+  /* ================= map geometry ================= */
+  const L = {
+    width: 1580,
+    top: 56,
+    minH: 580,
+    leafW: 272,
+    leafH: 52,
+    leafGap: 8,
+    branchW: 238,
+    branchH: 56,
+    headerGap: 14,
+    leafBranchGap: 34,
+    branchCenterGap: 50,
+    centerW: 300,
+    centerH: 136,
+    blockGap: 24
+  };
+  const CENTER_X = (L.width - L.centerW) / 2;
+  const LEFT_BRANCH_X = CENTER_X - L.branchCenterGap - L.branchW;
+  const RIGHT_BRANCH_X = CENTER_X + L.centerW + L.branchCenterGap;
+  const LEFT_LEAF_X = LEFT_BRANCH_X - L.leafBranchGap - L.leafW;
+  const RIGHT_LEAF_X = RIGHT_BRANCH_X + L.branchW + L.leafBranchGap;
+
+  const mapPane = $('#map-pane');
+  const mapViewport = $('#map-viewport');
+  const mapCanvas = $('#map-canvas');
+  const nodeLayer = $('#node-layer');
+  const connectors = $('#connectors');
+  const sidebar = $('#sidebar');
+  const sideInner = $('#side-inner');
+  const scrim = $('#scrim');
+  const sideToggle = $('#side-toggle');
+  const listPane = $('#list-pane');
+  const listSections = $('#list-sections');
+  const searchInput = $('#search-input');
+  const searchPop = $('#search-pop');
+  const toastEl = $('#toast');
+  const themeBtn = $('#btn-theme');
+
+  const nodes = new Map();
+  let currentGeo = new Map();
+  let lastTargets = new Map();
+  let layoutRaf = 0;
+  let viewRaf = 0;
+  let lastDragEnd = 0;
+  let mapReady = false;
+
+  function visibleLeaves(branch) {
+    return state.expanded.has(branch.id)
+      ? branch.leaves
+      : branch.leaves.slice(0, PREVIEW);
+  }
+  function blockHeight(n) {
+    return L.branchH + L.headerGap + n * L.leafH + Math.max(0, n - 1) * L.leafGap;
+  }
+  function stackHeight(branches) {
+    if (!branches.length) return 0;
+    return branches.reduce((sum, b) => sum + blockHeight(visibleLeaves(b).length), 0)
+      + (branches.length - 1) * L.blockGap;
+  }
+  function isDraggingRecently() {
+    return performance.now() - lastDragEnd < 320;
+  }
+
+  /* ================= map nodes ================= */
+  function makeCheck() {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'check');
+    svg.setAttribute('viewBox', '0 0 16 16');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.innerHTML = '<path d="M3 8.4 6.2 11.6 13 4.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>';
+    return svg;
+  }
+
+  function initMap() {
+    const center = document.createElement('button');
+    center.type = 'button';
+    center.className = 'center-card';
+    center.setAttribute('aria-label', '第4章 线性变换，返回章节导览');
+    center.innerHTML = [
+      '<span class="center-kicker">第 4 章 · CHAPTER 04</span>',
+      '<span class="center-title">线性变换</span>',
+      '<span class="center-sub">' + esc(CHAPTER.subtitle) + '</span>',
+      '<span class="center-line" aria-hidden="true"></span>'
+    ].join('');
+    center.addEventListener('click', () => {
+      if (isDraggingRecently()) return;
+      state.selectedId = null;
+      updateSelection();
+      renderChapterGuide();
+    });
+    nodeLayer.appendChild(center);
+    nodes.set('center', center);
+
+    BRANCHES.forEach(b => {
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'branch';
+      el.dataset.id = b.id;
+      el.style.setProperty('--bc', b.color);
+      el.style.width = L.branchW + 'px';
+      el.style.height = L.branchH + 'px';
+      el.innerHTML = [
+        '<span class="b-num">' + esc(b.num) + '</span>',
+        '<span class="b-main">',
+        '  <span class="b-title">' + esc(b.title) + '</span>',
+        '  <span class="b-sub">' + esc(b.short) + '</span>',
+        '</span>',
+        '<span class="b-count"></span>'
+      ].join('');
+      el.addEventListener('click', () => {
+        if (isDraggingRecently()) return;
+        toggleBranchExpansion(b.id);
+        renderBranchGuide(b.id);
+      });
+      nodeLayer.appendChild(el);
+      nodes.set(b.id, el);
+
+      b.leaves.forEach(leaf => {
+        const n = document.createElement('button');
+        n.type = 'button';
+        n.className = 'leaf';
+        n.dataset.id = leaf.id;
+        n.style.setProperty('--bc', b.color);
+        n.style.width = L.leafW + 'px';
+        n.style.height = L.leafH + 'px';
+        n.style.display = 'none';
+        n.title = leaf.title;
+        const tag = String(leaf.tag || '').split(' / ')[0];
+        n.innerHTML = [
+          '<span class="l-top">',
+          '  <span class="l-tag">' + esc(tag) + '</span>',
+          '  <span class="l-title">' + esc(leaf.title) + '</span>',
+          '</span>',
+          '<span class="l-brief">' + esc(leaf.brief) + '</span>'
+        ].join('');
+        n.appendChild(makeCheck());
+        n.addEventListener('click', () => {
+          if (isDraggingRecently()) return;
+          selectLeaf(leaf.id, { focus: false });
+        });
+        nodeLayer.appendChild(n);
+        nodes.set(leaf.id, n);
+      });
+    });
+  }
+
+  function computeLayout() {
+    const left = BRANCHES.filter(b => b.side === 'left');
+    const right = BRANCHES.filter(b => b.side === 'right');
+    const leftH = stackHeight(left);
+    const rightH = stackHeight(right);
+    const contentH = Math.max(leftH, rightH, L.minH);
+    const H = contentH + L.top * 2;
+    const targets = new Map();
+
+    targets.set('center', {
+      x: CENTER_X,
+      y: L.top + (contentH - L.centerH) / 2,
+      w: L.centerW,
+      h: L.centerH,
+      opacity: 1
+    });
+
+    [left, right].forEach(group => {
+      if (!group.length) return;
+      const total = stackHeight(group);
+      let y = L.top + (contentH - total) / 2;
+      group.forEach(b => {
+        const leaves = visibleLeaves(b);
+        const branchX = b.side === 'left' ? LEFT_BRANCH_X : RIGHT_BRANCH_X;
+        const leafX = b.side === 'left' ? LEFT_LEAF_X : RIGHT_LEAF_X;
+        targets.set(b.id, {
+          x: branchX,
+          y,
+          w: L.branchW,
+          h: L.branchH,
+          opacity: 1
+        });
+        let leafY = y + L.branchH + L.headerGap;
+        leaves.forEach(leaf => {
+          targets.set(leaf.id, {
+            x: leafX,
+            y: leafY,
+            w: L.leafW,
+            h: L.leafH,
+            opacity: 1
+          });
+          leafY += L.leafH + L.leafGap;
+        });
+        y += blockHeight(leaves.length) + L.blockGap;
+      });
+    });
+
+    return { targets, W: L.width, H };
+  }
+
+  function applyGeo(el, geo) {
+    el.style.left = geo.x + 'px';
+    el.style.top = geo.y + 'px';
+    el.style.opacity = String(geo.opacity == null ? 1 : geo.opacity);
+  }
+
+  function syncBranchChrome() {
+    BRANCHES.forEach(b => {
+      const el = nodes.get(b.id);
+      if (!el) return;
+      const shown = visibleLeaves(b).length;
+      const count = $('.b-count', el);
+      count.textContent = shown + '/' + b.leaves.length;
+      el.setAttribute('aria-label', b.num + ' ' + b.title + '，显示 ' + shown + ' / ' + b.leaves.length + ' 个知识点');
+      el.setAttribute('aria-expanded', state.expanded.has(b.id) ? 'true' : 'false');
+    });
+  }
+
+  function anchorFor(key, targets) {
+    const leaf = LEAF_BY_ID.get(key);
+    if (leaf) {
+      const bg = targets.get(leaf.branchId);
+      const g = targets.get(key);
+      if (bg && g) {
+        return {
+          x: leaf.side === 'left' ? bg.x + bg.w : bg.x - g.w,
+          y: bg.y + bg.h / 2 - g.h / 2
+        };
+      }
+    }
+    const t = targets.get(key);
+    return t ? { x: t.x, y: t.y } : { x: 0, y: 0 };
+  }
+
+  function applyLayout(animate) {
+    const { targets, W, H } = computeLayout();
+    lastTargets = targets;
+    mapCanvas.style.width = W + 'px';
+    mapCanvas.style.height = H + 'px';
+    connectors.setAttribute('width', String(W));
+    connectors.setAttribute('height', String(H));
+    connectors.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    syncBranchChrome();
+
+    if (!animate || prefersReduced) {
+      cancelAnimationFrame(layoutRaf);
+      mapCanvas.classList.remove('js-anim');
+      const all = new Set([...targets.keys(), ...currentGeo.keys()]);
+      all.forEach(key => {
+        const el = nodes.get(key);
+        if (!el) return;
+        if (targets.has(key)) {
+          const g = targets.get(key);
+          el.style.display = '';
+          applyGeo(el, g);
+        } else {
+          el.style.display = 'none';
+        }
+      });
+      currentGeo = new Map(targets);
+      drawConnectors(currentGeo);
+      return targets;
+    }
+
+    const from = new Map();
+    const to = new Map();
+    const hide = [];
+    targets.forEach((g, key) => {
+      const el = nodes.get(key);
+      if (!el) return;
+      el.style.display = '';
+      const prev = currentGeo.get(key);
+      if (prev) {
+        from.set(key, Object.assign({}, prev));
+      } else {
+        const a = anchorFor(key, targets);
+        const start = { x: a.x, y: a.y, w: g.w, h: g.h, opacity: 0 };
+        from.set(key, start);
+        applyGeo(el, start);
+      }
+      to.set(key, g);
+    });
+    currentGeo.forEach((prev, key) => {
+      if (targets.has(key)) return;
+      const el = nodes.get(key);
+      if (!el) return;
+      const a = anchorFor(key, targets);
+      from.set(key, Object.assign({}, prev));
+      to.set(key, { x: a.x, y: a.y, w: prev.w, h: prev.h, opacity: 0 });
+      hide.push(key);
+    });
+
+    cancelAnimationFrame(layoutRaf);
+    mapCanvas.classList.add('js-anim');
+    const started = performance.now();
+    const duration = 430;
+
+    const tick = now => {
+      const t = Math.min(1, (now - started) / duration);
+      const e = 1 - Math.pow(1 - t, 3);
+      const frame = new Map();
+      to.forEach((target, key) => {
+        const start = from.get(key);
+        const g = {
+          x: start.x + (target.x - start.x) * e,
+          y: start.y + (target.y - start.y) * e,
+          w: target.w,
+          h: target.h,
+          opacity: (start.opacity == null ? 1 : start.opacity)
+            + ((target.opacity == null ? 1 : target.opacity) - (start.opacity == null ? 1 : start.opacity)) * e
+        };
+        frame.set(key, g);
+        const el = nodes.get(key);
+        if (el) applyGeo(el, g);
+      });
+      currentGeo = frame;
+      drawConnectors(frame);
+      if (t < 1) {
+        layoutRaf = requestAnimationFrame(tick);
+      } else {
+        hide.forEach(key => {
+          const el = nodes.get(key);
+          if (el) el.style.display = 'none';
+        });
+        currentGeo = new Map(targets);
+        mapCanvas.classList.remove('js-anim');
+        drawConnectors(currentGeo);
+      }
+    };
+    layoutRaf = requestAnimationFrame(tick);
+    return targets;
+  }
+
+  function drawConnectors(geo) {
+    const center = geo.get('center');
+    if (!center) { connectors.innerHTML = ''; return; }
+    const parts = [];
+    const cx = center.x;
+    const cy = center.y + center.h / 2;
+    BRANCHES.forEach(b => {
+      const bg = geo.get(b.id);
+      if (!bg) return;
+      const bop = bg.opacity == null ? 1 : bg.opacity;
+      const sx = b.side === 'left' ? cx : cx + center.w;
+      const ex = b.side === 'left' ? bg.x + bg.w : bg.x;
+      const ey = bg.y + bg.h / 2;
+      const mx = (sx + ex) / 2;
+      parts.push('<path d="M' + sx + ' ' + cy + ' C ' + mx + ' ' + cy + ', ' + mx + ' ' + ey + ', ' + ex + ' ' + ey + '" stroke="' + b.color + '" stroke-width="1.25" opacity="' + (0.5 * bop).toFixed(3) + '"/>');
+      parts.push('<circle cx="' + ex + '" cy="' + ey + '" r="2.4" fill="' + b.color + '" opacity="' + (0.55 * bop).toFixed(3) + '"/>');
+
+      b.leaves.forEach(leaf => {
+        const lg = geo.get(leaf.id);
+        if (!lg) return;
+        const lop = (lg.opacity == null ? 1 : lg.opacity) * bop;
+        if (lop < 0.01) return;
+        const lx1 = b.side === 'left' ? bg.x : bg.x + bg.w;
+        const lx2 = b.side === 'left' ? lg.x + lg.w : lg.x;
+        const ly = lg.y + lg.h / 2;
+        parts.push('<path d="M' + lx1 + ' ' + ly + ' L ' + lx2 + ' ' + ly + '" stroke="' + b.color + '" stroke-width="1" opacity="' + (0.42 * lop).toFixed(3) + '"/>');
+        parts.push('<circle cx="' + lx2 + '" cy="' + ly + '" r="1.9" fill="' + b.color + '" opacity="' + (0.5 * lop).toFixed(3) + '"/>');
+      });
+    });
+    connectors.innerHTML = parts.join('');
+  }
+
+  /* ================= map view transform ================= */
+  function applyView() {
+    const v = state.viewport;
+    mapCanvas.style.transform = 'translate(' + v.x + 'px, ' + v.y + 'px) scale(' + v.scale + ')';
+    const readout = $('#zoom-readout');
+    if (readout) readout.textContent = Math.round(v.scale * 100) + '%';
+  }
+
+  function fitView(animate) {
+    if (mapPane.hidden || !mapViewport.clientWidth) return;
+    const pw = mapViewport.clientWidth;
+    const ph = mapViewport.clientHeight;
+    const target = lastTargets;
+    const W = parseFloat(mapCanvas.style.width) || L.width;
+    const H = parseFloat(mapCanvas.style.height) || 1200;
+    const scale = clamp(Math.min((pw - 28) / W, (ph - 28) / H), 0.24, 1.02);
+    const next = {
+      x: (pw - W * scale) / 2,
+      y: (ph - H * scale) / 2,
+      scale
+    };
+    state.isFit = true;
+    if (animate) {
+      animateViewTo(next, 360);
+    } else {
+      cancelAnimationFrame(viewRaf);
+      state.viewport = next;
+      applyView();
+    }
+  }
+
+  function animateViewTo(next, duration = 320) {
+    if (prefersReduced) {
+      cancelAnimationFrame(viewRaf);
+      state.viewport = next;
+      applyView();
+      return;
+    }
+    const from = Object.assign({}, state.viewport);
+    const started = performance.now();
+    cancelAnimationFrame(viewRaf);
+    const tick = now => {
+      const t = Math.min(1, (now - started) / duration);
+      const e = 1 - Math.pow(1 - t, 3);
+      state.viewport = {
+        x: from.x + (next.x - from.x) * e,
+        y: from.y + (next.y - from.y) * e,
+        scale: from.scale + (next.scale - from.scale) * e
+      };
+      applyView();
+      if (t < 1) viewRaf = requestAnimationFrame(tick);
+    };
+    viewRaf = requestAnimationFrame(tick);
+  }
+
+  function zoomAt(mx, my, factor) {
+    const v = state.viewport;
+    const nextScale = clamp(v.scale * factor, 0.24, 2.2);
+    const k = nextScale / v.scale;
+    state.viewport = {
+      x: mx - (mx - v.x) * k,
+      y: my - (my - v.y) * k,
+      scale: nextScale
+    };
+    state.isFit = false;
+    applyView();
+  }
+
+  function focusLeaf(id) {
+    const g = lastTargets.get(id);
+    if (!g) return;
+    const pw = mapViewport.clientWidth;
+    const ph = mapViewport.clientHeight;
+    const scale = clamp(Math.max(state.viewport.scale, 0.88), 0.24, 1.2);
+    state.isFit = false;
+    animateViewTo({
+      scale,
+      x: pw / 2 - (g.x + g.w / 2) * scale,
+      y: ph / 2 - (g.y + g.h / 2) * scale
+    }, 340);
+  }
+
+  function toggleBranchExpansion(bid) {
+    if (state.expanded.has(bid)) state.expanded.delete(bid);
+    else state.expanded.add(bid);
+    const before = lastTargets.get(bid) ? lastTargets.get(bid).y : null;
+    const targets = applyLayout(true);
+    if (before != null && state.view === 'map') {
+      const after = targets.get(bid) ? targets.get(bid).y : before;
+      const dy = (after - before) * state.viewport.scale;
+      if (Math.abs(dy) > 0.5) {
+        state.isFit = false;
+        animateViewTo(Object.assign({}, state.viewport, { y: state.viewport.y - dy }), 390);
+      }
+    }
+  }
+
+  /* ================= map interactions ================= */
+  const pointers = new Map();
+  let panStart = null;
+  let pinch = null;
+  let didDrag = false;
+
+  function setupMapEvents() {
+    mapViewport.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pointers.size === 1) {
+        panStart = {
+          x: e.clientX,
+          y: e.clientY,
+          vx: state.viewport.x,
+          vy: state.viewport.y
+        };
+        didDrag = false;
+      } else if (pointers.size === 2) {
+        const pts = Array.from(pointers.values());
+        const dx = pts[0].x - pts[1].x;
+        const dy = pts[0].y - pts[1].y;
+        pinch = {
+          dist: Math.hypot(dx, dy) || 1,
+          mx: (pts[0].x + pts[1].x) / 2 - mapViewport.getBoundingClientRect().left,
+          my: (pts[0].y + pts[1].y) / 2 - mapViewport.getBoundingClientRect().top,
+          vx: state.viewport.x,
+          vy: state.viewport.y,
+          scale: state.viewport.scale
+        };
+        panStart = null;
+      }
+    });
+
+    mapViewport.addEventListener('pointermove', e => {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      if (pointers.size === 2 && pinch) {
+        const pts = Array.from(pointers.values());
+        const dx = pts[0].x - pts[1].x;
+        const dy = pts[0].y - pts[1].y;
+        const dist = Math.hypot(dx, dy) || 1;
+        const rect = mapViewport.getBoundingClientRect();
+        const mx = (pts[0].x + pts[1].x) / 2 - rect.left;
+        const my = (pts[0].y + pts[1].y) / 2 - rect.top;
+        const scale = clamp(pinch.scale * dist / pinch.dist, 0.24, 2.2);
+        const k = scale / pinch.scale;
+        state.viewport = {
+          scale,
+          x: mx - (pinch.mx - pinch.vx) * k,
+          y: my - (pinch.my - pinch.vy) * k
+        };
+        state.isFit = false;
+        didDrag = true;
+        applyView();
+        return;
+      }
+
+      if (panStart && pointers.size === 1) {
+        const dx = e.clientX - panStart.x;
+        const dy = e.clientY - panStart.y;
+        if (!didDrag && Math.hypot(dx, dy) > 4) {
+          didDrag = true;
+          mapViewport.classList.add('dragging');
+          mapViewport.setPointerCapture(e.pointerId);
+          state.isFit = false;
+        }
+        if (didDrag) {
+          state.viewport.x = panStart.vx + dx;
+          state.viewport.y = panStart.vy + dy;
+          applyView();
+        }
+      }
+    });
+
+    const endPointer = e => {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.delete(e.pointerId);
+      if (didDrag) lastDragEnd = performance.now();
+      if (pointers.size < 2) pinch = null;
+      if (pointers.size === 1) {
+        const p = Array.from(pointers.values())[0];
+        panStart = { x: p.x, y: p.y, vx: state.viewport.x, vy: state.viewport.y };
+        didDrag = false;
+      } else if (pointers.size === 0) {
+        panStart = null;
+        mapViewport.classList.remove('dragging');
+      }
+    };
+    mapViewport.addEventListener('pointerup', endPointer);
+    mapViewport.addEventListener('pointercancel', endPointer);
+
+    mapViewport.addEventListener('wheel', e => {
+      e.preventDefault();
+      const rect = mapViewport.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+      zoomAt(mx, my, Math.exp(-dy * 0.0015));
+    }, { passive: false });
+
+    mapViewport.addEventListener('dblclick', e => {
+      if (e.target.closest('.leaf, .branch, .center-card')) return;
+      fitView(true);
+    });
+
+    $('#zoom-in').addEventListener('click', () => {
+      const rect = mapViewport.getBoundingClientRect();
+      zoomAt(rect.width / 2, rect.height / 2, 1.22);
+    });
+    $('#zoom-out').addEventListener('click', () => {
+      const rect = mapViewport.getBoundingClientRect();
+      zoomAt(rect.width / 2, rect.height / 2, 1 / 1.22);
+    });
+    $('#zoom-fit').addEventListener('click', () => fitView(true));
+
+    $('#btn-expand-all').addEventListener('click', () => {
+      BRANCHES.forEach(b => state.expanded.add(b.id));
+      applyLayout(true);
+      fitView(true);
+      toast('已展开全部 ' + TOTAL + ' 个知识点');
+    });
+    $('#btn-collapse-all').addEventListener('click', () => {
+      state.expanded.clear();
+      applyLayout(true);
+      fitView(true);
+      toast('已收起到章节预览');
+    });
+  }
+
+  /* ================= sidebar ================= */
+  function clearSidebarScope() {
+    sidebar.style.removeProperty('--bc');
+  }
+  function setSidebarScope(color) {
+    sidebar.style.setProperty('--bc', color);
+  }
+  function progressCardHTML(scope) {
+    const leaves = scope === 'all' ? ALL_LEAVES : BRANCH_BY_ID.get(scope).leaves;
+    const done = leaves.filter(l => state.mastered.has(l.id)).length;
+    return [
+      '<div class="progress-card" data-scope="' + scope + '">',
+      '  <div class="progress-top"><span>掌握进度</span><b class="progress-count">' + done + ' / ' + leaves.length + '</b></div>',
+      '  <div class="progress-bar"><i style="width:' + (leaves.length ? done / leaves.length * 100 : 0) + '%"></i></div>',
+      '  <div class="progress-foot">在详情或清单中勾选「标记掌握」，进度只保存在本机浏览器。</div>',
+      '</div>'
+    ].join('');
+  }
+
+  function renderChapterGuide() {
+    state.guideMode = 'chapter';
+    state.guideBranch = null;
+    state.selectedId = null;
+    clearSidebarScope();
+    sideInner.innerHTML = [
+      '<p class="eyebrow">CHAPTER 04 · 导览</p>',
+      '<h2 class="side-title">' + esc(CHAPTER.title) + '</h2>',
+      '<p class="side-lede">' + esc(CHAPTER.lede) + '</p>',
+      '<div class="pills">',
+      '  <span class="pill">' + BRANCHES.length + ' 节</span>',
+      '  <span class="pill">' + TOTAL + ' 个知识点</span>',
+      '  <span class="pill">' + CHAPTER.pitfalls.length + ' 条易错提醒</span>',
+      '  <span class="pill">A4 可打印</span>',
+      '</div>',
+      '<div class="thread">',
+      CHAPTER.thread.map(step => [
+        '<div class="thread-step">',
+        '  <div class="thread-num">' + esc(step.n) + '</div>',
+        '  <div><h4>' + esc(step.t) + '</h4><p>' + esc(step.d) + '</p></div>',
+        '</div>'
+      ].join('')).join(''),
+      '</div>',
+      '<p class="side-section-title">章节路线</p>',
+      '<ul class="route">',
+      CHAPTER.route.map(item => {
+        const branch = BRANCHES.find(b => b.num === item.num);
+        return [
+          '<li><button type="button" data-branch-link="' + (branch ? branch.id : '') + '">',
+          '  <span class="n">' + esc(item.num) + '</span>',
+          '  <span class="rt">' + esc(item.title) + '</span>',
+          '  <span class="rd">' + esc(item.desc) + '</span>',
+          '</button></li>'
+        ].join('');
+      }).join(''),
+      '</ul>',
+      '<p class="side-section-title">易错清单</p>',
+      '<ul class="pitfalls">',
+      CHAPTER.pitfalls.map(p => '<li>' + esc(p) + '</li>').join(''),
+      '</ul>',
+      progressCardHTML('all'),
+      '<p class="source-note">内容依据《线性代数 A（五学分）学生试用版》第 4 章（第 195–256 页）整理。标有「拓展」的知识点属于正文之外的补充说明，考试要求以课堂为准。</p>'
+    ].join('');
+
+    $$('[data-branch-link]', sideInner).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.branchLink;
+        if (id) renderBranchGuide(id);
+      });
+    });
+    sidebar.scrollTop = 0;
+  }
+
+  function renderBranchGuide(bid) {
+    const b = BRANCH_BY_ID.get(bid);
+    if (!b) return;
+    state.guideMode = 'branch';
+    state.guideBranch = bid;
+    state.selectedId = null;
+    updateSelection();
+    setSidebarScope(b.color);
+    const expanded = state.expanded.has(bid);
+    const onMap = state.view === 'map';
+    sideInner.innerHTML = [
+      '<p class="eyebrow">SECTION ' + esc(b.num) + ' · 导览</p>',
+      '<h2 class="side-title">' + esc(b.num) + ' ' + esc(b.title) + '</h2>',
+      '<p class="side-lede">' + esc(b.brief) + '</p>',
+      '<div class="pills">',
+      '  <span class="pill">' + b.leaves.length + ' 个知识点</span>',
+      '  <span class="pill">' + (expanded ? '已在图中展开' : '图中先展示 2 条') + '</span>',
+      '</div>',
+      '<p class="side-section-title">本节知识点</p>',
+      '<ul class="route">',
+      b.leaves.map((leaf, i) => [
+        '<li><button type="button" data-leaf-link="' + leaf.id + '">',
+        '  <span class="n">' + String(i + 1).padStart(2, '0') + '</span>',
+        '  <span class="rt">' + esc(leaf.title) + '</span>',
+        '  <span class="rd">' + esc(leaf.brief) + '</span>',
+        '</button></li>'
+      ].join('')).join(''),
+      '</ul>',
+      onMap
+        ? '<div class="detail-actions"><button class="master-btn" type="button" id="branch-toggle">' + (expanded ? '收起本节节点' : '展开本节全部 ' + b.leaves.length + ' 个知识点') + '</button></div>'
+        : '<p class="source-note">当前是清单视图。切换到「思维导图」后，可以展开本节节点查看结构。</p>',
+      progressCardHTML(bid),
+      '<p class="source-note">点击上方任一条目查看完整讲解；在图中点击节点头可以展开或收起其下节点。</p>'
+    ].join('');
+
+    $$('[data-leaf-link]', sideInner).forEach(btn => {
+      btn.addEventListener('click', () => selectLeaf(btn.dataset.leafLink, { focus: false }));
+    });
+    const toggle = $('#branch-toggle', sideInner);
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const scroll = sidebar.scrollTop;
+        toggleBranchExpansion(bid);
+        renderBranchGuide(bid);
+        sidebar.scrollTop = scroll;
+      });
+    }
+    sidebar.scrollTop = 0;
+  }
+
+  function renderDetail(leaf) {
+    const b = BRANCH_BY_ID.get(leaf.branchId);
+    state.guideMode = 'leaf';
+    state.guideBranch = b.id;
+    setSidebarScope(b.color);
+    const index = leaf.globalIndex;
+    const prev = ALL_LEAVES[index - 1];
+    const next = ALL_LEAVES[index + 1];
+    const on = state.mastered.has(leaf.id);
+    sideInner.innerHTML = [
+      '<div class="detail">',
+      '  <div class="detail-top">',
+      '    <button class="back-btn" type="button" id="back-guide">' + ICON.left + ' 章节导览</button>',
+      '    <div class="detail-ref">' + esc(leaf.branchNum) + ' · ' + esc(leaf.branchTitle) + '<br>' + esc(leaf.ref) + '</div>',
+      '  </div>',
+      '  <div class="detail-tagrow">',
+      '    <span class="tag">' + esc(leaf.tag) + '</span>',
+      '    <span class="section-chip">第 ' + (index + 1) + ' / ' + TOTAL + ' 个知识点</span>',
+      '  </div>',
+      '  <h2>' + esc(leaf.title) + '</h2>',
+      '  <p class="detail-one">' + esc(leaf.one) + '</p>',
+      '  <div class="formula">' + mathHTML(leaf.formula) + '</div>',
+      '  <ul class="detail-points">',
+      leaf.points.map(p => '<li>' + esc(p) + '</li>').join(''),
+      '  </ul>',
+      '  <div class="tip"><span>易错 / 提示</span><p>' + esc(leaf.tip) + '</p></div>',
+      '  <div class="detail-ref-line">教材出处 · ' + esc(leaf.ref) + '</div>',
+      '  <div class="detail-actions">',
+      '    <button class="master-btn' + (on ? ' is-mastered' : '') + '" type="button" data-master-toggle="' + leaf.id + '" aria-pressed="' + on + '">' + ICON.check + '<span class="label">' + (on ? '已掌握 · 点击取消' : '标记为已掌握') + '</span></button>',
+      '    <button class="nav-btn" type="button" id="prev-leaf" aria-label="上一个知识点"' + (prev ? '' : ' disabled') + '>' + ICON.left + '</button>',
+      '    <button class="nav-btn" type="button" id="next-leaf" aria-label="下一个知识点"' + (next ? '' : ' disabled') + '>' + ICON.right + '</button>',
+      '  </div>',
+      '</div>'
+    ].join('');
+
+    $('#back-guide', sideInner).addEventListener('click', renderChapterGuide);
+    const master = $('[data-master-toggle]', sideInner);
+    if (master) {
+      master.addEventListener('click', () => toggleMastery(leaf.id));
+    }
+    const prevBtn = $('#prev-leaf', sideInner);
+    const nextBtn = $('#next-leaf', sideInner);
+    if (prevBtn && prev) prevBtn.addEventListener('click', () => selectLeaf(prev.id, { focus: true }));
+    if (nextBtn && next) nextBtn.addEventListener('click', () => selectLeaf(next.id, { focus: true }));
+    sidebar.scrollTop = 0;
+    openSidebarIfNeeded();
+  }
+
+  function updateSelection() {
+    nodes.forEach((el, key) => {
+      if (!el.classList.contains('leaf')) return;
+      el.classList.toggle('selected', key === state.selectedId);
+    });
+  }
+
+  function selectLeaf(id, options) {
+    const leaf = LEAF_BY_ID.get(id);
+    if (!leaf) return;
+    const opts = options || {};
+    let changed = false;
+    if (!state.expanded.has(leaf.branchId) && leaf.localIndex >= PREVIEW) {
+      state.expanded.add(leaf.branchId);
+      changed = true;
+    }
+    state.selectedId = id;
+    if (changed) applyLayout(true);
+    updateSelection();
+    if (state.view === 'list') {
+      revealRow(id, !!opts.openDetails);
+      return;
+    }
+    renderDetail(leaf);
+    if (opts.focus) {
+      requestAnimationFrame(() => focusLeaf(id));
+    }
+  }
+
+  /* ================= list view ================= */
+  function rowHTML(b, leaf) {
+    const on = state.mastered.has(leaf.id);
+    return [
+      '<article class="leaf-row' + (on ? ' is-mastered' : '') + '" id="row-' + leaf.id + '" data-leaf="' + leaf.id + '" style="--bc:' + b.color + '">',
+      '  <div class="row-head">',
+      '    <span class="print-check" aria-hidden="true"></span>',
+      '    <h3 class="row-title">' + esc(leaf.title) + '</h3>',
+      '    <span class="row-brief">' + esc(leaf.brief) + '</span>',
+      '    <button class="row-master' + (on ? ' is-mastered' : '') + '" type="button" data-master-leaf="' + leaf.id + '" aria-pressed="' + on + '"><span class="label">' + (on ? '已掌握' : '标记掌握') + '</span></button>',
+      '  </div>',
+      '  <p class="row-one">' + esc(leaf.one) + '</p>',
+      '  <details class="row-more">',
+      '    <summary>公式 · 要点 · 提示</summary>',
+      '    <div class="row-body">',
+      '      <div class="formula">' + mathHTML(leaf.formula) + '</div>',
+      '      <ul class="detail-points">',
+      leaf.points.map(p => '<li>' + esc(p) + '</li>').join(''),
+      '      </ul>',
+      '      <div class="tip"><span>易错 / 提示</span><p>' + esc(leaf.tip) + '</p></div>',
+      '      <div class="detail-ref-line">教材出处 · ' + esc(leaf.ref) + '</div>',
+      '    </div>',
+      '  </details>',
+      '</article>'
+    ].join('');
+  }
+
+  function renderList() {
+    listSections.innerHTML = BRANCHES.map(b => {
+      return [
+        '<section class="sec" id="sec-' + b.id + '" data-branch="' + b.id + '" style="--bc:' + b.color + '">',
+        '  <div class="sec-head">',
+        '    <div class="sec-num">' + esc(b.num) + '</div>',
+        '    <div class="sec-title-wrap">',
+        '      <h2>' + esc(b.title) + '</h2>',
+        '      <p class="sec-brief">' + esc(b.brief) + '</p>',
+        '    </div>',
+        '    <div class="sec-progress"><b>0 / ' + b.leaves.length + '</b><div class="mini-bar"><i></i></div></div>',
+        '  </div>',
+        b.leaves.map(leaf => rowHTML(b, leaf)).join(''),
+        '</section>'
+      ].join('');
+    }).join('');
+
+    listSections.addEventListener('click', e => {
+      const btn = e.target.closest('[data-master-leaf]');
+      if (!btn) return;
+      toggleMastery(btn.dataset.masterLeaf);
+    });
+    updateProgressUI();
+  }
+
+  function revealRow(id, openDetails) {
+    const row = document.getElementById('row-' + id);
+    if (!row) return;
+    if (openDetails) {
+      const details = $('.row-more', row);
+      if (details) details.open = true;
+    }
+    row.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'center' });
+    row.classList.remove('flash');
+    void row.offsetWidth;
+    row.classList.add('flash');
+    window.setTimeout(() => row.classList.remove('flash'), 1300);
+  }
+
+  /* ================= mastery ================= */
+  function toggleMastery(id) {
+    const leaf = LEAF_BY_ID.get(id);
+    if (!leaf) return;
+    const wasOn = state.mastered.has(id);
+    if (wasOn) state.mastered.delete(id);
+    else state.mastered.add(id);
+    writeLS(LS_MASTERED, JSON.stringify(Array.from(state.mastered)));
+    updateMasteryUI();
+    toast(wasOn ? '已取消掌握标记' : '已标记「' + leaf.title + '」为掌握');
+  }
+
+  function updateMasteryUI() {
+    nodes.forEach((el, key) => {
+      if (!el.classList.contains('leaf')) return;
+      const on = state.mastered.has(key);
+      el.classList.toggle('mastered', on);
+      const check = $('.check', el);
+      if (check) check.hidden = !on;
+      const leaf = LEAF_BY_ID.get(key);
+      if (leaf) {
+        el.setAttribute('aria-label', leaf.title + '，' + leaf.brief + (on ? '，已掌握' : ''));
+      }
+    });
+
+    $$('.leaf-row').forEach(row => {
+      const on = state.mastered.has(row.dataset.leaf);
+      row.classList.toggle('is-mastered', on);
+      const btn = $('[data-master-leaf]', row);
+      if (btn) {
+        btn.classList.toggle('is-mastered', on);
+        btn.setAttribute('aria-pressed', String(on));
+        const label = $('.label', btn);
+        if (label) label.textContent = on ? '已掌握' : '标记掌握';
+      }
+    });
+
+    $$('[data-master-toggle]').forEach(btn => {
+      const on = state.mastered.has(btn.dataset.masterToggle);
+      btn.classList.toggle('is-mastered', on);
+      btn.setAttribute('aria-pressed', String(on));
+      const label = $('.label', btn);
+      if (label) label.textContent = on ? '已掌握 · 点击取消' : '标记为已掌握';
+    });
+
+    updateProgressUI();
+  }
+
+  function updateProgressUI() {
+    const done = ALL_LEAVES.filter(l => state.mastered.has(l.id)).length;
+    const stat = $('#stat-mastered');
+    if (stat) stat.textContent = String(done);
+    const listProgress = $('#list-progress');
+    if (listProgress) listProgress.textContent = '已掌握 ' + done + ' / ' + TOTAL;
+
+    $$('.progress-card').forEach(card => {
+      const scope = card.dataset.scope;
+      const leaves = scope === 'all' ? ALL_LEAVES : (BRANCH_BY_ID.get(scope) || { leaves: [] }).leaves;
+      const n = leaves.filter(l => state.mastered.has(l.id)).length;
+      const count = $('.progress-count', card);
+      if (count) count.textContent = n + ' / ' + leaves.length;
+      const bar = $('.progress-bar i', card);
+      if (bar) bar.style.width = (leaves.length ? n / leaves.length * 100 : 0) + '%';
+    });
+
+    $$('.sec').forEach(sec => {
+      const b = BRANCH_BY_ID.get(sec.dataset.branch);
+      if (!b) return;
+      const n = b.leaves.filter(l => state.mastered.has(l.id)).length;
+      const count = $('.sec-progress b', sec);
+      if (count) count.textContent = n + ' / ' + b.leaves.length;
+      const bar = $('.sec-progress .mini-bar i', sec);
+      if (bar) bar.style.width = (n / b.leaves.length * 100) + '%';
+    });
+  }
+
+  /* ================= search ================= */
+  const SEARCH_INDEX = ALL_LEAVES.map(l => ({
+    leaf: l,
+    blob: [l.title, l.brief, l.one, l.formula, l.points.join(' '), l.tip, l.ref, l.tag, l.branchTitle, l.branchNum]
+      .join(' ')
+      .toLowerCase()
+      .replace(/\s+/g, '')
+  }));
+  let searchResults = [];
+  let searchActive = -1;
+
+  function normalizeQuery(q) {
+    return q.trim().toLowerCase().replace(/\s+/g, '');
+  }
+
+  function positionSearchPop() {
+    if (window.innerWidth <= 760) {
+      const rect = $('.search', document).getBoundingClientRect();
+      searchPop.style.top = (rect.bottom + 8) + 'px';
+    } else {
+      searchPop.style.removeProperty('top');
+    }
+  }
+
+  function runSearch() {
+    const q = normalizeQuery(searchInput.value);
+    if (!q) {
+      searchResults = [];
+      searchActive = -1;
+      searchPop.hidden = true;
+      return;
+    }
+    searchResults = SEARCH_INDEX.filter(item => item.blob.includes(q)).map(item => item.leaf);
+    searchActive = searchResults.length ? 0 : -1;
+    renderSearchResults();
+    positionSearchPop();
+    searchPop.hidden = false;
+    searchInput.setAttribute('aria-expanded', 'true');
+  }
+
+  function renderSearchResults() {
+    if (!searchResults.length) {
+      searchPop.innerHTML = '<div class="search-empty">没有匹配的知识点，试试「行列式」「秩」「Cramer」。</div>';
+      return;
+    }
+    const shown = searchResults.slice(0, 24);
+    const items = shown.map((leaf, i) => [
+      '<button class="search-item' + (i === searchActive ? ' is-active' : '') + '" type="button" data-search-leaf="' + leaf.id + '" style="--bc:' + leaf.color + '">',
+      '  <span class="si-num">' + esc(leaf.branchNum) + '</span>',
+      '  <span class="si-main"><span class="si-t">' + esc(leaf.title) + '</span><span class="si-b">' + esc(leaf.brief) + ' · ' + esc(leaf.branchTitle) + '</span></span>',
+      '</button>'
+    ].join('')).join('');
+    const more = searchResults.length > shown.length
+      ? '<div class="search-empty">还有 ' + (searchResults.length - shown.length) + ' 条结果，请再具体一些。</div>'
+      : '';
+    searchPop.innerHTML = items + more;
+    $$('[data-search-leaf]', searchPop).forEach(btn => {
+      btn.addEventListener('click', () => chooseSearchResult(btn.dataset.searchLeaf));
+    });
+  }
+
+  function moveSearchActive(delta) {
+    if (!searchResults.length) return;
+    searchActive = (searchActive + delta + Math.min(searchResults.length, 24)) % Math.min(searchResults.length, 24);
+    renderSearchResults();
+    const active = $('.search-item.is-active', searchPop);
+    if (active) active.scrollIntoView({ block: 'nearest' });
+  }
+
+  function chooseSearchResult(id) {
+    hideSearch();
+    searchInput.blur();
+    if (state.view === 'list') {
+      revealRow(id, true);
+    } else {
+      selectLeaf(id, { focus: true });
+    }
+  }
+
+  function hideSearch() {
+    searchPop.hidden = true;
+    searchActive = -1;
+    searchInput.setAttribute('aria-expanded', 'false');
+  }
+
+  function setupSearch() {
+    searchInput.addEventListener('input', runSearch);
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim()) runSearch();
+    });
+    searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        hideSearch();
+        searchInput.blur();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        moveSearchActive(1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        moveSearchActive(-1);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (searchResults.length) {
+          chooseSearchResult(searchResults[Math.max(0, searchActive)].id);
+        }
+      }
+    });
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.search')) hideSearch();
+    });
+  }
+
+  /* ================= tabs / sidebar / theme ================= */
+  function setView(next, options) {
+    const opts = options || {};
+    state.view = next;
+    document.body.classList.toggle('list-mode', next === 'list');
+    mapPane.hidden = next !== 'map';
+    listPane.hidden = next !== 'list';
+    sidebar.hidden = next !== 'map';
+    sideToggle.hidden = next !== 'map';
+    $$('.tab').forEach(tab => {
+      const on = tab.dataset.view === next;
+      tab.classList.toggle('active', on);
+      tab.setAttribute('aria-selected', String(on));
+    });
+    if (opts.persist !== false) writeLS(LS_VIEW, next);
+    if (next === 'list') {
+      closeSidebar();
+      hideSearch();
+    } else {
+      if (opts.refit !== false && state.isFit) {
+        requestAnimationFrame(() => fitView(false));
+      }
+    }
+  }
+
+  function openSidebar() {
+    if (window.innerWidth > 980 || state.view !== 'map') return;
+    sidebar.classList.add('open');
+    scrim.classList.add('show');
+    state.sidebarOpen = true;
+  }
+  function openSidebarIfNeeded() {
+    if (window.innerWidth <= 980) openSidebar();
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    scrim.classList.remove('show');
+    state.sidebarOpen = false;
+  }
+
+  function applyTheme() {
+    document.documentElement.dataset.theme = state.theme;
+    const dark = state.theme === 'dark';
+    themeBtn.innerHTML = dark ? ICON.sun : ICON.moon;
+    themeBtn.title = dark ? '切换到浅色' : '切换到深色';
+    themeBtn.setAttribute('aria-label', themeBtn.title);
+  }
+
+  function toggleTheme() {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    writeLS(LS_THEME, state.theme);
+    applyTheme();
+    toast(state.theme === 'dark' ? '已切换到深色主题' : '已切换到浅色主题');
+  }
+
+  /* ================= export / print ================= */
+  function buildMarkdown() {
+    const lines = [];
+    lines.push('# ' + plain(CHAPTER.title), '', '> ' + plain(CHAPTER.subtitle), '', plain(CHAPTER.lede), '');
+    lines.push('## 学习主线', '');
+    CHAPTER.thread.forEach(step => {
+      lines.push(step.n + '. **' + plain(step.t) + '**：' + plain(step.d), '');
+    });
+    BRANCHES.forEach(b => {
+      lines.push('---', '', '## ' + b.num + ' ' + plain(b.title), '', '> ' + plain(b.brief), '');
+      b.leaves.forEach(leaf => {
+        const mark = state.mastered.has(leaf.id) ? ' [已掌握]' : '';
+        lines.push('### ' + plain(leaf.title) + mark, '');
+        lines.push('`' + plain(leaf.tag) + '` · ' + plain(leaf.one), '');
+        lines.push('**核心公式**', '', '```', plain(leaf.formula), '```', '');
+        lines.push('**要点**', '');
+        leaf.points.forEach(p => lines.push('- ' + plain(p)));
+        lines.push('', '> 提示：' + plain(leaf.tip), '');
+        lines.push('出处：' + plain(leaf.ref), '');
+      });
+    });
+    lines.push('---', '', '## 易错清单', '');
+    CHAPTER.pitfalls.forEach((p, i) => lines.push((i + 1) + '. ' + plain(p)));
+    lines.push('', '> 依据《线性代数 A（五学分）学生试用版》第 4 章（第 195–256 页）整理。');
+    return lines.join('\n');
+  }
+
+  function exportMarkdown() {
+    const text = buildMarkdown();
+    const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '线性代数第4章-知识点总结.md';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1200);
+    toast('已导出 Markdown 笔记');
+  }
+
+  let printRestoreView = null;
+
+  function preparePrint() {
+    if (state.view !== 'list') {
+      printRestoreView = state.view;
+      setView('list', { persist: false, refit: false });
+    }
+    $$('.row-more').forEach(d => { d.open = true; });
+  }
+
+  function printPage() {
+    preparePrint();
+    window.setTimeout(() => window.print(), 80);
+  }
+
+  function setupPrint() {
+    window.addEventListener('beforeprint', () => {
+      preparePrint();
+    });
+    window.addEventListener('afterprint', () => {
+      if (printRestoreView) {
+        const back = printRestoreView;
+        printRestoreView = null;
+        setView(back, { persist: false });
+      }
+    });
+    $('#btn-print').addEventListener('click', printPage);
+    $('#btn-print-list').addEventListener('click', printPage);
+  }
+
+  /* ================= misc UI ================= */
+  let toastTimer = 0;
+  function toast(message) {
+    toastEl.textContent = message;
+    toastEl.classList.add('show');
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => toastEl.classList.remove('show'), 1900);
+  }
+
+  function setupListControls() {
+    $('#list-expand').addEventListener('click', () => {
+      const all = $$('.row-more');
+      const anyClosed = all.some(d => !d.open);
+      all.forEach(d => { d.open = anyClosed; });
+      $('#list-expand').textContent = anyClosed ? '收起全部细节' : '展开全部细节';
+    });
+    $('#btn-export-list').addEventListener('click', exportMarkdown);
+    $('#btn-export').addEventListener('click', exportMarkdown);
+  }
+
+  function syncMapHint() {
+    const hint = $('.map-hint');
+    if (!hint) return;
+    hint.textContent = window.innerWidth <= 760
+      ? '双指缩放 · 拖动查看'
+      : '滚轮缩放 · 拖拽平移 · 点击节点头展开';
+  }
+
+  function setupViewportWatcher() {
+    let timer = 0;
+    const onResize = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (window.innerWidth > 980) closeSidebar();
+        if (state.view === 'map' && state.isFit) fitView(false);
+        syncMapHint();
+        positionSearchPop();
+      }, 120);
+    };
+    window.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
+  }
+
+  function setupKeyboard() {
+    document.addEventListener('keydown', e => {
+      const typing = e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable);
+      if (!typing && (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'))) {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+        return;
+      }
+      if (e.key === 'Escape') {
+        if (!searchPop.hidden) {
+          hideSearch();
+          searchInput.blur();
+        } else if (state.sidebarOpen) {
+          closeSidebar();
+        }
+      }
+    });
+  }
+
+  function setupTabs() {
+    $$('.tab').forEach(tab => {
+      tab.addEventListener('click', () => setView(tab.dataset.view));
+    });
+    $('#btn-theme').addEventListener('click', toggleTheme);
+    sideToggle.addEventListener('click', openSidebar);
+    $('#side-close').addEventListener('click', closeSidebar);
+    scrim.addEventListener('click', closeSidebar);
+  }
+
+  /* ================= init ================= */
+  function init() {
+    applyTheme();
+    renderList();
+    initMap();
+    setupMapEvents();
+    setupSearch();
+    setupTabs();
+    setupListControls();
+    setupPrint();
+    setupKeyboard();
+    setupViewportWatcher();
+    applyLayout(false);
+    updateMasteryUI();
+    renderChapterGuide();
+    setView(state.view, { persist: false, refit: false });
+    if (state.view === 'map') {
+      requestAnimationFrame(() => fitView(false));
+    }
+    syncMapHint();
+    // seed a guide-visible detail only when arriving through a hash
+    const hash = decodeURIComponent(window.location.hash.replace(/^#/, ''));
+    if (hash && LEAF_BY_ID.has(hash)) {
+      setView('map', { persist: false, refit: false });
+      requestAnimationFrame(() => {
+        fitView(false);
+        selectLeaf(hash, { focus: true });
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+</body>
+</html>

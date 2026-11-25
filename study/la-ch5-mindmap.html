@@ -1,0 +1,3752 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>第5章 内积空间 · 思维导图与知识清单</title>
+<meta name="description" content="线性代数 A（五学分）第5章知识点总结：交互式思维导图、39 个知识点清单、掌握度勾选与 A4 打印。">
+<script>
+  try {
+    if (localStorage.getItem('la-ch5-theme-v1') === 'dark') {
+      document.documentElement.dataset.theme = 'dark';
+    }
+  } catch (e) {}
+</script>
+<style>
+:root {
+  --paper: #f4f0e8;
+  --paper-2: #eae4d8;
+  --card: #fffcf6;
+  --card-2: #faf6ed;
+  --ink: #1f2a33;
+  --ink-2: #45525f;
+  --muted: #7c8792;
+  --line: #ddd4c5;
+  --line-strong: #c8bdab;
+  --accent: #c96f43;
+  --accent-ink: #8e4422;
+  --dot: rgba(50, 62, 74, 0.11);
+  --shadow-sm: 0 1px 2px rgba(31, 42, 51, 0.05), 0 5px 16px rgba(31, 42, 51, 0.045);
+  --shadow-md: 0 12px 34px rgba(31, 42, 51, 0.12);
+  --sidebar-w: 380px;
+  --topbar-h: 68px;
+  --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", SimSun, serif;
+  --sans: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", "Cascadia Code", Consolas, "SFMono-Regular", monospace;
+}
+
+[data-theme="dark"] {
+  --paper: #14191f;
+  --paper-2: #1b222a;
+  --card: #1f2730;
+  --card-2: #242d37;
+  --ink: #eae4d8;
+  --ink-2: #b9c2cb;
+  --muted: #87929e;
+  --line: #303b46;
+  --line-strong: #40505e;
+  --accent: #e08a5c;
+  --accent-ink: #f0b18c;
+  --dot: rgba(220, 230, 240, 0.075);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 18px 46px rgba(0, 0, 0, 0.38);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+button, input { font: inherit; color: inherit; }
+button { border: 0; background: none; padding: 0; cursor: pointer; }
+a { color: inherit; }
+::selection { background: color-mix(in srgb, var(--accent) 28%, transparent); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+[hidden] { display: none !important; }
+
+/* ---------- shell ---------- */
+.app {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.topbar {
+  flex: 0 0 var(--topbar-h);
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 22px;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: relative;
+  z-index: 40;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.seal {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--ink);
+  color: var(--paper);
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: 9px;
+  line-height: 1.15;
+  letter-spacing: 0.1em;
+  text-align: center;
+  flex: 0 0 auto;
+}
+
+.brand-text { min-width: 0; }
+.brand-text h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.brand-text p {
+  margin: 3px 0 0;
+  font-size: 10.5px;
+  color: var(--muted);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper-2);
+  flex: 0 0 auto;
+}
+.tab {
+  padding: 7px 13px;
+  border-radius: 7px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  transition: color 0.18s, box-shadow 0.18s;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--ink); }
+.tab.active {
+  background: var(--card);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(31, 42, 51, 0.08);
+}
+
+.top-actions {
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.search {
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+.search svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.search input {
+  width: 210px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--ink);
+  padding: 0 11px 0 31px;
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s, width 0.2s;
+}
+.search input::placeholder { color: var(--muted); }
+.search input:focus {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  flex: 0 0 auto;
+}
+.icon-btn:hover {
+  background: var(--card);
+  border-color: var(--line);
+  color: var(--ink);
+}
+.icon-btn svg { width: 16px; height: 16px; }
+.icon-btn.wide {
+  width: auto;
+  padding: 0 10px;
+  gap: 6px;
+  font-size: 11.5px;
+}
+.icon-btn.wide svg { width: 14px; height: 14px; }
+
+#side-toggle { display: none; }
+
+/* ---------- workspace ---------- */
+.workspace {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  position: relative;
+}
+
+/* ---------- map ---------- */
+.map-pane {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.map-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  background-image: radial-gradient(var(--dot) 1.1px, transparent 1.1px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+}
+.map-viewport.dragging { cursor: grabbing; }
+.map-viewport::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 20%, color-mix(in srgb, var(--accent) 5%, transparent), transparent 34%),
+    radial-gradient(circle at 82% 70%, color-mix(in srgb, var(--ink) 4%, transparent), transparent 38%);
+  z-index: 0;
+}
+
+.map-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.connectors {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+}
+.connectors path {
+  fill: none;
+  stroke-linecap: round;
+}
+.connectors circle { opacity: 0.55; }
+
+.node-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.center-card {
+  position: absolute;
+  width: 300px;
+  height: 136px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 84% 10%, rgba(217, 119, 69, 0.18), transparent 42%),
+    linear-gradient(145deg, #26313c, #151b21);
+  color: #f7f1e5;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 18px 46px rgba(20, 28, 36, 0.22);
+  padding: 19px 22px;
+  text-align: left;
+  overflow: hidden;
+  z-index: 3;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.center-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 56px rgba(20, 28, 36, 0.28);
+}
+.center-card::after {
+  content: "04";
+  position: absolute;
+  right: -4px;
+  bottom: -30px;
+  font-family: var(--serif);
+  font-size: 104px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.055);
+  pointer-events: none;
+}
+.center-kicker {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.17em;
+  color: #dd9a70;
+  text-transform: uppercase;
+}
+.center-title {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  margin: 8px 0 5px;
+  line-height: 1.2;
+}
+.center-sub {
+  font-size: 11px;
+  line-height: 1.55;
+  color: rgba(247, 241, 229, 0.63);
+  max-width: 245px;
+}
+.center-line {
+  position: absolute;
+  left: 22px;
+  bottom: 16px;
+  width: 32px;
+  height: 2px;
+  background: #d97745;
+  border-radius: 2px;
+}
+
+.branch {
+  position: absolute;
+  border-radius: 13px;
+  border: 1px solid color-mix(in srgb, var(--bc) 28%, var(--line));
+  background: color-mix(in srgb, var(--bc) 7%, var(--card));
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 11px 0 13px;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition:
+    left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+  overflow: hidden;
+}
+.branch::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--bc);
+}
+.branch:hover {
+  background: color-mix(in srgb, var(--bc) 12%, var(--card));
+  border-color: color-mix(in srgb, var(--bc) 45%, var(--line));
+  box-shadow: var(--shadow-md);
+}
+.branch .b-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--bc);
+  background: color-mix(in srgb, var(--bc) 10%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--bc) 22%, transparent);
+  border-radius: 5px;
+  padding: 3px 5px;
+  flex: 0 0 auto;
+}
+.b-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.b-title {
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+.b-sub {
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.b-count {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--bc);
+  background: color-mix(in srgb, var(--bc) 11%, var(--card));
+  border-radius: 999px;
+  padding: 3px 6px;
+  min-width: 26px;
+  text-align: center;
+}
+
+.leaf {
+  position: absolute;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  padding: 6px 26px 6px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  justify-content: center;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition:
+    left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.18s,
+    background 0.18s,
+    box-shadow 0.18s,
+    transform 0.15s,
+    opacity 0.2s;
+  overflow: hidden;
+}
+.leaf::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 18px;
+  transform: translateY(-50%);
+  border-radius: 0 3px 3px 0;
+  background: var(--bc);
+}
+.leaf:hover {
+  border-color: color-mix(in srgb, var(--bc) 52%, var(--line));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+.leaf.selected {
+  border-color: var(--bc);
+  background: color-mix(in srgb, var(--bc) 5%, var(--card));
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--bc) 17%, transparent),
+    var(--shadow-sm);
+}
+.leaf.mastered { background: color-mix(in srgb, var(--bc) 6%, var(--card)); }
+.leaf.mastered .l-title { color: var(--ink-2); }
+.leaf .l-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.leaf .l-title {
+  font-size: 15.5px;
+  font-weight: 650;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.leaf .l-brief {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.l-tag {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 8px;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: var(--bc);
+  background: color-mix(in srgb, var(--bc) 9%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--bc) 18%, transparent);
+  border-radius: 4px;
+  padding: 0 4px;
+}
+.leaf .check {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 12px;
+  height: 12px;
+  color: var(--bc);
+  opacity: 0.9;
+}
+
+/* ---------- map chrome ---------- */
+.map-hint,
+.map-status {
+  position: absolute;
+  z-index: 10;
+  font-size: 10.5px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 11px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.map-hint { top: 16px; left: 18px; }
+.map-status {
+  left: 18px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.map-status .dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+.map-status b {
+  color: var(--ink-2);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.map-actions {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  gap: 6px;
+}
+.map-actions button {
+  font-size: 10.5px;
+  color: var(--ink-2);
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 6px 9px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.18s, color 0.18s;
+}
+.map-actions button:hover { background: var(--card); color: var(--ink); }
+
+.zoom-controls {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
+}
+.zoom-controls button {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink-2);
+  transition: background 0.15s, color 0.15s;
+}
+.zoom-controls button:hover { background: var(--paper-2); color: var(--ink); }
+.zoom-controls button svg { width: 13px; height: 13px; }
+.zoom-controls .sep { height: 1px; background: var(--line); margin: 1px 3px; }
+
+/* ---------- sidebar ---------- */
+.sidebar {
+  width: var(--sidebar-w);
+  flex: 0 0 var(--sidebar-w);
+  border-left: 1px solid var(--line);
+  background: var(--card);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  position: relative;
+  z-index: 20;
+}
+.side-inner {
+  padding: 25px 25px 44px;
+}
+.side-close {
+  display: none;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  z-index: 2;
+}
+.side-close:hover { color: var(--ink); background: var(--paper-2); }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+.side-title {
+  font-family: var(--serif);
+  font-size: 25px;
+  font-weight: 650;
+  line-height: 1.28;
+  letter-spacing: 0.015em;
+  margin: 8px 0 10px;
+}
+.side-lede {
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  margin: 0 0 18px;
+}
+
+.thread {
+  margin: 0 0 20px;
+  padding: 16px 15px 2px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.thread-step {
+  display: grid;
+  grid-template-columns: 25px 1fr;
+  gap: 10px;
+  position: relative;
+  padding-bottom: 15px;
+}
+.thread-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 27px;
+  bottom: 1px;
+  width: 1px;
+  background: var(--line-strong);
+}
+.thread-num {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--accent-ink);
+}
+.thread-step h4 {
+  margin: 1px 0 3px;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--ink);
+}
+.thread-step p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 22px;
+}
+.pill {
+  font-size: 10.5px;
+  color: var(--ink-2);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 9px;
+}
+
+.side-section-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 24px 0 9px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.side-section-title::after {
+  content: "";
+  height: 1px;
+  background: var(--line);
+  flex: 1;
+}
+
+.route {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.route li { border-bottom: 1px solid var(--line); }
+.route button {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 9px 1px;
+  text-align: left;
+  transition: padding-left 0.18s, color 0.18s;
+}
+.route button:hover { padding-left: 4px; }
+.route .n {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent-ink);
+  width: 25px;
+  flex: 0 0 auto;
+}
+.route .rt {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  flex: 1;
+  min-width: 0;
+}
+.route .rd {
+  font-size: 10px;
+  color: var(--muted);
+  max-width: 105px;
+  text-align: right;
+  line-height: 1.35;
+}
+
+.pitfalls {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: pit;
+}
+.pitfalls li {
+  counter-increment: pit;
+  position: relative;
+  padding: 0 0 10px 22px;
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+.pitfalls li::before {
+  content: counter(pit, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--accent-ink);
+}
+
+.progress-card {
+  margin-top: 20px;
+  padding: 14px 15px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.progress-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.progress-top span {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.progress-top b {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-ink);
+  font-variant-numeric: tabular-nums;
+}
+.progress-bar {
+  height: 5px;
+  margin-top: 9px;
+  background: var(--line);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 0.35s ease;
+}
+.progress-foot {
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.link-btn {
+  color: var(--accent-ink);
+  font-size: 10px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.source-note {
+  margin: 18px 0 0;
+  font-size: 9.5px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+/* ---------- detail ---------- */
+.detail-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 4px 6px 4px 2px;
+  transition: color 0.18s, background 0.18s;
+}
+.back-btn:hover { color: var(--ink); background: var(--paper-2); }
+.back-btn svg { width: 12px; height: 12px; }
+.detail-ref {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  text-align: right;
+  line-height: 1.4;
+}
+.detail-tagrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.03em;
+  color: var(--bc, var(--accent-ink));
+  background: color-mix(in srgb, var(--bc, var(--accent)) 9%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--bc, var(--accent)) 20%, transparent);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+.section-chip {
+  font-size: 10px;
+  color: var(--muted);
+}
+.detail h2 {
+  font-family: var(--serif);
+  font-size: 23px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  margin: 0 0 10px;
+}
+.detail-one {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  margin: 0 0 14px;
+}
+.formula {
+  margin: 0 0 15px;
+  padding: 12px 13px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--bc, var(--accent));
+  border-radius: 7px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.75;
+  color: var(--ink-2);
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+.formula sup,
+.formula sub { font-size: 0.72em; line-height: 0; }
+.detail-points {
+  margin: 0 0 16px;
+  padding: 0 0 0 16px;
+  font-size: 12px;
+  line-height: 1.78;
+  color: var(--ink-2);
+}
+.detail-points li { margin: 5px 0; padding-left: 2px; }
+.detail-points li::marker { color: var(--bc, var(--accent)); }
+.tip {
+  margin: 0 0 16px;
+  padding: 12px 13px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--accent) 7%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--accent) 17%, var(--line));
+}
+.tip span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin-bottom: 5px;
+}
+.tip p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+.detail-ref-line {
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.detail-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+}
+.master-btn {
+  flex: 1;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink-2);
+  font-size: 11.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+.master-btn:hover { border-color: var(--bc, var(--accent)); }
+.master-btn svg { width: 13px; height: 13px; }
+.master-btn.is-mastered {
+  color: var(--bc, var(--accent));
+  border-color: color-mix(in srgb, var(--bc, var(--accent)) 38%, var(--line));
+  background: color-mix(in srgb, var(--bc, var(--accent)) 9%, var(--card));
+  font-weight: 600;
+}
+.nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--ink-2);
+  background: var(--card);
+  transition: background 0.18s, color 0.18s;
+}
+.nav-btn:hover { background: var(--paper-2); color: var(--ink); }
+.nav-btn svg { width: 14px; height: 14px; }
+.nav-btn:disabled { opacity: 0.35; cursor: default; }
+
+/* ---------- list view ---------- */
+.list-pane {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  background: var(--paper);
+  padding: 34px 46px 90px;
+  scroll-behavior: smooth;
+}
+.list-doc {
+  max-width: 940px;
+  margin: 0 auto;
+}
+.list-head {
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+.list-head .eyebrow { margin-bottom: 8px; }
+.list-head h1 {
+  font-family: var(--serif);
+  font-size: 33px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  margin: 0 0 10px;
+}
+.list-head .list-lede {
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  max-width: 690px;
+  margin: 0 0 16px;
+}
+.list-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+}
+.list-actions button {
+  font-size: 10.5px;
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 6px;
+  padding: 6px 9px;
+  transition: background 0.18s, color 0.18s;
+}
+.list-actions button:hover { background: var(--paper-2); color: var(--ink); }
+.list-actions .spacer { flex: 1; }
+.list-progress {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.sec {
+  margin: 0 0 34px;
+  scroll-margin-top: 16px;
+}
+.sec-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--bc);
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+.sec-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--bc);
+  padding-top: 3px;
+  flex: 0 0 auto;
+}
+.sec-title-wrap { flex: 1; min-width: 0; }
+.sec-head h2 {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 650;
+  line-height: 1.35;
+  margin: 0;
+}
+.sec-head .sec-brief {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.sec-progress {
+  flex: 0 0 auto;
+  text-align: right;
+  min-width: 54px;
+}
+.sec-progress b {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.sec-progress .mini-bar {
+  width: 54px;
+  height: 3px;
+  background: var(--line);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.sec-progress .mini-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--bc);
+  border-radius: 99px;
+  transition: width 0.3s;
+}
+
+.leaf-row {
+  position: relative;
+  margin: 9px 0 0;
+  padding: 14px 16px 14px 18px;
+  border: 1px solid var(--line);
+  border-left: 3px solid color-mix(in srgb, var(--bc) 55%, var(--line));
+  border-radius: 10px;
+  background: var(--card);
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+}
+.leaf-row:hover {
+  border-color: color-mix(in srgb, var(--bc) 38%, var(--line));
+  box-shadow: var(--shadow-sm);
+}
+.leaf-row.is-mastered {
+  background: color-mix(in srgb, var(--bc) 3.5%, var(--card));
+}
+.leaf-row.is-mastered .row-title { color: var(--ink-2); }
+.row-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.row-title {
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.4;
+  margin: 0;
+}
+.row-brief {
+  font-size: 10.5px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.row-master {
+  margin-left: auto;
+  font-size: 9.5px;
+  color: var(--muted);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 3px 6px;
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
+  white-space: nowrap;
+}
+.row-master:hover { color: var(--bc); border-color: var(--line); background: var(--paper); }
+.row-master.is-mastered { color: var(--bc); font-weight: 600; }
+.row-one {
+  margin: 7px 0 0;
+  font-size: 12px;
+  line-height: 1.78;
+  color: var(--ink-2);
+}
+.row-more {
+  margin-top: 9px;
+}
+.row-more summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  font-size: 9.5px;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 1px dashed var(--line-strong);
+  padding-bottom: 1px;
+  transition: color 0.18s;
+}
+.row-more summary::-webkit-details-marker { display: none; }
+.row-more summary:hover { color: var(--bc); }
+.row-more summary::after {
+  content: "+";
+  font-family: var(--mono);
+  font-size: 10px;
+}
+.row-more[open] summary::after { content: "−"; }
+.row-body {
+  margin-top: 11px;
+  padding-top: 11px;
+  border-top: 1px solid var(--line);
+}
+.row-body .formula {
+  margin-bottom: 11px;
+  font-size: 11px;
+}
+.row-body .detail-points {
+  font-size: 11.5px;
+  margin-bottom: 11px;
+}
+.row-body .tip { margin-bottom: 10px; }
+.row-body .detail-ref-line { padding-top: 9px; }
+.print-check { display: none; }
+
+/* ---------- search pop ---------- */
+.search-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 350px;
+  max-height: min(440px, 62vh);
+  overflow-y: auto;
+  padding: 5px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  box-shadow: var(--shadow-md);
+  z-index: 80;
+}
+.search-item {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 9px;
+  border-radius: 7px;
+  text-align: left;
+  transition: background 0.15s;
+}
+.search-item:hover { background: var(--paper-2); }
+.si-num {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--bc);
+  width: 24px;
+  padding-top: 2px;
+  flex: 0 0 auto;
+}
+.si-main { min-width: 0; flex: 1; }
+.si-t {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.si-b {
+  display: block;
+  font-size: 9.5px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.search-empty {
+  padding: 16px 10px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translate(-50%, 12px);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 11.5px;
+  line-height: 1.5;
+  padding: 8px 13px;
+  border-radius: 7px;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 200;
+  max-width: 88vw;
+  text-align: center;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- scrim ---------- */
+.scrim {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 20, 0.34);
+  z-index: 25;
+  backdrop-filter: blur(2px);
+}
+.scrim.show { display: block; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1280px) {
+  :root { --sidebar-w: 348px; }
+  .search input { width: 178px; }
+  .brand-text p { display: none; }
+}
+
+@media (max-width: 1080px) {
+  .topbar { gap: 12px; padding: 0 16px; }
+  .brand-text h1 { font-size: 16px; }
+  .tab { padding: 7px 10px; }
+  .icon-btn.wide span { display: none; }
+  .icon-btn.wide { width: 34px; padding: 0; }
+  .search input { width: 150px; }
+}
+
+@media (max-width: 980px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(390px, 92vw);
+    transform: translateX(102%);
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: -18px 0 46px rgba(10, 15, 20, 0.18);
+    z-index: 60;
+  }
+  .sidebar.open { transform: none; }
+  .side-close { display: grid; place-items: center; }
+  #side-toggle { display: inline-flex; }
+}
+
+@media (max-width: 760px) {
+  :root { --topbar-h: auto; }
+  .app { height: 100dvh; }
+  .topbar {
+    height: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand actions"
+      "tabs search";
+    align-items: center;
+    padding: 9px 12px;
+    gap: 8px 10px;
+  }
+  .brand { grid-area: brand; flex: initial; }
+  .seal { width: 34px; height: 34px; border-radius: 9px; font-size: 8px; }
+  .brand-text h1 { font-size: 14px; }
+  .top-actions { margin-left: 0; gap: 3px; }
+  .tabs { grid-area: tabs; order: initial; justify-self: start; }
+  .top-actions { grid-area: actions; margin-left: 0; }
+  .search { grid-area: search; order: initial; flex: 1; min-width: 0; width: 100%; margin-left: 0; }
+  .search input { width: 100%; }
+  .wide-only { display: none !important; }
+  .map-hint {
+    display: block;
+    top: 10px;
+    left: 10px;
+    font-size: 9px;
+    padding: 5px 8px;
+  }
+  .map-status { left: 10px; bottom: 10px; font-size: 9.5px; }
+  .zoom-controls { right: 10px; bottom: 10px; }
+  .map-actions { top: 10px; right: 10px; }
+  .list-pane { padding: 22px 14px 70px; }
+  .list-head h1 { font-size: 26px; }
+  .list-head .list-lede { font-size: 12px; }
+  .sec-head { padding: 13px 14px; gap: 10px; }
+  .sec-head h2 { font-size: 18px; }
+  .sec-progress { display: none; }
+  .leaf-row { padding: 12px 13px 12px 14px; }
+  .row-brief { flex: 1 1 100%; margin-left: 0; }
+  .row-master {
+    margin-left: 0;
+    padding: 4px 8px;
+    border-color: var(--line);
+    background: var(--card);
+    color: var(--ink-2);
+  }
+  .search-pop {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: calc(var(--topbar-h) + 54px);
+    width: auto;
+    max-height: 56vh;
+  }
+  .side-inner { padding: 22px 20px 40px; }
+  .side-close { top: 10px; right: 10px; }
+}
+
+@media (max-width: 420px) {
+  .brand-text h1 { max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+  .tab { padding: 6px 8px; font-size: 11.5px; }
+  .icon-btn { width: 31px; height: 31px; }
+  .map-actions button { padding: 5px 7px; font-size: 9.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- print ---------- */
+.print-only { display: none; }
+
+@media print {
+  @page { size: A4; margin: 14mm 14mm 16mm; }
+
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+    color: #1b2228 !important;
+  }
+  .app { height: auto; display: block; overflow: visible; }
+  .topbar, .map-pane, .sidebar, .scrim, .toast, .search-pop,
+  .map-hint, .map-status, .zoom-controls, .map-actions,
+  .list-actions, .row-master, .side-close { display: none !important; }
+  .workspace { display: block; }
+  .list-pane {
+    display: block !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+  .list-doc { max-width: none; }
+  .print-only { display: block !important; }
+  .print-head {
+    margin: 0 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid #222;
+  }
+  .print-head .print-kicker {
+    font-family: var(--mono);
+    font-size: 8pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #555;
+  }
+  .print-head h1 {
+    font-family: var(--serif);
+    font-size: 22pt;
+    margin: 5px 0 4px;
+  }
+  .print-head p { font-size: 9pt; color: #555; margin: 0; }
+
+  .list-head { display: none; }
+  .sec { margin-bottom: 14px; }
+  .sec-head {
+    padding: 8px 10px;
+    border: 1px solid #bbb;
+    border-top: 2.5pt solid var(--bc);
+    background: #fff !important;
+    box-shadow: none;
+    break-after: avoid;
+  }
+  .sec-head h2 { font-size: 14pt; }
+  .sec-head .sec-brief { font-size: 8.5pt; color: #666; }
+  .sec-progress { display: none; }
+  .leaf-row {
+    margin-top: 6px;
+    padding: 8px 10px 9px 11px;
+    border: 1px solid #ccc;
+    border-left: 2.5pt solid var(--bc);
+    background: #fff !important;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+  .row-title { font-size: 10.5pt; }
+  .row-brief { font-size: 8pt; color: #666; }
+  .row-one { font-size: 9pt; line-height: 1.6; color: #333; }
+  .row-more { margin-top: 5px; }
+  .row-more summary { display: none; }
+  .row-more > .row-body { display: block !important; }
+  .row-body { margin-top: 5px; padding-top: 6px; border-top: 1px dashed #ccc; }
+  .row-body .formula {
+    padding: 6px 8px;
+    font-size: 8.5pt;
+    background: #f7f7f5 !important;
+    border: 1px solid #ddd;
+    border-left: 2pt solid var(--bc);
+  }
+  .row-body .detail-points { font-size: 8.8pt; line-height: 1.55; margin-bottom: 6px; }
+  .row-body .tip { padding: 6px 8px; background: #faf6f0 !important; border: 1px solid #e3d8c8; margin-bottom: 6px; }
+  .row-body .tip span { font-size: 7pt; }
+  .row-body .tip p { font-size: 8.5pt; line-height: 1.5; }
+  .row-body .detail-ref-line { font-size: 7.5pt; color: #777; padding-top: 4px; }
+  .print-check {
+    display: inline-block;
+    width: 9pt;
+    height: 9pt;
+    border: 1px solid #999;
+    border-radius: 1.5pt;
+    margin-right: 6px;
+    vertical-align: -1pt;
+  }
+  .detail-points li::marker { color: #333; }
+  .tag { color: #444 !important; background: #f2f2f2 !important; border-color: #ccc !important; }
+}
+
+/* ---------- app runtime additions ---------- */
+.center-kicker,
+.center-title,
+.center-sub { display: block; }
+
+.map-canvas.js-anim .leaf,
+.map-canvas.js-anim .branch,
+.map-canvas.js-anim .center-card { transition: none !important; }
+
+body.list-mode .sidebar { display: none !important; }
+
+.search-item.is-active { background: var(--paper-2); }
+
+.leaf-row.flash {
+  animation: row-flash 1.15s ease;
+}
+@keyframes row-flash {
+  0%, 100% { box-shadow: none; }
+  22% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--bc) 24%, transparent); border-color: var(--bc); }
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="seal" aria-hidden="true">LA<br>05</div>
+      <div class="brand-text">
+        <h1>线性代数 · 第5章</h1>
+        <p>内积 · 正交基 · 正交变换 · 二次型 · 正定 · 奇异值 · 最小二乘</p>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="视图切换">
+      <button class="tab active" type="button" role="tab" aria-selected="true" data-view="map" id="tab-map">思维导图</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-view="list" id="tab-list">知识清单</button>
+    </div>
+
+    <div class="search">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.4"/><path d="m12.8 12.8 4 4"/></svg>
+      <input id="search-input" type="search" placeholder="搜索知识点…" autocomplete="off" aria-label="搜索知识点" aria-controls="search-pop" aria-expanded="false">
+      <div class="search-pop" id="search-pop" role="region" aria-label="搜索结果" hidden></div>
+    </div>
+
+    <div class="top-actions">
+      <button class="icon-btn wide" type="button" id="btn-export" title="导出 Markdown 笔记" aria-label="导出 Markdown 笔记">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v8.4"/><path d="m6.6 8.2 3.4 3.4 3.4-3.4"/><path d="M3.8 15.8h12.4"/></svg>
+        <span class="wide-only">Markdown</span>
+      </button>
+      <button class="icon-btn" type="button" id="btn-print" title="打印 / 另存为 PDF" aria-label="打印或另存为 PDF">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7V3.6h8V7"/><rect x="3" y="7" width="14" height="6.4" rx="1.4"/><path d="M6 11h8v5.4H6z"/></svg>
+      </button>
+      <button class="icon-btn" type="button" id="btn-theme" title="切换深色" aria-label="切换深色主题"></button>
+      <button class="icon-btn" type="button" id="side-toggle" title="打开章节导览" aria-label="打开章节导览">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3.6" width="14" height="12.8" rx="1.6"/><path d="M12.2 3.6v12.8"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="map-pane" id="map-pane" aria-label="第5章思维导图">
+      <div class="map-viewport" id="map-viewport">
+        <div class="map-canvas" id="map-canvas">
+          <svg class="connectors" id="connectors" aria-hidden="true"></svg>
+          <div class="node-layer" id="node-layer"></div>
+        </div>
+      </div>
+      <div class="map-hint">滚轮缩放 · 拖拽平移 · 点击节点头展开</div>
+      <div class="map-actions">
+        <button type="button" id="btn-expand-all">全部展开</button>
+        <button type="button" id="btn-collapse-all">收起</button>
+      </div>
+      <div class="map-status">
+        <span class="dot"></span><span><b id="stat-sections">7</b> 节</span>
+        <span class="dot"></span><span><b id="stat-leaves">39</b> 个知识点</span>
+        <span class="dot"></span><span>已掌握 <b id="stat-mastered">0</b></span>
+        <span class="dot"></span><span id="zoom-readout">100%</span>
+      </div>
+      <div class="zoom-controls" aria-label="缩放控制">
+        <button type="button" id="zoom-in" title="放大" aria-label="放大">+</button>
+        <button type="button" id="zoom-out" title="缩小" aria-label="缩小">−</button>
+        <div class="sep" aria-hidden="true"></div>
+        <button type="button" id="zoom-fit" title="适应视图" aria-label="适应视图">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.4H3.4V7M13 3.4h3.6V7M7 16.6H3.4V13M13 16.6h3.6V13"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <aside class="sidebar" id="sidebar" aria-label="章节导览与知识点详情">
+      <button class="side-close" type="button" id="side-close" aria-label="关闭导览">×</button>
+      <div class="side-inner" id="side-inner"></div>
+    </aside>
+
+    <section class="list-pane" id="list-pane" aria-label="知识清单" hidden>
+      <div class="list-doc">
+        <div class="print-only print-head">
+          <div class="print-kicker">LINEAR ALGEBRA A · CHAPTER 05</div>
+          <h1>第5章 内积空间 · 知识点清单</h1>
+          <p>从内积与正交基出发：QR 分解、正交相似对角化、二次型与正定性、奇异值分解、最小二乘 · 共 39 个知识点</p>
+        </div>
+
+        <div class="list-head">
+          <p class="eyebrow">CHAPTER 05 · CHECKLIST</p>
+          <h1>第5章 内积空间</h1>
+          <p class="list-lede">按教材 5.1–5.7 的顺序整理。每一条先给出一句话结论，展开后是核心公式、推导要点与易错提醒；勾选「标记掌握」可以在本机记录复习进度。</p>
+          <div class="list-actions">
+            <button type="button" id="list-expand">展开全部细节</button>
+            <button type="button" id="btn-export-list">导出 Markdown</button>
+            <button type="button" id="btn-print-list">打印 / 存为 PDF</button>
+            <span class="spacer"></span>
+            <span class="list-progress" id="list-progress">已掌握 0 / 39</span>
+          </div>
+        </div>
+
+        <div id="list-sections"></div>
+      </div>
+    </section>
+
+    <div class="scrim" id="scrim"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const CHAPTER = {
+  kicker: '线性代数 A · 五学分教材',
+  title: '第5章 内积空间',
+  subtitle: '给线性空间装上「尺子」与「量角器」',
+  lede: '前四章只谈线性运算，向量没有长度也没有夹角；本章在线性空间上引入内积，立刻长出长度、夹角、正交与正交投影。围绕「标准正交基」这把直角尺，先给出施密特正交化、QR 分解与正交补，再证明对称矩阵必可正交相似对角化；由此一举拿下实二次型的标准形、惯性定理与正定性判定，并推广到一般矩阵的奇异值分解与最小二乘问题。',
+  thread: [
+    {
+      n: '01',
+      t: '加度量',
+      d: '在线性空间定义对称、双线性、正定的内积，导出长度、柯西-施瓦茨不等式、夹角与正交，用施密特正交化搭出标准正交基。'
+    },
+    {
+      n: '02',
+      t: '正交化',
+      d: '标准正交基下内积变坐标点积，过渡矩阵是正交阵 Q；一般可逆阵可作 QR 分解；对称阵必能被正交阵对角化。'
+    },
+    {
+      n: '03',
+      t: '做应用',
+      d: '对称阵 ↔ 二次型，正交变换不改变二次型几何形状，惯性定理给出规范形与正定判据；再进一步得一般矩阵 SVD 与最小二乘解。'
+    }
+  ],
+  route: [
+    { num: '5.1', title: '内积空间的定义及性质', desc: '内积公理、长度夹角、柯西不等式、投影' },
+    { num: '5.2', title: '标准正交基和子空间的正交性', desc: '施密特正交化、Gram 阵、正交阵、QR 分解、正交补' },
+    { num: '5.3', title: '保长同构与正交相似对角化', desc: '保长同构、正交变换、对称变换、实对称阵对角化' },
+    { num: '5.4', title: '二次型及其标准形', desc: '配方法、正交变换法、矩阵合同、惯性定理' },
+    { num: '5.5', title: '正定二次型', desc: '五种型、八条等价判据、半正定、同时合同对角化' },
+    { num: '5.6', title: '奇异值分解', desc: '正交等价、奇异值、SVD 算法、四子空间与范数' },
+    { num: '5.7', title: '内积的应用：最小二乘问题', desc: '误差平方和、列空间正交投影、正规方程' }
+  ],
+  pitfalls: [
+    '在同一线性空间 ℝⁿ 上可以定义不同的内积：αᵀAβ 成为内积的充要条件是 A 为对称正定阵，而非任意对称阵。',
+    '正交向量组定义里要求向量「非零」；零向量与任何向量都正交，包含零向量的向量组必线性相关。',
+    'QR 分解的唯一性要求 R 的对角元全为正数（且 A 可逆）；若放宽到一般列满秩或奇异矩阵，R 对角元只保证非负。',
+    '可正交相似对角化 ⟺ 实对称矩阵（Aᵀ = A）；一般可对角化矩阵未必对称，其特征向量也未必正交。',
+    '对角化对称阵时，不同特征值的特征向量已经自动正交，只需在「重特征值」的同一特征子空间内部做施密特正交化，再全部单位化。',
+    '配方法（合同变换）会改变二次型的特征值，只保持正负惯性指数不变；只有正交变换既合同又相似，才既保规范形又保特征值与几何形状。',
+    '半正定矩阵不能只看顺序主子式非负：diag(0, −1) 的顺序主子式全为 0，但它不是半正定的，必须要求「所有」主子式非负。',
+    '最小二乘解 x = (AᵀA)⁻¹Aᵀb 成立的前提是 AᵀA 可逆（即 A 列满秩）；若 A 不列满秩，正规方程 AᵀAx = Aᵀb 仍有解但不唯一。'
+  ]
+};
+
+const BRANCHES = [
+  {
+    id: 'b51',
+    num: '5.1',
+    title: '内积空间的定义及性质',
+    short: '内积、长度、夹角与正交',
+    color: '#3F6F9F',
+    side: 'left',
+    brief: '把点积、长度、垂直推广到一般线性空间',
+    leaves: [
+      {
+        id: 'l51-1',
+        title: '内积与欧氏空间',
+        brief: '对称、线性、正定三公理',
+        tag: '定义 5.1 / 引理 5.1',
+        one: '实线性空间 V 上的二元函数 (·, ·) 若满足对称性、第一分量线性性与正定性，就称为内积；配备内积的实线性空间称为欧氏空间。',
+        formula: '(β, α) = (α, β)， (α + β, γ) = (α, γ) + (β, γ)， (α, α) ≥ 0（取 0 ⟺ α = 0）',
+        points: [
+          '由对称性与第一分量线性性可推出第二分量线性性（引理 5.1）：(α, β + γ) = (α, β) + (α, γ)，(α, λβ) = λ(α, β)。',
+          '零向量与任何向量内积为 0：(0, α) = (α, 0) = 0。',
+          '复线性空间上的内积需把对称性改为共轭对称性 (β, α) = conj(α, β)，称为酉空间；教材第 5 章仅讨论实欧氏空间。'
+        ],
+        tip: '检验一个二元函数是不是内积，最容易漏掉的是「正定性」里的当且仅当：不仅要 ≥ 0，还必须有 (α, α) = 0 ⟹ α = 0。',
+        ref: '§5.1.1'
+      },
+      {
+        id: 'l51-2',
+        title: '常见内积空间实例',
+        brief: '标准内积与加权内积',
+        tag: '例 5.1–5.3',
+        one: 'ℝⁿ 上的点积、正定对称阵诱导的加权内积，以及 Mₙ(ℝ) 上的 Frobenius 内积都是内积。',
+        formula: '(α, β) = α^{T}β ｜ (α, β) = α^{T}Aβ (A > 0) ｜ (A, B) = Σ_{i,j} a_{ij}b_{ij} = Tr(A^{T}B)',
+        points: [
+          '例 5.1：ℝⁿ 上的标准内积 (α, β) = x₁y₁ + … + xₙyₙ = αᵀβ。',
+          '例 5.2：同一个线性空间上可定义不同内积，例如 (α, β) = αᵀAβ，当且仅当 A 对称正定时满足内积三公理。',
+          '例 5.3：矩阵空间 Mₙ(ℝ) 上的标准内积为对应位置元素乘积之和，等价于 Tr(AᵀB)。'
+        ],
+        tip: '几何概念（长度、垂直）依赖于所选内积：换一个正定阵 A 定义内积，同一对向量的夹角与长度都会改变。',
+        ref: '§5.1.1 · 例 5.1–5.3'
+      },
+      {
+        id: 'l51-3',
+        title: '向量长度与单位化',
+        brief: '内积诱导的度量',
+        tag: '定义 5.2 / 命题 5.2(1)(2)',
+        one: '向量 α 的长度定义为 ‖α‖ = √(α, α)；长度为 1 的向量称为单位向量。',
+        formula: '‖α‖ = √(α, α) ≥ 0， ‖λα‖ = |λ|‖α‖， 单位化：α / ‖α‖ (α ≠ 0)',
+        points: [
+          '正定性：‖α‖ = 0 当且仅当 α = 0。',
+          '绝对齐次性：‖λα‖ = |λ|‖α‖，注意数乘系数带绝对值。',
+          '对任意非零向量 α，α / ‖α‖ 是与 α 同方向的单位向量。'
+        ],
+        tip: '化单位向量时别忘了绝对值与开平方，尤其是含参数的向量要先确认 α ≠ 0。',
+        ref: '§5.1.2'
+      },
+      {
+        id: 'l51-4',
+        title: '柯西-施瓦茨与三角不等式',
+        brief: '内积空间最核心的不等式',
+        tag: '命题 5.2(3)(4)',
+        one: '任意两向量的内积绝对值不超过其长度乘积，等号成立当且仅当两向量线性相关。',
+        formula: '|(α, β)| ≤ ‖α‖‖β‖ ｜ ‖α + β‖ ≤ ‖α‖ + ‖β‖， ‖α − β‖ ≥ |‖α‖ − ‖β‖|',
+        points: [
+          '柯西-施瓦茨不等式证明关键：构造二次函数 f(x) = (α + xβ, α + xβ) ≥ 0，判别式 Δ ≤ 0。',
+          '在 ℝⁿ 标准内积下即为经典的柯西不等式：(Σ xᵢyᵢ)² ≤ (Σ xᵢ²)(Σ yᵢ²)。',
+          '由柯西-施瓦茨不等式展开 ‖α + β‖² 即得三角不等式 ‖α + β‖ ≤ ‖α‖ + ‖β‖。'
+        ],
+        tip: '记清等号条件：柯西不等式取等 ⟺ α, β 线性相关（包含其中一个为 0 的情况）。',
+        ref: '§5.1.2 · 命题 5.2'
+      },
+      {
+        id: 'l51-5',
+        title: '夹角、正交与勾股定理',
+        brief: '从垂直导出直角关系',
+        tag: '定义 5.3–5.4 / 命题 5.3',
+        one: '非零向量夹角由 cos⟨α, β⟩ = (α, β)/(‖α‖‖β‖) 定义；内积为 0 即正交（α ⊥ β）。',
+        formula: 'α ⊥ β ⟺ (α, β) = 0 ｜ α_{1},…,α_{m} 两两正交 ⟹ ‖Σ α_{i}‖^{2} = Σ ‖α_{i}‖^{2}',
+        points: [
+          '夹角 ⟨α, β⟩ ∈ [0, π] 的合理性由柯西-施瓦茨不等式保证。',
+          '零向量与任何向量正交，且只有零向量与自身正交。',
+          '广义勾股定理：两两正交向量之和的长度平方等于各向量长度平方之和。'
+        ],
+        tip: '用 ‖α − β‖² = ‖α‖² + ‖β‖² − 2‖α‖‖β‖cosθ 可直接把余弦定理搬进任意欧氏空间（习题 5.1.6）。',
+        ref: '§5.1.2'
+      },
+      {
+        id: 'l51-6',
+        title: '正交投影',
+        brief: '把一个向量垂直落到另一个向量上',
+        tag: '例 5.4',
+        one: '向量 β 在非零向量 α 上的正交投影向量为 γ = [(β, α)/(α, α)] α，满足余项 (β − γ) ⊥ α。',
+        formula: 'γ = [(β, α) / (α, α)] α， (β − γ, α) = 0',
+        points: [
+          '投影长度（带符号）为 x = ‖β‖cosθ = (β, α)/‖α‖，再乘单位方向向量 α/‖α‖ 即得 γ。',
+          '直角关系：‖β‖² = ‖γ‖² + ‖β − γ‖² ≥ ‖γ‖²，这也是柯西-施瓦茨不等式的几何含义。',
+          '该公式是下一节格拉姆-施密特正交化的基本单元。'
+        ],
+        tip: '分母是 (α, α) = ‖α‖² 而不是 ‖α‖；若 α 已单位化，投影直接简化为 (β, α)α。',
+        ref: '§5.1.2 · 例 5.4'
+      }
+    ]
+  },
+  {
+    id: 'b52',
+    num: '5.2',
+    title: '标准正交基和子空间的正交性',
+    short: '施密特正交化、QR 与正交补',
+    color: '#2E7D74',
+    side: 'left',
+    brief: '搭建一般内积空间中的「直角坐标系」',
+    leaves: [
+      {
+        id: 'l52-1',
+        title: '正交向量组必线性无关',
+        brief: '垂直的几何直观落到代数独立',
+        tag: '定义 5.5 / 命题 5.4',
+        one: '两两正交的非零向量组称为正交向量组；若每个还是单位向量，称为规范正交向量组。正交向量组必线性无关。',
+        formula: 'α_{i} ≠ 0 且 (α_{i}, α_{j}) = 0 (i ≠ j) ⟹ α_{1},…,α_{s} 线性无关',
+        points: [
+          '证明极其简洁：线性组合 Σ cᵢαᵢ = 0 两端同时与 αⱼ 作内积，其余项全为 0，只剩 cⱼ(αⱼ, αⱼ) = 0，故 cⱼ = 0。',
+          '由正交性立刻知道：n 维欧氏空间中两两正交的非零向量至多有 n 个。'
+        ],
+        tip: '定义明确要求「非零向量」，如果包含 0 向量，虽然仍两两内积为 0，但组必线性相关。',
+        ref: '§5.2.1 · 命题 5.4'
+      },
+      {
+        id: 'l52-2',
+        title: '标准正交基与坐标内积',
+        brief: '让抽象内积退化成 ℝⁿ 点积',
+        tag: '定义 5.6',
+        one: '由规范正交向量组构成的基称为标准正交基；在该基下，任意两向量的内积等于其坐标向量的标准内积。',
+        formula: '(α_{i}, α_{j}) = δ_{ij} ⟹ (α, β) = X^{T}Y， ‖α‖ = √(x_{1}^{2} + … + x_{n}^{2})',
+        points: [
+          '向量 α 在标准正交基 e₁,…,eₙ 下的坐标就是内积本身：xᵢ = (α, eᵢ)。',
+          '正交基则是两两正交的基（未要求单位长），坐标公式为 xᵢ = (α, αᵢ)/(αᵢ, αᵢ)。'
+        ],
+        tip: '一旦选定标准正交基，所有内积与长度计算都可以直接按 ℝⁿ 的坐标点积来处理。',
+        ref: '§5.2.1'
+      },
+      {
+        id: 'l52-3',
+        title: '格拉姆-施密特正交化',
+        brief: '从任意线性无关组造标准正交基',
+        tag: '定理 5.5 / 推论 5.6',
+        one: '通过依次减去前面已构造正交向量方向上的正交投影，可把任意线性无关组化为等价的正交向量组；再单位化即得标准正交基。',
+        formula: 'β_{1} = α_{1}， β_{r} = α_{r} − Σ_{i=1}^{r-1} [(α_{r}, β_{i}) / (β_{i}, β_{i})] β_{i}， ξ_{r} = β_{r} / ‖β_{r}‖',
+        points: [
+          '等价性：(α₁,…,αₘ) = (β₁,…,βₘ)P₁，其中 P₁ 为对角元全为 1 的上三角阵。',
+          '推论 5.6：任意正交向量组均可扩充为 V 的正交基；任何有限维内积空间必存在标准正交基。',
+          '若原向量组已经正交，施密特正交化结果保持原向量不变。'
+        ],
+        tip: '计算技巧：先做完所有 βᵣ（正交化），最后再统一除以各自长度单位化，避免中途出现大量根号分母！',
+        ref: '§5.2.2 · 定理 5.5'
+      },
+      {
+        id: 'l52-4',
+        title: 'Gram 方阵与度量矩阵',
+        brief: '非标准基下的内积矩阵公式',
+        tag: '定义 5.7 / 命题 5.7–5.8',
+        one: '基 α₁,…,αₙ 的 Gram 阵 G = ((αᵢ, αⱼ)) 称为度量矩阵，它对称且可逆（实为正定），使一般基下内积满足 (α, β) = XᵀGY。',
+        formula: 'G = ((α_{i}, α_{j}))， (α, β) = X^{T}GY， 换基 B = A·P ⟹ G_{B} = P^{T}G_{A}P',
+        points: [
+          '标准正交基 ⟺ 度量矩阵 G = Eₙ。',
+          '换基公式说明不同基的度量矩阵彼此合同：G(β₁,…,βₙ) = PᵀG(α₁,…,αₙ)P。',
+          '由此可见，标准正交基之间的过渡矩阵满足 Eₙ = PᵀEₙP = PᵀP。'
+        ],
+        tip: '注意区分过渡矩阵方向：(β₁,…,βₙ) = (α₁,…,αₙ)P 时，度量矩阵按 PᵀGP 变换，与二次型合同变换完全一致。',
+        ref: '§5.2.3'
+      },
+      {
+        id: 'l52-5',
+        title: '正交阵及其等价刻画',
+        brief: '标准正交基之间的桥梁',
+        tag: '定义 5.8 / 命题 5.9–5.10',
+        one: '满足 QᵀQ = Eₙ 的实方阵称为正交阵；它是标准正交基之间的过渡矩阵，可逆且逆等于转置。',
+        formula: 'Q^{T}Q = E_{n} ⟺ Q^{-1} = Q^{T} ⟺ QQ^{T} = E_{n} ⟹ |Q| = ±1',
+        points: [
+          '等价刻画：Q 为正交阵 ⟺ Q⁻¹ = Qᵀ ⟺ QQᵀ = Eₙ ⟺ Q 的列（或行）向量组是 ℝⁿ 的标准正交基。',
+          '群性质：正交阵的逆仍是正交阵，两个同阶正交阵的乘积仍是正交阵。',
+          '|Q| = 1 对应旋转（保定向），|Q| = −1 对应含反射的变换。'
+        ],
+        tip: '验证一个矩阵是否为正交阵，最快的办法是直接算 QᵀQ 是否等于 Eₙ（即检查各列是否单位长且两两正交）。',
+        ref: '§5.2.3 · 命题 5.10'
+      },
+      {
+        id: 'l52-6',
+        title: '矩阵的 QR 分解',
+        brief: '施密特正交化的矩阵形式',
+        tag: '定理 5.11 / 推论 5.12',
+        one: '任意 n 阶可逆实矩阵 A 都可唯一分解为正交阵 Q 与对角元全正的上三角阵 R 的乘积 A = QR。',
+        formula: 'A = QR （Q^{T}Q = E_{n}， R 为上三角且 r_{ii} > 0，唯一）',
+        points: [
+          '构造：对 A 的列作施密特正交化并单位化得 Q = (ξ₁,…,ξₙ)，R = diag(‖β₁‖,…,‖βₙ‖)·P₁。',
+          '唯一性关键：既为正交阵又为对角元全正的上三角阵的矩阵只有 Eₙ。',
+          '推广：列满秩矩阵 Aₘₓₙ = QₘₓₙRₙ（QᵀQ = Eₙ，R 对角元全正）；一般矩阵也可分解，此时 R 对角元非负。'
+        ],
+        tip: '用 QR 分解解线性方程组 AX = β：X = R⁻¹Qᵀβ，只需正交转置和上三角回代，数值稳定性极佳。',
+        ref: '§5.2.4 · 定理 5.11'
+      },
+      {
+        id: 'l52-7',
+        title: '正交子空间与正交补',
+        brief: '子空间的垂直直和分解',
+        tag: '定义 5.9–5.10 / 命题 5.13–5.15',
+        one: '两两正交的子空间之和必为直和；有限维内积空间中任一子空间 W 都有唯一正交补 W⊥，满足 V = W ⊕ W⊥。',
+        formula: 'V = W ⊕ W^{⊥}， dim W + dim W^{⊥} = dim V ｜ C(A)^{⊥} = Null(A^{T})， C(A^{T})^{⊥} = Null(A)',
+        points: [
+          '判定正交只需检生成集（命题 5.14）：Span(S₁) ⊥ Span(S₂) ⟺ S₁ 与 S₂ 中向量两两正交。',
+          '例 5.7：ℝⁿ 中 W = Span(α₁,…,αₛ) 的正交补 W⊥ 是齐次方程组 (α₁,…,αₛ)ᵀX = 0 的解空间。',
+          '例 5.8（四大基本子空间正交关系）：ℝᵐ 中列空间的正交补是左零空间；ℝⁿ 中行空间的正交补是零空间。'
+        ],
+        tip: '正交补把空间拆成互补的两半，维数之和恒等于 n，这是后面最小二乘正交投影的理论基础。',
+        ref: '§5.2.5 · 例 5.7–5.8'
+      }
+    ]
+  },
+  {
+    id: 'b53',
+    num: '5.3',
+    title: '保长同构与正交相似对角化',
+    short: '正交变换与实对称阵谱定理',
+    color: '#6B5B95',
+    side: 'left',
+    brief: '哪些矩阵能在标准正交基下变成对角阵？',
+    leaves: [
+      {
+        id: 'l53-1',
+        title: '保内积与保长等价',
+        brief: '极化恒等式连通长度与内积',
+        tag: '定义 5.11 / 命题 5.16',
+        one: '内积空间之间的线性映射 φ 保内积当且仅当 φ 保长度。',
+        formula: '(α, β) = (1/4)‖α + β‖^{2} − (1/4)‖α − β‖^{2}',
+        points: [
+          '保内积 ⟹ 保长是显然的（取 β = α）。',
+          '保长 ⟹ 保内积靠极化恒等式：内积完全由长度决定，只要长度不变，内积与夹角就全部不变。'
+        ],
+        tip: '极化恒等式是实内积空间中「长度决定内积」的万能公式。',
+        ref: '§5.3.1 · 命题 5.16'
+      },
+      {
+        id: 'l53-2',
+        title: '保长同构与维数分类',
+        brief: '同维数即保长同构',
+        tag: '定义 5.12 / 命题 5.17 / 定理 5.18',
+        one: '既是线性同构又保长的映射称为保长同构；n 维内积空间都保长同构于标准 ℝⁿ，两有限维内积空间保长同构当且仅当维数相等。',
+        formula: 'V ≅ ℝ^{n}（保长） ｜ V_{1} ≅ V_{2}（保长） ⟺ dim V_{1} = dim V_{2}',
+        points: [
+          '命题 5.17：有限维内积空间 V 上的保长线性变换必是单射（‖φα‖ = 0 ⟹ α = 0），从而必为保长自同构。',
+          '定理 5.18 构造方式：取 V 的任一标准正交基，把向量映成其坐标即可。'
+        ],
+        tip: '第 3 章说同维线性空间在代数上没区别；本节说同维欧氏空间连几何（长度、夹角）也没区别。',
+        ref: '§5.3.1 · 定理 5.18'
+      },
+      {
+        id: 'l53-3',
+        title: '正交变换的四个等价刻画',
+        brief: '几何保长 ↔ 代数正交阵',
+        tag: '定义 5.13 / 定理 5.19 / 推论 5.20',
+        one: '内积空间上的保长线性变换称为正交变换；它在任意标准正交基下的矩阵都是正交阵。',
+        formula: '‖φα‖ = ‖α‖ ⟺ (φα, φβ) = (α, β) ⟺ 标准正交基映为标准正交基 ⟺ 基下矩阵为正交阵',
+        points: [
+          '例 5.9：恒等变换与平面逆时针旋转变换都是正交变换。',
+          '推论 5.20：正交变换的逆、两个正交变换的复合仍为正交变换。',
+          '注意定语：是「在标准正交基下」矩阵为正交阵，在一般基下未必是正交阵。'
+        ],
+        tip: '只要把一组标准正交基映成另一组标准正交基，该线性变换就一定是正交变换。',
+        ref: '§5.3.2 · 定理 5.19'
+      },
+      {
+        id: 'l53-4',
+        title: '正交相似与对称变换',
+        brief: '在标准正交基之间换基',
+        tag: '定义 5.14–5.15 / 命题 5.21',
+        one: '若存在正交阵 Q 使 Q⁻¹AQ = B（即 QᵀAQ = B），称 A 与 B 正交相似；满足 (Hα, β) = (α, Hβ) 的线性变换称为对称变换。',
+        formula: 'Q^{-1}AQ = Q^{T}AQ = B ｜ (Hα, β) = (α, Hβ) ⟺ 标准正交基下矩阵 H^{T} = H',
+        points: [
+          '同一变换在两组标准正交基下的矩阵正交相似。',
+          '命题 5.21：对称变换在标准正交基下的矩阵必为实对称矩阵，反之亦然。',
+          '必要性伏笔：若 A 可正交相似于对角阵 Λ，则 A = QΛQᵀ 必满足 Aᵀ = A。'
+        ],
+        tip: '正交相似既是相似（Q⁻¹AQ），又是合同（QᵀAQ），兼顾特征值与二次型两套理论。',
+        ref: '§5.3.3'
+      },
+      {
+        id: 'l53-5',
+        title: '实对称阵的特征值与正交性',
+        brief: '谱定理的两块基石',
+        tag: '命题 5.22',
+        one: '实对称矩阵（或对称变换）的所有特征值都是实数，且属于不同特征值的特征向量必相互正交。',
+        formula: 'A^{T} = A ⟹ λ_{i} ∈ ℝ； λ ≠ μ 且 Aα = λα, Aβ = μβ ⟹ (α, β) = 0',
+        points: [
+          '实特征值证明关键：对共轭转置 X̄ᵀAX = λX̄ᵀX 取共轭比较，由 X̄ᵀX > 0 得 λ̄ = λ。',
+          '正交性证明关键：λ(α, β) = (Aα, β) = (α, Aβ) = μ(α, β) ⟹ (λ − μ)(α, β) = 0。'
+        ],
+        tip: '第 4 章中一般实矩阵可能有复特征值（如旋转 90°），但对称阵排除了这种可能，特征值全在 ℝ 内。',
+        ref: '§5.3.3 · 命题 5.22'
+      },
+      {
+        id: 'l53-6',
+        title: '实对称阵正交相似对角化',
+        brief: '充要条件与标准四步法',
+        tag: '命题 5.23 / 定理 5.24 / 算法 5.1',
+        one: '实方阵 A 可正交相似对角化当且仅当 A 是对称阵；此时存在正交阵 Q 使 Q⁻¹AQ = QᵀAQ = Λ。',
+        formula: 'A 可正交相似对角化 ⟺ A^{T} = A ⟹ Q^{-1}AQ = diag(λ_{1},…,λ_{n})',
+        points: [
+          '定理证明思路（Schur 三角化，第 6 章附录证）：实特征值阵正交相似于上三角阵 T，对称性迫使 T 为对角阵。',
+          '算法四步：(1) 求特征值；(2) 求各特征子空间基础解系；(3) 对每个特征子空间内部施密特正交化并单位化；(4) 拼成正交阵 Q。',
+          '重要推论：实对称阵每个特征值的几何重数恒等于代数重数。'
+        ],
+        tip: '拼 Q 时各列特征向量顺序必须与 Λ 对角元顺序严格一致；单根特征向量只需单位化，重根内部才需正交化。',
+        ref: '§5.3.3 · 定理 5.24 / 算法 5.1'
+      }
+    ]
+  },
+  {
+    id: 'b54',
+    num: '5.4',
+    title: '二次型及其标准形',
+    short: '配方法、正交法与惯性定理',
+    color: '#B07A2E',
+    side: 'left',
+    brief: '用可逆或正交变换消去二次型的交叉项',
+    leaves: [
+      {
+        id: 'l54-1',
+        title: '二次型与对称矩阵一一对应',
+        brief: '从二次齐次函数翻译到矩阵',
+        tag: '定义 5.16 / §5.4.2',
+        one: 'n 元二次齐次函数 f(X) = Σ aᵢᵢxᵢ² + 2 Σ_{i<j} aᵢⱼxᵢxⱼ 可唯一写成 f(X) = XᵀAX（Aᵀ = A），对称阵 A 的秩称为二次型的秩 R(f)。',
+        formula: 'f(X) = X^{T}AX （A^{T} = A， a_{ij} = a_{ji} = 交叉项系数 / 2）',
+        points: [
+          '写矩阵 A 的口诀：平方项系数放主对角线，交叉项 xᵢxⱼ 的系数「平分一半」放到 (i, j) 和 (j, i) 位置。',
+          '二次型 f ↔ 对称阵 A 是一一对应；虽然任意方阵 B 也能写出 XᵀBX，但只有对称阵 A = (B+Bᵀ)/2 唯一确定。'
+        ],
+        tip: '写二次型矩阵时最常见的低级错误就是交叉项忘记除以 2！务必检查 A 是否对称。',
+        ref: '§5.4.1–5.4.2'
+      },
+      {
+        id: 'l54-2',
+        title: '标准形、规范形与矩阵合同',
+        brief: '可逆坐标变换对应合同变换',
+        tag: '定义 5.17–5.18',
+        one: '只含平方项的二次型称标准形，系数仅含 1, −1, 0 的称规范形；可逆变换 X = PY 把矩阵 A 变为合同矩阵 PᵀAP。',
+        formula: 'X = PY (P 可逆) ⟹ f = Y^{T}(P^{T}AP)Y ｜ B = P^{T}AP （合同，R(B) = R(A)）',
+        points: [
+          '合同是矩阵上的等价关系，保持对称性与秩不变。',
+          '化标准形对应把对称阵 A 合同对角化；化规范形对应合同到 diag(Eₚ, −E_{r−p}, O)。'
+        ],
+        tip: '注意区分：变换是 X = PY（用新变量表示旧变量），不要把 P 和 P⁻¹ 搞反。',
+        ref: '§5.4.1–5.4.2'
+      },
+      {
+        id: 'l54-3',
+        title: '配方法化简二次型',
+        brief: '逐次配方消交叉项，直观快捷',
+        tag: '定理 5.25 / 例 5.11–5.12',
+        one: '任意实二次型都可用可逆坐标变换化为标准形与规范形；配方法通过逐个变量配方或先造平方项来完成。',
+        formula: '无平方项时：令 x_{1} = z_{1} + z_{2}, x_{2} = z_{1} − z_{2} ⟹ 2x_{1}x_{2} = 2z_{1}^{2} − 2z_{2}^{2}',
+        points: [
+          '有平方项（如 x₁²）：把含 x₁ 的所有项集中配成完全平方，余下不再含 x₁，继续对下一变量配方。',
+          '只有交叉项（如 2x₁x₂）：先作平方差替换 x₁ = z₁ + z₂, x₂ = z₁ − z₂ 造出平方项，再配方。',
+          '再作伸缩 yᵢ = √|λᵢ| zᵢ 即可从标准形一步变成规范形。'
+        ],
+        tip: '写坐标变换矩阵时必须保证变换可逆（例如每个新变量尽量用三角形式定义，且别漏掉未参与配方的变量 yₖ = xₖ）。',
+        ref: '§5.4.1 · 定理 5.25'
+      },
+      {
+        id: 'l54-4',
+        title: '正交变换化简二次型',
+        brief: '不改变几何图形形状的刚体变换',
+        tag: '定理 5.26 / 例 5.13–5.14',
+        one: '对实对称阵 A 求正交阵 Q 使 QᵀAQ = diag(λ₁,…,λₙ)，则正交变换 X = QY 把二次型化为 f = λ₁y₁² + … + λₙyₙ²。',
+        formula: 'X = QY (Q^{T}Q = E_{n}) ⟹ f = λ_{1}y_{1}^{2} + … + λ_{n}y_{n}^{2}',
+        points: [
+          '标准形的系数恰好是矩阵 A 的全部特征值（顺序与 Q 的列一致）。',
+          '与配方法对比：配方法会拉伸/剪切图形（圆变椭圆），正交变换只做旋转与反射，严格保持二次曲面形状。'
+        ],
+        tip: '题目若要求「求正交变换化为标准形」，必须用特征值 + 施密特正交化求 Q，不能用配方法。',
+        ref: '§5.4.2 · 定理 5.26'
+      },
+      {
+        id: 'l54-5',
+        title: '惯性定理与规范形唯一性',
+        brief: '无论怎么变，正负项个数不变',
+        tag: '定理 5.27 / 定义 5.19',
+        one: '任意实二次型的规范形唯一确定：正平方项个数 p（正惯性指数）与负平方项个数 r − p（负惯性指数）不随可逆变换改变。',
+        formula: 'f = y_{1}^{2} + … + y_{p}^{2} − y_{p+1}^{2} − … − y_{r}^{2} ｜ 符号差 = p − (r − p) = 2p − r',
+        points: [
+          '无论用配方法还是正交变换法，得到的标准形中正系数个数、负系数个数都等于 p 与 r − p。',
+          '对称阵 A 的正（负）惯性指数就等于 A 的正（负）特征值个数（计重数）。'
+        ],
+        tip: '求正负惯性指数最快的办法往往是先配方法，而不是硬算高次特征多项式的根！',
+        ref: '§5.4.3 · 定理 5.27'
+      },
+      {
+        id: 'l54-6',
+        title: '对称矩阵合同的充要条件',
+        brief: '用秩与惯性指数一锤定音',
+        tag: '推论 5.28',
+        one: '两个同阶实对称矩阵 A 与 B 合同，当且仅当它们有相同的秩和正惯性指数（等价于相同的正、负惯性指数）。',
+        formula: 'A 合同 B ⟺ R(A) = R(B) 且 p(A) = p(B) ⟺ 正、负惯性指数全相同',
+        points: [
+          '等价表述：同秩且负惯性指数相同；同秩且符号差相同；同秩且正特征值个数相同。',
+          '合同（只看符号）比相似（看具体特征值数值）更粗：所有正定阵都与 Eₙ 合同，但未必相似。'
+        ],
+        tip: '记住「相似 ⟹ 合同（对实对称阵而言，若可正交相似）」，但合同远不能推出相似。',
+        ref: '§5.4.3 · 推论 5.28'
+      }
+    ]
+  },
+  {
+    id: 'b55',
+    num: '5.5',
+    title: '正定二次型',
+    short: '二次型的型与正定判据',
+    color: '#4C5F9E',
+    side: 'right',
+    brief: '恒取正值的二次型及其八条等价刻画',
+    leaves: [
+      {
+        id: 'l55-1',
+        title: '二次型的五种型',
+        brief: '正定、半正定、负定、半负定、不定',
+        tag: '定义 5.20 / 命题 5.29–5.30',
+        one: '按 f(X) 在非零向量上的符号，二次型（及对称阵）分为五类；可逆坐标变换（即合同）不改变二次型的型。',
+        formula: '正定：∀X ≠ 0, X^{T}AX > 0 ｜ 半正定：∀X, X^{T}AX ≥ 0 ｜ A 负定 ⟺ −A 正定',
+        points: [
+          '命题 5.30（标准形判型）：全正 ⟺ 正定；全非负 ⟺ 半正定；全负 ⟺ 负定；全非正 ⟺ 半负定；有正有负 ⟺ 不定。',
+          '研究负定/半负定只需对 −A 研究正定/半正定即可。'
+        ],
+        tip: '前提必须是「实对称矩阵」，非对称矩阵讨论正定性时通常先对称化为 (A+Aᵀ)/2。',
+        ref: '§5.5.1'
+      },
+      {
+        id: 'l55-2',
+        title: '正定阵的八条等价刻画',
+        brief: '赫尔维茨顺序主子式定理',
+        tag: '定理 5.32',
+        one: '对称阵 A 正定 ⟺ 特征值全正 ⟺ 正惯性指数 p = n ⟺ 与 E 合同（A = PᵀP） ⟺ 各主子式为正 ⟺ 各顺序主子式为正。',
+        formula: 'A > 0 ⟺ λ_{i} > 0 ⟺ p = n ⟺ A = P^{T}P ⟺ A = S^{2} (S > 0) ⟺ Δ_{1},…,Δ_{n} > 0',
+        points: [
+          '第 (5) 条：A = PᵀP（P 可逆），在构造正定阵或证明 BᵀAB 正定时极为好用。',
+          '第 (6) 条：存在唯一（实为正定对称）平方根 S 使得 A = S²，由正交对角化 S = Q√ΛQᵀ 构造。',
+          '第 (8) 条（最常用计算判据）：只需检验左上角 1 阶到 n 阶顺序主子式 Δ₁,…,Δₙ 全大于 0。'
+        ],
+        tip: '负定矩阵的顺序主子式判据（习题 5.5.5）：奇数阶顺序主子式 < 0，偶数阶顺序主子式 > 0（由 (−1)ᵏΔₖ(A) > 0 推出）。',
+        ref: '§5.5.2 · 定理 5.32'
+      },
+      {
+        id: 'l55-3',
+        title: '正定阵的性质与开任意次方',
+        brief: '必要条件与 Cholesky / 方根分解',
+        tag: '推论 5.31, 5.33–5.34',
+        one: '正定阵的对角元与行列式必大于 0；对称阵 A 正定当且仅当存在对角元全正的上三角阵 R 使 A = RᵀR，且可开任意 m 次方。',
+        formula: 'A > 0 ⟹ a_{ii} > 0, |A| > 0 ｜ A = R^{T}R （r_{ii} > 0） ｜ A = B^{m} (B > 0)',
+        points: [
+          '推论 5.31 是快速排除法：主对角线上只要出现 ≤ 0 的元素，矩阵立刻不正定（但全正不保证正定）。',
+          '推论 5.33：对 A = PᵀP 中的 P 作 QR 分解 P = QR，立即得 A = RᵀR。',
+          '推论 5.34：B = Q diag(λ₁^{1/m},…,λₙ^{1/m}) Qᵀ 是正定对称阵且满足 Bᵐ = A。'
+        ],
+        tip: '正定阵之和仍正定（习题 5.5.4）；若 B 列满秩且 A 正定，则 BᵀAB 正定（习题 5.5.8）。',
+        ref: '§5.5.2 · 推论 5.31–5.34'
+      },
+      {
+        id: 'l55-4',
+        title: '半正定阵的刻画与反例陷阱',
+        brief: '全主子式非负 ≠ 顺序主子式非负',
+        tag: '定理 5.35',
+        one: '对称阵 A 半正定 ⟺ 特征值全 ≥ 0 ⟺ p = R(A) ⟺ 与 diag(Eᵣ, O) 合同 ⟺ 每个主子式均非负。',
+        formula: 'A ≥ 0 ⟺ λ_{i} ≥ 0 ⟺ p = R(A) ⟺ 所有主子式 ≥ 0',
+        points: [
+          '半正定阵也可拆成 S²（S 半正定对称且 R(S) = R(A)）。',
+          '重要反例：A = diag(0, −1) 的两个顺序主子式都是 0（非负），但主子式 a₂₂ = −1 < 0，故非半正定。'
+        ],
+        tip: '判半正定必须检查「全部主子式」而非仅顺序主子式；或者直接算特征值或配方法看正负惯性指数！',
+        ref: '§5.5.2 · 定理 5.35'
+      },
+      {
+        id: 'l55-5',
+        title: '同时合同对角化与常见证明',
+        brief: '一个正定就能把两个对称阵一起对角化',
+        tag: '例 5.15–5.17',
+        one: '若 A, B 均为实对称阵且 A 正定，则存在可逆阵 P 使 PᵀAP = E 且 PᵀBP 为对角阵。',
+        formula: 'P_{1}^{T}AP_{1} = E， Q^{T}(P_{1}^{T}BP_{1})Q = Λ ⟹ P = P_{1}Q 同时合同对角化 A, B',
+        points: [
+          '例 5.15（多项式判正定）：对称阵 A 的特征值 λᵢ 满足 λᵢ² + 2λᵢ + 3 = (λᵢ + 1)² + 2 > 0，故 A² + 2A + 3E 正定。',
+          '例 5.17 证明精髓：先用可逆阵 P₁ 把正定 A 合同成 E，再对对称阵 P₁ᵀBP₁ 用正交阵 Q 对角化，QᵀEQ = E 保持不变。'
+        ],
+        tip: '同时合同对角化只需其中「至少一个」正定；若两个都不定，一般不能同时合同对角化。',
+        ref: '§5.5.2 · 例 5.15–5.17'
+      }
+    ]
+  },
+  {
+    id: 'b56',
+    num: '5.6',
+    title: '奇异值分解',
+    short: '一般矩阵的 SVD 与应用',
+    color: '#4F7D56',
+    side: 'right',
+    brief: '把对称阵正交对角化推广到任意 m × n 矩阵',
+    leaves: [
+      {
+        id: 'l56-1',
+        title: '正交等价与奇异值',
+        brief: '用左右两个正交阵夹出简单形式',
+        tag: '定义 5.21–5.22',
+        one: '若存在正交阵 P, Q 使 PAQ = B，称 A 与 B 正交等价；AᵀA（与 AAᵀ）的非零特征值的算术平方根 μ₁ ≥ … ≥ μᵣ > 0 称为 A 的奇异值。',
+        formula: 'R(A^{T}A) = R(AA^{T}) = R(A) = r， μ_{i} = √λ_{i} > 0 (i = 1,…,r)',
+        points: [
+          'AᵀA 与 AAᵀ 都是半正定对称阵，且 λᵐ|λEₙ − AᵀA| = λⁿ|λEₘ − AAᵀ|，故二者非零特征值完全相同。',
+          '奇异值个数恰好等于矩阵的秩 r = R(A)。'
+        ],
+        tip: '奇异值是实矩阵在正交等价下的全系不变量，无需矩阵是方阵，也无需可对角化。',
+        ref: '§5.6.1'
+      },
+      {
+        id: 'l56-2',
+        title: '奇异值分解定理 (SVD)',
+        brief: '线性代数最核心的矩阵分解之一',
+        tag: '定理 5.36',
+        one: '任意 m × n 实矩阵 A（秩为 r）均可分解为 A = P Σ Qᵀ，其中 P ∈ Mₘ(ℝ)、Q ∈ Mₙ(ℝ) 为正交阵，Σ 左上角为 Λ = diag(μ₁,…,μᵣ)。',
+        formula: 'A = P [ Λ  O ; O  O ] Q^{T}， Λ = diag(μ_{1},…,μ_{r})',
+        points: [
+          '构造关键：从 Qᵀ(AᵀA)Q = diag(Λ², O) 出发，取 P₁ = AQ₁Λ⁻¹，验证 P₁ᵀP₁ = Eᵣ 后扩充为正交阵 P = (P₁, P₂)。',
+          '同时 AQ₂ = O 自动成立，因为 (AQ₂)ᵀ(AQ₂) = Q₂ᵀAᵀAQ₂ = O。'
+        ],
+        tip: '注意公式里右边是 Qᵀ 而不是 Q，对应 A qᵢ = μᵢ pᵢ（i ≤ r）与 A qⱼ = 0（j > r）。',
+        ref: '§5.6.1 · 定理 5.36'
+      },
+      {
+        id: 'l56-3',
+        title: 'SVD 计算步骤',
+        brief: '选维度小的一侧算特征值',
+        tag: '算法 5.2–5.3',
+        one: 'm ≥ n 时正交对角化 n 阶阵 AᵀA 得 Q，再由 pᵢ = μᵢ⁻¹Aqᵢ 并扩充得 P；m < n 时转而对角化 m 阶阵 AAᵀ 得 P，再求 qᵢ = μᵢ⁻¹Aᵀpᵢ 并扩充得 Q。',
+        formula: 'p_{i} = (1 / μ_{i}) A q_{i} ｜ q_{i} = (1 / μ_{i}) A^{T} p_{i} (i = 1,…,r)',
+        points: [
+          '无论选 AᵀA 还是 AAᵀ，目的都是挑阶数更小的对称阵来算特征值与特征向量。',
+          '前 r 个方向由公式直接算，后 m − r（或 n − r）个向量只需在对应正交补中求标准正交基。'
+        ],
+        tip: '注意奇异值通常按降序排列 μ₁ ≥ … ≥ μᵣ > 0，对应的特征向量列顺序要同步对齐。',
+        ref: '§5.6.1 · 算法 5.2–5.3'
+      },
+      {
+        id: 'l56-4',
+        title: '极分解与四大基本子空间',
+        brief: 'SVD 一举给出四个子空间的标准正交基',
+        tag: '例 5.19–5.20',
+        one: '方阵可极分解为半正定对称阵与正交阵之积 A = SQ；SVD 中 P, Q 的列向量直接给出 C(A), Null(Aᵀ), C(Aᵀ), Null(A) 的标准正交基。',
+        formula: 'A = (P_{1}DP_{1}^{T})(P_{1}P_{2}^{T}) = SQ ｜ P = (C(A)基 | Null(A^{T})基)， Q = (C(A^{T})基 | Null(A)基)',
+        points: [
+          '例 5.19（极分解）：当 A 可逆时，S = P₁DP₁ᵀ 为正定对称阵；这对应复数极坐标 r·e^{iθ} 的矩阵推广。',
+          '例 5.20：p₁,…,pᵣ 是 C(A) 标准正交基，p_{r+1},…,pₘ 是 Null(Aᵀ) 标准正交基；q₁,…,qᵣ 是 C(Aᵀ) 基，q_{r+1},…,qₙ 是 Null(A) 基。'
+        ],
+        tip: 'SVD 把第 5.2 节的「四大子空间正交补分解」具体化成了显式的标准正交基。',
+        ref: '§5.6.2 · 例 5.19–5.20'
+      },
+      {
+        id: 'l56-5',
+        title: '矩阵范数与几何解释',
+        brief: '最大拉伸与把圆映成椭圆',
+        tag: '例 5.21–5.22',
+        one: '矩阵的谱范数 ‖A‖₂ 等于最大奇异值 μ₁，Frobenius 范数 ‖A‖_F 等于所有奇异值平方和的平方根；几何上 A 把单位圆映为半轴为 μ₁p₁, μ₂p₂ 的椭圆。',
+        formula: '‖A‖_{2} = μ_{1}， ‖A‖_{F} = √Tr(A^{T}A) = √(μ_{1}^{2} + … + μ_{r}^{2})， ‖A‖_{2} ≤ ‖A‖_{F}',
+        points: [
+          '例 5.21：由于 Q 正交保长，‖AX‖/‖X‖ 的最大值在 X = Q(1,0,…,0)ᵀ 处取到，等于 μ₁。',
+          '例 5.22：2 阶可逆阵把正交基 q₁, q₂ 映为正交轴 μ₁p₁, μ₂p₂，揭示了「先旋转 Qᵀ、再沿轴伸缩 Λ、再旋转 P」的几何本质。'
+        ],
+        tip: '‖A‖₂ ≤ ‖A‖_F 恒成立，且等号成立当且仅当 R(A) ≤ 1。',
+        ref: '§5.6.2 · 例 5.21–5.22'
+      }
+    ]
+  },
+  {
+    id: 'b57',
+    num: '5.7',
+    title: '内积的应用：最小二乘问题',
+    short: '正交投影与正规方程',
+    color: '#B05C47',
+    side: 'right',
+    brief: '超定方程组无解时如何找最优近似解',
+    leaves: [
+      {
+        id: 'l57-1',
+        title: '直线拟合与误差平方和',
+        brief: '用矩阵写出残差长度平方',
+        tag: '§5.7.1',
+        one: '用模型 y = c + dx 拟合数据点 (xᵢ, yᵢ) 时，最小二乘目标是使所有预测误差的平方和 S(c, d) = ‖y − Ax‖² 最小。',
+        formula: 'S(x) = e^{T}e = ‖y − Ax‖^{2} = Σ_{i=1}^{n} [y_{i} − (c + dx_{i})]^{2}',
+        points: [
+          '设计矩阵 A 的第一列全为 1，第二列为 (x₁,…,xₙ)ᵀ，未知参数向量 x = (c, d)ᵀ。',
+          '当数据点不共线时 Ax = y 无精确解，需寻找误差向量 e = y − Ax 长度最小的 x。'
+        ],
+        tip: '误差平方和就是欧氏空间 ℝⁿ 中向量距离的平方，这正是内积介入的入口。',
+        ref: '§5.7.1'
+      },
+      {
+        id: 'l57-2',
+        title: '正交投影与正规方程',
+        brief: '点到子空间距离最短 ⟺ 垂线正交',
+        tag: '§5.7.1–5.7.2',
+        one: '在 A 的列空间 C(A) 中找最接近 b 的向量 Ax，等价于要求误差向量 Ax − b 与 C(A) 正交，从而导出正规方程 AᵀAx = Aᵀb。',
+        formula: '(Ax − b) ⊥ C(A) ⟺ A^{T}(Ax − b) = 0 ⟺ A^{T}Ax = A^{T}b',
+        points: [
+          '几何本质：Ax 是 b 在列空间 C(A) 上的正交投影，误差 Ax − b ∈ C(A)⊥ = Null(Aᵀ)。',
+          '正规方程始终有解（因为 Aᵀb ∈ C(Aᵀ) = C(AᵀA)），把无解的超定方程 Ax = b 转化为相容方阵方程。'
+        ],
+        tip: '不需要求导，直接用「误差与列空间正交」就能一步写出正规方程 AᵀAx = Aᵀb。',
+        ref: '§5.7.1–5.7.2'
+      },
+      {
+        id: 'l57-3',
+        title: '最小二乘解公式',
+        brief: '列满秩时唯一解析解',
+        tag: '§5.7.2',
+        one: '对一般超定方程组 Ax = b（m > n），当 AᵀA 可逆（即 A 列满秩）时，正规方程给出唯一最小二乘解 x = (AᵀA)⁻¹Aᵀb。',
+        formula: 'x = (A^{T}A)^{-1}A^{T}b （当 R(A) = n 时 A^{T}A 正定可逆）',
+        points: [
+          'A 列满秩 ⟹ R(AᵀA) = R(A) = n ⟹ AᵀA 对称正定且可逆。',
+          '最小二乘解 x 使 ‖Ax − b‖² 达到全局最小。'
+        ],
+        tip: '千万别把 (AᵀA)⁻¹Aᵀb 错拆成 A⁻¹(Aᵀ)⁻¹Aᵀb——A 不是方阵，根本没有逆！',
+        ref: '§5.7.2'
+      },
+      {
+        id: 'l57-4',
+        title: '实际应用：GPS 与回归',
+        brief: '从定位到多元线性回归',
+        tag: '§5.7.3',
+        one: '最小二乘法广泛用于求解方程多于未知数的超定问题，典型应用包括 GPS 卫星定位（线性化后求解）与多元线性回归预测。',
+        formula: 'b ≈ x_{1}a_{1} + … + x_{n}a_{n} ⟹ Xa ≈ b ⟹ a = (X^{T}X)^{-1}X^{T}b',
+        points: [
+          'GPS 定位：接收多颗卫星距离，将球面距离方程线性化为 Ax ≈ b，用最小二乘估计三维坐标 (x, y, z)。',
+          '多元线性回归：用面积、房龄等 n 个特征与 m 套样本（m > n）拟合权重系数，最小化预测残差平方和。'
+        ],
+        tip: '实际工程中若 XᵀX 条件数过大（多重共线性），数值上常改用第 5.2 节的 QR 分解或第 5.6 节的 SVD 来稳定求解。',
+        ref: '§5.7.3'
+      }
+    ]
+  }
+];
+
+
+'use strict';
+
+(() => {
+  /* ================= data ================= */
+  const BRANCH_BY_ID = new Map(BRANCHES.map(b => [b.id, b]));
+  const ALL_LEAVES = [];
+  BRANCHES.forEach((b, bi) => {
+    b.leaves.forEach((l, li) => {
+      ALL_LEAVES.push(Object.assign({}, l, {
+        branchId: b.id,
+        branchNum: b.num,
+        branchTitle: b.title,
+        branchShort: b.short,
+        color: b.color,
+        side: b.side,
+        localIndex: li,
+        globalIndex: ALL_LEAVES.length
+      }));
+    });
+  });
+  const LEAF_BY_ID = new Map(ALL_LEAVES.map(l => [l.id, l]));
+  const PREVIEW = 2;
+  const TOTAL = ALL_LEAVES.length;
+
+  /* ================= storage ================= */
+  const LS_MASTERED = 'la-ch5-mastered-v1';
+  const LS_THEME = 'la-ch5-theme-v1';
+  const LS_VIEW = 'la-ch5-view-v1';
+
+  function readLS(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function writeLS(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* private mode */ }
+  }
+  function loadMastered() {
+    try {
+      const raw = readLS(LS_MASTERED);
+      const arr = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(arr)) return new Set();
+      return new Set(arr.filter(id => LEAF_BY_ID.has(id)));
+    } catch (e) { return new Set(); }
+  }
+
+  const state = {
+    view: readLS(LS_VIEW) === 'list' || readLS(LS_VIEW) === 'map'
+      ? readLS(LS_VIEW)
+      : (window.innerWidth < 900 ? 'list' : 'map'),
+    expanded: new Set(),
+    selectedId: null,
+    guideMode: 'chapter',
+    guideBranch: null,
+    mastered: loadMastered(),
+    theme: readLS(LS_THEME) === 'dark' ? 'dark' : 'light',
+    viewport: { x: 0, y: 0, scale: 1 },
+    isFit: true,
+    sidebarOpen: false
+  };
+
+  /* ================= helpers ================= */
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+  const esc = (value) => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[ch]));
+  const plain = (value) => String(value == null ? '' : value).replace(/<[^>]*>/g, '');
+  const mathHTML = (value) => esc(value)
+    .replace(/\^\{([^{}]+)\}/g, '<sup>$1</sup>')
+    .replace(/_\{([^{}]+)\}/g, '<sub>$1</sub>')
+    .replace(/\^([A-Za-z0-9θ])/g, '<sup>$1</sup>')
+    .replace(/_([A-Za-z0-9θ])/g, '<sub>$1</sub>');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReduced = reducedMotion;
+
+  const ICON = {
+    search: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.4"/><path d="m12.8 12.8 4 4"/></svg>',
+    moon: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.8 6.8 0 0 1 7.6 3.8a6.8 6.8 0 1 0 8.6 8.6Z"/></svg>',
+    sun: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 1.8v1.7M10 16.5v1.7M1.8 10h1.7M16.5 10h1.7M4.2 4.2l1.2 1.2M14.6 14.6l1.2 1.2M15.8 4.2l-1.2 1.2M5.4 14.6l-1.2 1.2"/></svg>',
+    printer: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7V3.6h8V7"/><rect x="3" y="7" width="14" height="6.4" rx="1.4"/><path d="M6 11h8v5.4H6z"/></svg>',
+    download: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v8.4"/><path d="m6.6 8.2 3.4 3.4 3.4-3.4"/><path d="M3.8 15.8h12.4"/></svg>',
+    panel: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3.6" width="14" height="12.8" rx="1.6"/><path d="M12.2 3.6v12.8"/></svg>',
+    fit: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.4H3.4V7M13 3.4h3.6V7M7 16.6H3.4V13M13 16.6h3.6V13"/></svg>',
+    left: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.4 4.6 7 10l5.4 5.4"/></svg>',
+    right: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.6 4.6 13 10l-5.4 5.4"/></svg>',
+    check: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4.6 10.3 3.4 3.4 7.4-7.4"/></svg>'
+  };
+
+  /* ================= map geometry ================= */
+  const L = {
+    width: 1580,
+    top: 56,
+    minH: 580,
+    leafW: 272,
+    leafH: 52,
+    leafGap: 8,
+    branchW: 238,
+    branchH: 56,
+    headerGap: 14,
+    leafBranchGap: 34,
+    branchCenterGap: 50,
+    centerW: 300,
+    centerH: 136,
+    blockGap: 24
+  };
+  const CENTER_X = (L.width - L.centerW) / 2;
+  const LEFT_BRANCH_X = CENTER_X - L.branchCenterGap - L.branchW;
+  const RIGHT_BRANCH_X = CENTER_X + L.centerW + L.branchCenterGap;
+  const LEFT_LEAF_X = LEFT_BRANCH_X - L.leafBranchGap - L.leafW;
+  const RIGHT_LEAF_X = RIGHT_BRANCH_X + L.branchW + L.leafBranchGap;
+
+  const mapPane = $('#map-pane');
+  const mapViewport = $('#map-viewport');
+  const mapCanvas = $('#map-canvas');
+  const nodeLayer = $('#node-layer');
+  const connectors = $('#connectors');
+  const sidebar = $('#sidebar');
+  const sideInner = $('#side-inner');
+  const scrim = $('#scrim');
+  const sideToggle = $('#side-toggle');
+  const listPane = $('#list-pane');
+  const listSections = $('#list-sections');
+  const searchInput = $('#search-input');
+  const searchPop = $('#search-pop');
+  const toastEl = $('#toast');
+  const themeBtn = $('#btn-theme');
+
+  const nodes = new Map();
+  let currentGeo = new Map();
+  let lastTargets = new Map();
+  let layoutRaf = 0;
+  let viewRaf = 0;
+  let lastDragEnd = 0;
+  let mapReady = false;
+
+  function visibleLeaves(branch) {
+    return state.expanded.has(branch.id)
+      ? branch.leaves
+      : branch.leaves.slice(0, PREVIEW);
+  }
+  function blockHeight(n) {
+    return L.branchH + L.headerGap + n * L.leafH + Math.max(0, n - 1) * L.leafGap;
+  }
+  function stackHeight(branches) {
+    if (!branches.length) return 0;
+    return branches.reduce((sum, b) => sum + blockHeight(visibleLeaves(b).length), 0)
+      + (branches.length - 1) * L.blockGap;
+  }
+  function isDraggingRecently() {
+    return performance.now() - lastDragEnd < 320;
+  }
+
+  /* ================= map nodes ================= */
+  function makeCheck() {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'check');
+    svg.setAttribute('viewBox', '0 0 16 16');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.innerHTML = '<path d="M3 8.4 6.2 11.6 13 4.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>';
+    return svg;
+  }
+
+  function initMap() {
+    const center = document.createElement('button');
+    center.type = 'button';
+    center.className = 'center-card';
+    center.setAttribute('aria-label', '第5章 内积空间，返回章节导览');
+    center.innerHTML = [
+      '<span class="center-kicker">第 5 章 · CHAPTER 05</span>',
+      '<span class="center-title">线性变换</span>',
+      '<span class="center-sub">' + esc(CHAPTER.subtitle) + '</span>',
+      '<span class="center-line" aria-hidden="true"></span>'
+    ].join('');
+    center.addEventListener('click', () => {
+      if (isDraggingRecently()) return;
+      state.selectedId = null;
+      updateSelection();
+      renderChapterGuide();
+    });
+    nodeLayer.appendChild(center);
+    nodes.set('center', center);
+
+    BRANCHES.forEach(b => {
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'branch';
+      el.dataset.id = b.id;
+      el.style.setProperty('--bc', b.color);
+      el.style.width = L.branchW + 'px';
+      el.style.height = L.branchH + 'px';
+      el.innerHTML = [
+        '<span class="b-num">' + esc(b.num) + '</span>',
+        '<span class="b-main">',
+        '  <span class="b-title">' + esc(b.title) + '</span>',
+        '  <span class="b-sub">' + esc(b.short) + '</span>',
+        '</span>',
+        '<span class="b-count"></span>'
+      ].join('');
+      el.addEventListener('click', () => {
+        if (isDraggingRecently()) return;
+        toggleBranchExpansion(b.id);
+        renderBranchGuide(b.id);
+      });
+      nodeLayer.appendChild(el);
+      nodes.set(b.id, el);
+
+      b.leaves.forEach(leaf => {
+        const n = document.createElement('button');
+        n.type = 'button';
+        n.className = 'leaf';
+        n.dataset.id = leaf.id;
+        n.style.setProperty('--bc', b.color);
+        n.style.width = L.leafW + 'px';
+        n.style.height = L.leafH + 'px';
+        n.style.display = 'none';
+        n.title = leaf.title;
+        const tag = String(leaf.tag || '').split(' / ')[0];
+        n.innerHTML = [
+          '<span class="l-top">',
+          '  <span class="l-tag">' + esc(tag) + '</span>',
+          '  <span class="l-title">' + esc(leaf.title) + '</span>',
+          '</span>',
+          '<span class="l-brief">' + esc(leaf.brief) + '</span>'
+        ].join('');
+        n.appendChild(makeCheck());
+        n.addEventListener('click', () => {
+          if (isDraggingRecently()) return;
+          selectLeaf(leaf.id, { focus: false });
+        });
+        nodeLayer.appendChild(n);
+        nodes.set(leaf.id, n);
+      });
+    });
+  }
+
+  function computeLayout() {
+    const left = BRANCHES.filter(b => b.side === 'left');
+    const right = BRANCHES.filter(b => b.side === 'right');
+    const leftH = stackHeight(left);
+    const rightH = stackHeight(right);
+    const contentH = Math.max(leftH, rightH, L.minH);
+    const H = contentH + L.top * 2;
+    const targets = new Map();
+
+    targets.set('center', {
+      x: CENTER_X,
+      y: L.top + (contentH - L.centerH) / 2,
+      w: L.centerW,
+      h: L.centerH,
+      opacity: 1
+    });
+
+    [left, right].forEach(group => {
+      if (!group.length) return;
+      const total = stackHeight(group);
+      let y = L.top + (contentH - total) / 2;
+      group.forEach(b => {
+        const leaves = visibleLeaves(b);
+        const branchX = b.side === 'left' ? LEFT_BRANCH_X : RIGHT_BRANCH_X;
+        const leafX = b.side === 'left' ? LEFT_LEAF_X : RIGHT_LEAF_X;
+        targets.set(b.id, {
+          x: branchX,
+          y,
+          w: L.branchW,
+          h: L.branchH,
+          opacity: 1
+        });
+        let leafY = y + L.branchH + L.headerGap;
+        leaves.forEach(leaf => {
+          targets.set(leaf.id, {
+            x: leafX,
+            y: leafY,
+            w: L.leafW,
+            h: L.leafH,
+            opacity: 1
+          });
+          leafY += L.leafH + L.leafGap;
+        });
+        y += blockHeight(leaves.length) + L.blockGap;
+      });
+    });
+
+    return { targets, W: L.width, H };
+  }
+
+  function applyGeo(el, geo) {
+    el.style.left = geo.x + 'px';
+    el.style.top = geo.y + 'px';
+    el.style.opacity = String(geo.opacity == null ? 1 : geo.opacity);
+  }
+
+  function syncBranchChrome() {
+    BRANCHES.forEach(b => {
+      const el = nodes.get(b.id);
+      if (!el) return;
+      const shown = visibleLeaves(b).length;
+      const count = $('.b-count', el);
+      count.textContent = shown + '/' + b.leaves.length;
+      el.setAttribute('aria-label', b.num + ' ' + b.title + '，显示 ' + shown + ' / ' + b.leaves.length + ' 个知识点');
+      el.setAttribute('aria-expanded', state.expanded.has(b.id) ? 'true' : 'false');
+    });
+  }
+
+  function anchorFor(key, targets) {
+    const leaf = LEAF_BY_ID.get(key);
+    if (leaf) {
+      const bg = targets.get(leaf.branchId);
+      const g = targets.get(key);
+      if (bg && g) {
+        return {
+          x: leaf.side === 'left' ? bg.x + bg.w : bg.x - g.w,
+          y: bg.y + bg.h / 2 - g.h / 2
+        };
+      }
+    }
+    const t = targets.get(key);
+    return t ? { x: t.x, y: t.y } : { x: 0, y: 0 };
+  }
+
+  function applyLayout(animate) {
+    const { targets, W, H } = computeLayout();
+    lastTargets = targets;
+    mapCanvas.style.width = W + 'px';
+    mapCanvas.style.height = H + 'px';
+    connectors.setAttribute('width', String(W));
+    connectors.setAttribute('height', String(H));
+    connectors.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    syncBranchChrome();
+
+    if (!animate || prefersReduced) {
+      cancelAnimationFrame(layoutRaf);
+      mapCanvas.classList.remove('js-anim');
+      const all = new Set([...targets.keys(), ...currentGeo.keys()]);
+      all.forEach(key => {
+        const el = nodes.get(key);
+        if (!el) return;
+        if (targets.has(key)) {
+          const g = targets.get(key);
+          el.style.display = '';
+          applyGeo(el, g);
+        } else {
+          el.style.display = 'none';
+        }
+      });
+      currentGeo = new Map(targets);
+      drawConnectors(currentGeo);
+      return targets;
+    }
+
+    const from = new Map();
+    const to = new Map();
+    const hide = [];
+    targets.forEach((g, key) => {
+      const el = nodes.get(key);
+      if (!el) return;
+      el.style.display = '';
+      const prev = currentGeo.get(key);
+      if (prev) {
+        from.set(key, Object.assign({}, prev));
+      } else {
+        const a = anchorFor(key, targets);
+        const start = { x: a.x, y: a.y, w: g.w, h: g.h, opacity: 0 };
+        from.set(key, start);
+        applyGeo(el, start);
+      }
+      to.set(key, g);
+    });
+    currentGeo.forEach((prev, key) => {
+      if (targets.has(key)) return;
+      const el = nodes.get(key);
+      if (!el) return;
+      const a = anchorFor(key, targets);
+      from.set(key, Object.assign({}, prev));
+      to.set(key, { x: a.x, y: a.y, w: prev.w, h: prev.h, opacity: 0 });
+      hide.push(key);
+    });
+
+    cancelAnimationFrame(layoutRaf);
+    mapCanvas.classList.add('js-anim');
+    const started = performance.now();
+    const duration = 430;
+
+    const tick = now => {
+      const t = Math.min(1, (now - started) / duration);
+      const e = 1 - Math.pow(1 - t, 3);
+      const frame = new Map();
+      to.forEach((target, key) => {
+        const start = from.get(key);
+        const g = {
+          x: start.x + (target.x - start.x) * e,
+          y: start.y + (target.y - start.y) * e,
+          w: target.w,
+          h: target.h,
+          opacity: (start.opacity == null ? 1 : start.opacity)
+            + ((target.opacity == null ? 1 : target.opacity) - (start.opacity == null ? 1 : start.opacity)) * e
+        };
+        frame.set(key, g);
+        const el = nodes.get(key);
+        if (el) applyGeo(el, g);
+      });
+      currentGeo = frame;
+      drawConnectors(frame);
+      if (t < 1) {
+        layoutRaf = requestAnimationFrame(tick);
+      } else {
+        hide.forEach(key => {
+          const el = nodes.get(key);
+          if (el) el.style.display = 'none';
+        });
+        currentGeo = new Map(targets);
+        mapCanvas.classList.remove('js-anim');
+        drawConnectors(currentGeo);
+      }
+    };
+    layoutRaf = requestAnimationFrame(tick);
+    return targets;
+  }
+
+  function drawConnectors(geo) {
+    const center = geo.get('center');
+    if (!center) { connectors.innerHTML = ''; return; }
+    const parts = [];
+    const cx = center.x;
+    const cy = center.y + center.h / 2;
+    BRANCHES.forEach(b => {
+      const bg = geo.get(b.id);
+      if (!bg) return;
+      const bop = bg.opacity == null ? 1 : bg.opacity;
+      const sx = b.side === 'left' ? cx : cx + center.w;
+      const ex = b.side === 'left' ? bg.x + bg.w : bg.x;
+      const ey = bg.y + bg.h / 2;
+      const mx = (sx + ex) / 2;
+      parts.push('<path d="M' + sx + ' ' + cy + ' C ' + mx + ' ' + cy + ', ' + mx + ' ' + ey + ', ' + ex + ' ' + ey + '" stroke="' + b.color + '" stroke-width="1.25" opacity="' + (0.5 * bop).toFixed(3) + '"/>');
+      parts.push('<circle cx="' + ex + '" cy="' + ey + '" r="2.4" fill="' + b.color + '" opacity="' + (0.55 * bop).toFixed(3) + '"/>');
+
+      b.leaves.forEach(leaf => {
+        const lg = geo.get(leaf.id);
+        if (!lg) return;
+        const lop = (lg.opacity == null ? 1 : lg.opacity) * bop;
+        if (lop < 0.01) return;
+        const lx1 = b.side === 'left' ? bg.x : bg.x + bg.w;
+        const lx2 = b.side === 'left' ? lg.x + lg.w : lg.x;
+        const ly = lg.y + lg.h / 2;
+        parts.push('<path d="M' + lx1 + ' ' + ly + ' L ' + lx2 + ' ' + ly + '" stroke="' + b.color + '" stroke-width="1" opacity="' + (0.42 * lop).toFixed(3) + '"/>');
+        parts.push('<circle cx="' + lx2 + '" cy="' + ly + '" r="1.9" fill="' + b.color + '" opacity="' + (0.5 * lop).toFixed(3) + '"/>');
+      });
+    });
+    connectors.innerHTML = parts.join('');
+  }
+
+  /* ================= map view transform ================= */
+  function applyView() {
+    const v = state.viewport;
+    mapCanvas.style.transform = 'translate(' + v.x + 'px, ' + v.y + 'px) scale(' + v.scale + ')';
+    const readout = $('#zoom-readout');
+    if (readout) readout.textContent = Math.round(v.scale * 100) + '%';
+  }
+
+  function fitView(animate) {
+    if (mapPane.hidden || !mapViewport.clientWidth) return;
+    const pw = mapViewport.clientWidth;
+    const ph = mapViewport.clientHeight;
+    const target = lastTargets;
+    const W = parseFloat(mapCanvas.style.width) || L.width;
+    const H = parseFloat(mapCanvas.style.height) || 1200;
+    const scale = clamp(Math.min((pw - 28) / W, (ph - 28) / H), 0.24, 1.02);
+    const next = {
+      x: (pw - W * scale) / 2,
+      y: (ph - H * scale) / 2,
+      scale
+    };
+    state.isFit = true;
+    if (animate) {
+      animateViewTo(next, 360);
+    } else {
+      cancelAnimationFrame(viewRaf);
+      state.viewport = next;
+      applyView();
+    }
+  }
+
+  function animateViewTo(next, duration = 320) {
+    if (prefersReduced) {
+      cancelAnimationFrame(viewRaf);
+      state.viewport = next;
+      applyView();
+      return;
+    }
+    const from = Object.assign({}, state.viewport);
+    const started = performance.now();
+    cancelAnimationFrame(viewRaf);
+    const tick = now => {
+      const t = Math.min(1, (now - started) / duration);
+      const e = 1 - Math.pow(1 - t, 3);
+      state.viewport = {
+        x: from.x + (next.x - from.x) * e,
+        y: from.y + (next.y - from.y) * e,
+        scale: from.scale + (next.scale - from.scale) * e
+      };
+      applyView();
+      if (t < 1) viewRaf = requestAnimationFrame(tick);
+    };
+    viewRaf = requestAnimationFrame(tick);
+  }
+
+  function zoomAt(mx, my, factor) {
+    const v = state.viewport;
+    const nextScale = clamp(v.scale * factor, 0.24, 2.2);
+    const k = nextScale / v.scale;
+    state.viewport = {
+      x: mx - (mx - v.x) * k,
+      y: my - (my - v.y) * k,
+      scale: nextScale
+    };
+    state.isFit = false;
+    applyView();
+  }
+
+  function focusLeaf(id) {
+    const g = lastTargets.get(id);
+    if (!g) return;
+    const pw = mapViewport.clientWidth;
+    const ph = mapViewport.clientHeight;
+    const scale = clamp(Math.max(state.viewport.scale, 0.88), 0.24, 1.2);
+    state.isFit = false;
+    animateViewTo({
+      scale,
+      x: pw / 2 - (g.x + g.w / 2) * scale,
+      y: ph / 2 - (g.y + g.h / 2) * scale
+    }, 340);
+  }
+
+  function toggleBranchExpansion(bid) {
+    if (state.expanded.has(bid)) state.expanded.delete(bid);
+    else state.expanded.add(bid);
+    const before = lastTargets.get(bid) ? lastTargets.get(bid).y : null;
+    const targets = applyLayout(true);
+    if (before != null && state.view === 'map') {
+      const after = targets.get(bid) ? targets.get(bid).y : before;
+      const dy = (after - before) * state.viewport.scale;
+      if (Math.abs(dy) > 0.5) {
+        state.isFit = false;
+        animateViewTo(Object.assign({}, state.viewport, { y: state.viewport.y - dy }), 390);
+      }
+    }
+  }
+
+  /* ================= map interactions ================= */
+  const pointers = new Map();
+  let panStart = null;
+  let pinch = null;
+  let didDrag = false;
+
+  function setupMapEvents() {
+    mapViewport.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pointers.size === 1) {
+        panStart = {
+          x: e.clientX,
+          y: e.clientY,
+          vx: state.viewport.x,
+          vy: state.viewport.y
+        };
+        didDrag = false;
+      } else if (pointers.size === 2) {
+        const pts = Array.from(pointers.values());
+        const dx = pts[0].x - pts[1].x;
+        const dy = pts[0].y - pts[1].y;
+        pinch = {
+          dist: Math.hypot(dx, dy) || 1,
+          mx: (pts[0].x + pts[1].x) / 2 - mapViewport.getBoundingClientRect().left,
+          my: (pts[0].y + pts[1].y) / 2 - mapViewport.getBoundingClientRect().top,
+          vx: state.viewport.x,
+          vy: state.viewport.y,
+          scale: state.viewport.scale
+        };
+        panStart = null;
+      }
+    });
+
+    mapViewport.addEventListener('pointermove', e => {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      if (pointers.size === 2 && pinch) {
+        const pts = Array.from(pointers.values());
+        const dx = pts[0].x - pts[1].x;
+        const dy = pts[0].y - pts[1].y;
+        const dist = Math.hypot(dx, dy) || 1;
+        const rect = mapViewport.getBoundingClientRect();
+        const mx = (pts[0].x + pts[1].x) / 2 - rect.left;
+        const my = (pts[0].y + pts[1].y) / 2 - rect.top;
+        const scale = clamp(pinch.scale * dist / pinch.dist, 0.24, 2.2);
+        const k = scale / pinch.scale;
+        state.viewport = {
+          scale,
+          x: mx - (pinch.mx - pinch.vx) * k,
+          y: my - (pinch.my - pinch.vy) * k
+        };
+        state.isFit = false;
+        didDrag = true;
+        applyView();
+        return;
+      }
+
+      if (panStart && pointers.size === 1) {
+        const dx = e.clientX - panStart.x;
+        const dy = e.clientY - panStart.y;
+        if (!didDrag && Math.hypot(dx, dy) > 4) {
+          didDrag = true;
+          mapViewport.classList.add('dragging');
+          mapViewport.setPointerCapture(e.pointerId);
+          state.isFit = false;
+        }
+        if (didDrag) {
+          state.viewport.x = panStart.vx + dx;
+          state.viewport.y = panStart.vy + dy;
+          applyView();
+        }
+      }
+    });
+
+    const endPointer = e => {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.delete(e.pointerId);
+      if (didDrag) lastDragEnd = performance.now();
+      if (pointers.size < 2) pinch = null;
+      if (pointers.size === 1) {
+        const p = Array.from(pointers.values())[0];
+        panStart = { x: p.x, y: p.y, vx: state.viewport.x, vy: state.viewport.y };
+        didDrag = false;
+      } else if (pointers.size === 0) {
+        panStart = null;
+        mapViewport.classList.remove('dragging');
+      }
+    };
+    mapViewport.addEventListener('pointerup', endPointer);
+    mapViewport.addEventListener('pointercancel', endPointer);
+
+    mapViewport.addEventListener('wheel', e => {
+      e.preventDefault();
+      const rect = mapViewport.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+      zoomAt(mx, my, Math.exp(-dy * 0.0015));
+    }, { passive: false });
+
+    mapViewport.addEventListener('dblclick', e => {
+      if (e.target.closest('.leaf, .branch, .center-card')) return;
+      fitView(true);
+    });
+
+    $('#zoom-in').addEventListener('click', () => {
+      const rect = mapViewport.getBoundingClientRect();
+      zoomAt(rect.width / 2, rect.height / 2, 1.22);
+    });
+    $('#zoom-out').addEventListener('click', () => {
+      const rect = mapViewport.getBoundingClientRect();
+      zoomAt(rect.width / 2, rect.height / 2, 1 / 1.22);
+    });
+    $('#zoom-fit').addEventListener('click', () => fitView(true));
+
+    $('#btn-expand-all').addEventListener('click', () => {
+      BRANCHES.forEach(b => state.expanded.add(b.id));
+      applyLayout(true);
+      fitView(true);
+      toast('已展开全部 ' + TOTAL + ' 个知识点');
+    });
+    $('#btn-collapse-all').addEventListener('click', () => {
+      state.expanded.clear();
+      applyLayout(true);
+      fitView(true);
+      toast('已收起到章节预览');
+    });
+  }
+
+  /* ================= sidebar ================= */
+  function clearSidebarScope() {
+    sidebar.style.removeProperty('--bc');
+  }
+  function setSidebarScope(color) {
+    sidebar.style.setProperty('--bc', color);
+  }
+  function progressCardHTML(scope) {
+    const leaves = scope === 'all' ? ALL_LEAVES : BRANCH_BY_ID.get(scope).leaves;
+    const done = leaves.filter(l => state.mastered.has(l.id)).length;
+    return [
+      '<div class="progress-card" data-scope="' + scope + '">',
+      '  <div class="progress-top"><span>掌握进度</span><b class="progress-count">' + done + ' / ' + leaves.length + '</b></div>',
+      '  <div class="progress-bar"><i style="width:' + (leaves.length ? done / leaves.length * 100 : 0) + '%"></i></div>',
+      '  <div class="progress-foot">在详情或清单中勾选「标记掌握」，进度只保存在本机浏览器。</div>',
+      '</div>'
+    ].join('');
+  }
+
+  function renderChapterGuide() {
+    state.guideMode = 'chapter';
+    state.guideBranch = null;
+    state.selectedId = null;
+    clearSidebarScope();
+    sideInner.innerHTML = [
+      '<p class="eyebrow">CHAPTER 05 · 导览</p>',
+      '<h2 class="side-title">' + esc(CHAPTER.title) + '</h2>',
+      '<p class="side-lede">' + esc(CHAPTER.lede) + '</p>',
+      '<div class="pills">',
+      '  <span class="pill">' + BRANCHES.length + ' 节</span>',
+      '  <span class="pill">' + TOTAL + ' 个知识点</span>',
+      '  <span class="pill">' + CHAPTER.pitfalls.length + ' 条易错提醒</span>',
+      '  <span class="pill">A4 可打印</span>',
+      '</div>',
+      '<div class="thread">',
+      CHAPTER.thread.map(step => [
+        '<div class="thread-step">',
+        '  <div class="thread-num">' + esc(step.n) + '</div>',
+        '  <div><h4>' + esc(step.t) + '</h4><p>' + esc(step.d) + '</p></div>',
+        '</div>'
+      ].join('')).join(''),
+      '</div>',
+      '<p class="side-section-title">章节路线</p>',
+      '<ul class="route">',
+      CHAPTER.route.map(item => {
+        const branch = BRANCHES.find(b => b.num === item.num);
+        return [
+          '<li><button type="button" data-branch-link="' + (branch ? branch.id : '') + '">',
+          '  <span class="n">' + esc(item.num) + '</span>',
+          '  <span class="rt">' + esc(item.title) + '</span>',
+          '  <span class="rd">' + esc(item.desc) + '</span>',
+          '</button></li>'
+        ].join('');
+      }).join(''),
+      '</ul>',
+      '<p class="side-section-title">易错清单</p>',
+      '<ul class="pitfalls">',
+      CHAPTER.pitfalls.map(p => '<li>' + esc(p) + '</li>').join(''),
+      '</ul>',
+      progressCardHTML('all'),
+      '<p class="source-note">内容依据《线性代数 A（五学分）学生试用版》第 5 章（第 257–311 页）整理。标有「拓展」的知识点属于正文之外的补充说明，考试要求以课堂为准。</p>'
+    ].join('');
+
+    $$('[data-branch-link]', sideInner).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.branchLink;
+        if (id) renderBranchGuide(id);
+      });
+    });
+    sidebar.scrollTop = 0;
+  }
+
+  function renderBranchGuide(bid) {
+    const b = BRANCH_BY_ID.get(bid);
+    if (!b) return;
+    state.guideMode = 'branch';
+    state.guideBranch = bid;
+    state.selectedId = null;
+    updateSelection();
+    setSidebarScope(b.color);
+    const expanded = state.expanded.has(bid);
+    const onMap = state.view === 'map';
+    sideInner.innerHTML = [
+      '<p class="eyebrow">SECTION ' + esc(b.num) + ' · 导览</p>',
+      '<h2 class="side-title">' + esc(b.num) + ' ' + esc(b.title) + '</h2>',
+      '<p class="side-lede">' + esc(b.brief) + '</p>',
+      '<div class="pills">',
+      '  <span class="pill">' + b.leaves.length + ' 个知识点</span>',
+      '  <span class="pill">' + (expanded ? '已在图中展开' : '图中先展示 2 条') + '</span>',
+      '</div>',
+      '<p class="side-section-title">本节知识点</p>',
+      '<ul class="route">',
+      b.leaves.map((leaf, i) => [
+        '<li><button type="button" data-leaf-link="' + leaf.id + '">',
+        '  <span class="n">' + String(i + 1).padStart(2, '0') + '</span>',
+        '  <span class="rt">' + esc(leaf.title) + '</span>',
+        '  <span class="rd">' + esc(leaf.brief) + '</span>',
+        '</button></li>'
+      ].join('')).join(''),
+      '</ul>',
+      onMap
+        ? '<div class="detail-actions"><button class="master-btn" type="button" id="branch-toggle">' + (expanded ? '收起本节节点' : '展开本节全部 ' + b.leaves.length + ' 个知识点') + '</button></div>'
+        : '<p class="source-note">当前是清单视图。切换到「思维导图」后，可以展开本节节点查看结构。</p>',
+      progressCardHTML(bid),
+      '<p class="source-note">点击上方任一条目查看完整讲解；在图中点击节点头可以展开或收起其下节点。</p>'
+    ].join('');
+
+    $$('[data-leaf-link]', sideInner).forEach(btn => {
+      btn.addEventListener('click', () => selectLeaf(btn.dataset.leafLink, { focus: false }));
+    });
+    const toggle = $('#branch-toggle', sideInner);
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const scroll = sidebar.scrollTop;
+        toggleBranchExpansion(bid);
+        renderBranchGuide(bid);
+        sidebar.scrollTop = scroll;
+      });
+    }
+    sidebar.scrollTop = 0;
+  }
+
+  function renderDetail(leaf) {
+    const b = BRANCH_BY_ID.get(leaf.branchId);
+    state.guideMode = 'leaf';
+    state.guideBranch = b.id;
+    setSidebarScope(b.color);
+    const index = leaf.globalIndex;
+    const prev = ALL_LEAVES[index - 1];
+    const next = ALL_LEAVES[index + 1];
+    const on = state.mastered.has(leaf.id);
+    sideInner.innerHTML = [
+      '<div class="detail">',
+      '  <div class="detail-top">',
+      '    <button class="back-btn" type="button" id="back-guide">' + ICON.left + ' 章节导览</button>',
+      '    <div class="detail-ref">' + esc(leaf.branchNum) + ' · ' + esc(leaf.branchTitle) + '<br>' + esc(leaf.ref) + '</div>',
+      '  </div>',
+      '  <div class="detail-tagrow">',
+      '    <span class="tag">' + esc(leaf.tag) + '</span>',
+      '    <span class="section-chip">第 ' + (index + 1) + ' / ' + TOTAL + ' 个知识点</span>',
+      '  </div>',
+      '  <h2>' + esc(leaf.title) + '</h2>',
+      '  <p class="detail-one">' + esc(leaf.one) + '</p>',
+      '  <div class="formula">' + mathHTML(leaf.formula) + '</div>',
+      '  <ul class="detail-points">',
+      leaf.points.map(p => '<li>' + esc(p) + '</li>').join(''),
+      '  </ul>',
+      '  <div class="tip"><span>易错 / 提示</span><p>' + esc(leaf.tip) + '</p></div>',
+      '  <div class="detail-ref-line">教材出处 · ' + esc(leaf.ref) + '</div>',
+      '  <div class="detail-actions">',
+      '    <button class="master-btn' + (on ? ' is-mastered' : '') + '" type="button" data-master-toggle="' + leaf.id + '" aria-pressed="' + on + '">' + ICON.check + '<span class="label">' + (on ? '已掌握 · 点击取消' : '标记为已掌握') + '</span></button>',
+      '    <button class="nav-btn" type="button" id="prev-leaf" aria-label="上一个知识点"' + (prev ? '' : ' disabled') + '>' + ICON.left + '</button>',
+      '    <button class="nav-btn" type="button" id="next-leaf" aria-label="下一个知识点"' + (next ? '' : ' disabled') + '>' + ICON.right + '</button>',
+      '  </div>',
+      '</div>'
+    ].join('');
+
+    $('#back-guide', sideInner).addEventListener('click', renderChapterGuide);
+    const master = $('[data-master-toggle]', sideInner);
+    if (master) {
+      master.addEventListener('click', () => toggleMastery(leaf.id));
+    }
+    const prevBtn = $('#prev-leaf', sideInner);
+    const nextBtn = $('#next-leaf', sideInner);
+    if (prevBtn && prev) prevBtn.addEventListener('click', () => selectLeaf(prev.id, { focus: true }));
+    if (nextBtn && next) nextBtn.addEventListener('click', () => selectLeaf(next.id, { focus: true }));
+    sidebar.scrollTop = 0;
+    openSidebarIfNeeded();
+  }
+
+  function updateSelection() {
+    nodes.forEach((el, key) => {
+      if (!el.classList.contains('leaf')) return;
+      el.classList.toggle('selected', key === state.selectedId);
+    });
+  }
+
+  function selectLeaf(id, options) {
+    const leaf = LEAF_BY_ID.get(id);
+    if (!leaf) return;
+    const opts = options || {};
+    let changed = false;
+    if (!state.expanded.has(leaf.branchId) && leaf.localIndex >= PREVIEW) {
+      state.expanded.add(leaf.branchId);
+      changed = true;
+    }
+    state.selectedId = id;
+    if (changed) applyLayout(true);
+    updateSelection();
+    if (state.view === 'list') {
+      revealRow(id, !!opts.openDetails);
+      return;
+    }
+    renderDetail(leaf);
+    if (opts.focus) {
+      requestAnimationFrame(() => focusLeaf(id));
+    }
+  }
+
+  /* ================= list view ================= */
+  function rowHTML(b, leaf) {
+    const on = state.mastered.has(leaf.id);
+    return [
+      '<article class="leaf-row' + (on ? ' is-mastered' : '') + '" id="row-' + leaf.id + '" data-leaf="' + leaf.id + '" style="--bc:' + b.color + '">',
+      '  <div class="row-head">',
+      '    <span class="print-check" aria-hidden="true"></span>',
+      '    <h3 class="row-title">' + esc(leaf.title) + '</h3>',
+      '    <span class="row-brief">' + esc(leaf.brief) + '</span>',
+      '    <button class="row-master' + (on ? ' is-mastered' : '') + '" type="button" data-master-leaf="' + leaf.id + '" aria-pressed="' + on + '"><span class="label">' + (on ? '已掌握' : '标记掌握') + '</span></button>',
+      '  </div>',
+      '  <p class="row-one">' + esc(leaf.one) + '</p>',
+      '  <details class="row-more">',
+      '    <summary>公式 · 要点 · 提示</summary>',
+      '    <div class="row-body">',
+      '      <div class="formula">' + mathHTML(leaf.formula) + '</div>',
+      '      <ul class="detail-points">',
+      leaf.points.map(p => '<li>' + esc(p) + '</li>').join(''),
+      '      </ul>',
+      '      <div class="tip"><span>易错 / 提示</span><p>' + esc(leaf.tip) + '</p></div>',
+      '      <div class="detail-ref-line">教材出处 · ' + esc(leaf.ref) + '</div>',
+      '    </div>',
+      '  </details>',
+      '</article>'
+    ].join('');
+  }
+
+  function renderList() {
+    listSections.innerHTML = BRANCHES.map(b => {
+      return [
+        '<section class="sec" id="sec-' + b.id + '" data-branch="' + b.id + '" style="--bc:' + b.color + '">',
+        '  <div class="sec-head">',
+        '    <div class="sec-num">' + esc(b.num) + '</div>',
+        '    <div class="sec-title-wrap">',
+        '      <h2>' + esc(b.title) + '</h2>',
+        '      <p class="sec-brief">' + esc(b.brief) + '</p>',
+        '    </div>',
+        '    <div class="sec-progress"><b>0 / ' + b.leaves.length + '</b><div class="mini-bar"><i></i></div></div>',
+        '  </div>',
+        b.leaves.map(leaf => rowHTML(b, leaf)).join(''),
+        '</section>'
+      ].join('');
+    }).join('');
+
+    listSections.addEventListener('click', e => {
+      const btn = e.target.closest('[data-master-leaf]');
+      if (!btn) return;
+      toggleMastery(btn.dataset.masterLeaf);
+    });
+    updateProgressUI();
+  }
+
+  function revealRow(id, openDetails) {
+    const row = document.getElementById('row-' + id);
+    if (!row) return;
+    if (openDetails) {
+      const details = $('.row-more', row);
+      if (details) details.open = true;
+    }
+    row.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'center' });
+    row.classList.remove('flash');
+    void row.offsetWidth;
+    row.classList.add('flash');
+    window.setTimeout(() => row.classList.remove('flash'), 1300);
+  }
+
+  /* ================= mastery ================= */
+  function toggleMastery(id) {
+    const leaf = LEAF_BY_ID.get(id);
+    if (!leaf) return;
+    const wasOn = state.mastered.has(id);
+    if (wasOn) state.mastered.delete(id);
+    else state.mastered.add(id);
+    writeLS(LS_MASTERED, JSON.stringify(Array.from(state.mastered)));
+    updateMasteryUI();
+    toast(wasOn ? '已取消掌握标记' : '已标记「' + leaf.title + '」为掌握');
+  }
+
+  function updateMasteryUI() {
+    nodes.forEach((el, key) => {
+      if (!el.classList.contains('leaf')) return;
+      const on = state.mastered.has(key);
+      el.classList.toggle('mastered', on);
+      const check = $('.check', el);
+      if (check) check.hidden = !on;
+      const leaf = LEAF_BY_ID.get(key);
+      if (leaf) {
+        el.setAttribute('aria-label', leaf.title + '，' + leaf.brief + (on ? '，已掌握' : ''));
+      }
+    });
+
+    $$('.leaf-row').forEach(row => {
+      const on = state.mastered.has(row.dataset.leaf);
+      row.classList.toggle('is-mastered', on);
+      const btn = $('[data-master-leaf]', row);
+      if (btn) {
+        btn.classList.toggle('is-mastered', on);
+        btn.setAttribute('aria-pressed', String(on));
+        const label = $('.label', btn);
+        if (label) label.textContent = on ? '已掌握' : '标记掌握';
+      }
+    });
+
+    $$('[data-master-toggle]').forEach(btn => {
+      const on = state.mastered.has(btn.dataset.masterToggle);
+      btn.classList.toggle('is-mastered', on);
+      btn.setAttribute('aria-pressed', String(on));
+      const label = $('.label', btn);
+      if (label) label.textContent = on ? '已掌握 · 点击取消' : '标记为已掌握';
+    });
+
+    updateProgressUI();
+  }
+
+  function updateProgressUI() {
+    const done = ALL_LEAVES.filter(l => state.mastered.has(l.id)).length;
+    const stat = $('#stat-mastered');
+    if (stat) stat.textContent = String(done);
+    const listProgress = $('#list-progress');
+    if (listProgress) listProgress.textContent = '已掌握 ' + done + ' / ' + TOTAL;
+
+    $$('.progress-card').forEach(card => {
+      const scope = card.dataset.scope;
+      const leaves = scope === 'all' ? ALL_LEAVES : (BRANCH_BY_ID.get(scope) || { leaves: [] }).leaves;
+      const n = leaves.filter(l => state.mastered.has(l.id)).length;
+      const count = $('.progress-count', card);
+      if (count) count.textContent = n + ' / ' + leaves.length;
+      const bar = $('.progress-bar i', card);
+      if (bar) bar.style.width = (leaves.length ? n / leaves.length * 100 : 0) + '%';
+    });
+
+    $$('.sec').forEach(sec => {
+      const b = BRANCH_BY_ID.get(sec.dataset.branch);
+      if (!b) return;
+      const n = b.leaves.filter(l => state.mastered.has(l.id)).length;
+      const count = $('.sec-progress b', sec);
+      if (count) count.textContent = n + ' / ' + b.leaves.length;
+      const bar = $('.sec-progress .mini-bar i', sec);
+      if (bar) bar.style.width = (n / b.leaves.length * 100) + '%';
+    });
+  }
+
+  /* ================= search ================= */
+  const SEARCH_INDEX = ALL_LEAVES.map(l => ({
+    leaf: l,
+    blob: [l.title, l.brief, l.one, l.formula, l.points.join(' '), l.tip, l.ref, l.tag, l.branchTitle, l.branchNum]
+      .join(' ')
+      .toLowerCase()
+      .replace(/\s+/g, '')
+  }));
+  let searchResults = [];
+  let searchActive = -1;
+
+  function normalizeQuery(q) {
+    return q.trim().toLowerCase().replace(/\s+/g, '');
+  }
+
+  function positionSearchPop() {
+    if (window.innerWidth <= 760) {
+      const rect = $('.search', document).getBoundingClientRect();
+      searchPop.style.top = (rect.bottom + 8) + 'px';
+    } else {
+      searchPop.style.removeProperty('top');
+    }
+  }
+
+  function runSearch() {
+    const q = normalizeQuery(searchInput.value);
+    if (!q) {
+      searchResults = [];
+      searchActive = -1;
+      searchPop.hidden = true;
+      return;
+    }
+    searchResults = SEARCH_INDEX.filter(item => item.blob.includes(q)).map(item => item.leaf);
+    searchActive = searchResults.length ? 0 : -1;
+    renderSearchResults();
+    positionSearchPop();
+    searchPop.hidden = false;
+    searchInput.setAttribute('aria-expanded', 'true');
+  }
+
+  function renderSearchResults() {
+    if (!searchResults.length) {
+      searchPop.innerHTML = '<div class="search-empty">没有匹配的知识点，试试「行列式」「秩」「Cramer」。</div>';
+      return;
+    }
+    const shown = searchResults.slice(0, 24);
+    const items = shown.map((leaf, i) => [
+      '<button class="search-item' + (i === searchActive ? ' is-active' : '') + '" type="button" data-search-leaf="' + leaf.id + '" style="--bc:' + leaf.color + '">',
+      '  <span class="si-num">' + esc(leaf.branchNum) + '</span>',
+      '  <span class="si-main"><span class="si-t">' + esc(leaf.title) + '</span><span class="si-b">' + esc(leaf.brief) + ' · ' + esc(leaf.branchTitle) + '</span></span>',
+      '</button>'
+    ].join('')).join('');
+    const more = searchResults.length > shown.length
+      ? '<div class="search-empty">还有 ' + (searchResults.length - shown.length) + ' 条结果，请再具体一些。</div>'
+      : '';
+    searchPop.innerHTML = items + more;
+    $$('[data-search-leaf]', searchPop).forEach(btn => {
+      btn.addEventListener('click', () => chooseSearchResult(btn.dataset.searchLeaf));
+    });
+  }
+
+  function moveSearchActive(delta) {
+    if (!searchResults.length) return;
+    searchActive = (searchActive + delta + Math.min(searchResults.length, 24)) % Math.min(searchResults.length, 24);
+    renderSearchResults();
+    const active = $('.search-item.is-active', searchPop);
+    if (active) active.scrollIntoView({ block: 'nearest' });
+  }
+
+  function chooseSearchResult(id) {
+    hideSearch();
+    searchInput.blur();
+    if (state.view === 'list') {
+      revealRow(id, true);
+    } else {
+      selectLeaf(id, { focus: true });
+    }
+  }
+
+  function hideSearch() {
+    searchPop.hidden = true;
+    searchActive = -1;
+    searchInput.setAttribute('aria-expanded', 'false');
+  }
+
+  function setupSearch() {
+    searchInput.addEventListener('input', runSearch);
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim()) runSearch();
+    });
+    searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        hideSearch();
+        searchInput.blur();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        moveSearchActive(1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        moveSearchActive(-1);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (searchResults.length) {
+          chooseSearchResult(searchResults[Math.max(0, searchActive)].id);
+        }
+      }
+    });
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.search')) hideSearch();
+    });
+  }
+
+  /* ================= tabs / sidebar / theme ================= */
+  function setView(next, options) {
+    const opts = options || {};
+    state.view = next;
+    document.body.classList.toggle('list-mode', next === 'list');
+    mapPane.hidden = next !== 'map';
+    listPane.hidden = next !== 'list';
+    sidebar.hidden = next !== 'map';
+    sideToggle.hidden = next !== 'map';
+    $$('.tab').forEach(tab => {
+      const on = tab.dataset.view === next;
+      tab.classList.toggle('active', on);
+      tab.setAttribute('aria-selected', String(on));
+    });
+    if (opts.persist !== false) writeLS(LS_VIEW, next);
+    if (next === 'list') {
+      closeSidebar();
+      hideSearch();
+    } else {
+      if (opts.refit !== false && state.isFit) {
+        requestAnimationFrame(() => fitView(false));
+      }
+    }
+  }
+
+  function openSidebar() {
+    if (window.innerWidth > 980 || state.view !== 'map') return;
+    sidebar.classList.add('open');
+    scrim.classList.add('show');
+    state.sidebarOpen = true;
+  }
+  function openSidebarIfNeeded() {
+    if (window.innerWidth <= 980) openSidebar();
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    scrim.classList.remove('show');
+    state.sidebarOpen = false;
+  }
+
+  function applyTheme() {
+    document.documentElement.dataset.theme = state.theme;
+    const dark = state.theme === 'dark';
+    themeBtn.innerHTML = dark ? ICON.sun : ICON.moon;
+    themeBtn.title = dark ? '切换到浅色' : '切换到深色';
+    themeBtn.setAttribute('aria-label', themeBtn.title);
+  }
+
+  function toggleTheme() {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    writeLS(LS_THEME, state.theme);
+    applyTheme();
+    toast(state.theme === 'dark' ? '已切换到深色主题' : '已切换到浅色主题');
+  }
+
+  /* ================= export / print ================= */
+  function buildMarkdown() {
+    const lines = [];
+    lines.push('# ' + plain(CHAPTER.title), '', '> ' + plain(CHAPTER.subtitle), '', plain(CHAPTER.lede), '');
+    lines.push('## 学习主线', '');
+    CHAPTER.thread.forEach(step => {
+      lines.push(step.n + '. **' + plain(step.t) + '**：' + plain(step.d), '');
+    });
+    BRANCHES.forEach(b => {
+      lines.push('---', '', '## ' + b.num + ' ' + plain(b.title), '', '> ' + plain(b.brief), '');
+      b.leaves.forEach(leaf => {
+        const mark = state.mastered.has(leaf.id) ? ' [已掌握]' : '';
+        lines.push('### ' + plain(leaf.title) + mark, '');
+        lines.push('`' + plain(leaf.tag) + '` · ' + plain(leaf.one), '');
+        lines.push('**核心公式**', '', '```', plain(leaf.formula), '```', '');
+        lines.push('**要点**', '');
+        leaf.points.forEach(p => lines.push('- ' + plain(p)));
+        lines.push('', '> 提示：' + plain(leaf.tip), '');
+        lines.push('出处：' + plain(leaf.ref), '');
+      });
+    });
+    lines.push('---', '', '## 易错清单', '');
+    CHAPTER.pitfalls.forEach((p, i) => lines.push((i + 1) + '. ' + plain(p)));
+    lines.push('', '> 依据《线性代数 A（五学分）学生试用版》第 5 章（第 257–311 页）整理。');
+    return lines.join('\n');
+  }
+
+  function exportMarkdown() {
+    const text = buildMarkdown();
+    const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '线性代数第5章-知识点总结.md';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1200);
+    toast('已导出 Markdown 笔记');
+  }
+
+  let printRestoreView = null;
+
+  function preparePrint() {
+    if (state.view !== 'list') {
+      printRestoreView = state.view;
+      setView('list', { persist: false, refit: false });
+    }
+    $$('.row-more').forEach(d => { d.open = true; });
+  }
+
+  function printPage() {
+    preparePrint();
+    window.setTimeout(() => window.print(), 80);
+  }
+
+  function setupPrint() {
+    window.addEventListener('beforeprint', () => {
+      preparePrint();
+    });
+    window.addEventListener('afterprint', () => {
+      if (printRestoreView) {
+        const back = printRestoreView;
+        printRestoreView = null;
+        setView(back, { persist: false });
+      }
+    });
+    $('#btn-print').addEventListener('click', printPage);
+    $('#btn-print-list').addEventListener('click', printPage);
+  }
+
+  /* ================= misc UI ================= */
+  let toastTimer = 0;
+  function toast(message) {
+    toastEl.textContent = message;
+    toastEl.classList.add('show');
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => toastEl.classList.remove('show'), 1900);
+  }
+
+  function setupListControls() {
+    $('#list-expand').addEventListener('click', () => {
+      const all = $$('.row-more');
+      const anyClosed = all.some(d => !d.open);
+      all.forEach(d => { d.open = anyClosed; });
+      $('#list-expand').textContent = anyClosed ? '收起全部细节' : '展开全部细节';
+    });
+    $('#btn-export-list').addEventListener('click', exportMarkdown);
+    $('#btn-export').addEventListener('click', exportMarkdown);
+  }
+
+  function syncMapHint() {
+    const hint = $('.map-hint');
+    if (!hint) return;
+    hint.textContent = window.innerWidth <= 760
+      ? '双指缩放 · 拖动查看'
+      : '滚轮缩放 · 拖拽平移 · 点击节点头展开';
+  }
+
+  function setupViewportWatcher() {
+    let timer = 0;
+    const onResize = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (window.innerWidth > 980) closeSidebar();
+        if (state.view === 'map' && state.isFit) fitView(false);
+        syncMapHint();
+        positionSearchPop();
+      }, 120);
+    };
+    window.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
+  }
+
+  function setupKeyboard() {
+    document.addEventListener('keydown', e => {
+      const typing = e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable);
+      if (!typing && (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'))) {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+        return;
+      }
+      if (e.key === 'Escape') {
+        if (!searchPop.hidden) {
+          hideSearch();
+          searchInput.blur();
+        } else if (state.sidebarOpen) {
+          closeSidebar();
+        }
+      }
+    });
+  }
+
+  function setupTabs() {
+    $$('.tab').forEach(tab => {
+      tab.addEventListener('click', () => setView(tab.dataset.view));
+    });
+    $('#btn-theme').addEventListener('click', toggleTheme);
+    sideToggle.addEventListener('click', openSidebar);
+    $('#side-close').addEventListener('click', closeSidebar);
+    scrim.addEventListener('click', closeSidebar);
+  }
+
+  /* ================= init ================= */
+  function init() {
+    applyTheme();
+    renderList();
+    initMap();
+    setupMapEvents();
+    setupSearch();
+    setupTabs();
+    setupListControls();
+    setupPrint();
+    setupKeyboard();
+    setupViewportWatcher();
+    applyLayout(false);
+    updateMasteryUI();
+    renderChapterGuide();
+    setView(state.view, { persist: false, refit: false });
+    if (state.view === 'map') {
+      requestAnimationFrame(() => fitView(false));
+    }
+    syncMapHint();
+    // seed a guide-visible detail only when arriving through a hash
+    const hash = decodeURIComponent(window.location.hash.replace(/^#/, ''));
+    if (hash && LEAF_BY_ID.has(hash)) {
+      setView('map', { persist: false, refit: false });
+      requestAnimationFrame(() => {
+        fitView(false);
+        selectLeaf(hash, { focus: true });
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+</body>
+</html>

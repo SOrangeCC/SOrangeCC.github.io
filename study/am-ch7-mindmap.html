@@ -1,0 +1,3604 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>第7章 微分方程 · 思维导图与知识清单</title>
+<meta name="description" content="高等数学（第八版）上册第7章知识点总结：交互式思维导图、29 个知识点清单、掌握度勾选与 A4 打印。">
+<script>
+  try {
+    if (localStorage.getItem('am-ch7-theme-v1') === 'dark') {
+      document.documentElement.dataset.theme = 'dark';
+    }
+  } catch (e) {}
+</script>
+<style>
+:root {
+  --paper: #f4f0e8;
+  --paper-2: #eae4d8;
+  --card: #fffcf6;
+  --card-2: #faf6ed;
+  --ink: #1f2a33;
+  --ink-2: #45525f;
+  --muted: #7c8792;
+  --line: #ddd4c5;
+  --line-strong: #c8bdab;
+  --accent: #c96f43;
+  --accent-ink: #8e4422;
+  --dot: rgba(50, 62, 74, 0.11);
+  --shadow-sm: 0 1px 2px rgba(31, 42, 51, 0.05), 0 5px 16px rgba(31, 42, 51, 0.045);
+  --shadow-md: 0 12px 34px rgba(31, 42, 51, 0.12);
+  --sidebar-w: 380px;
+  --topbar-h: 68px;
+  --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", SimSun, serif;
+  --sans: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", "Cascadia Code", Consolas, "SFMono-Regular", monospace;
+}
+
+[data-theme="dark"] {
+  --paper: #14191f;
+  --paper-2: #1b222a;
+  --card: #1f2730;
+  --card-2: #242d37;
+  --ink: #eae4d8;
+  --ink-2: #b9c2cb;
+  --muted: #87929e;
+  --line: #303b46;
+  --line-strong: #40505e;
+  --accent: #e08a5c;
+  --accent-ink: #f0b18c;
+  --dot: rgba(220, 230, 240, 0.075);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 18px 46px rgba(0, 0, 0, 0.38);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+button, input { font: inherit; color: inherit; }
+button { border: 0; background: none; padding: 0; cursor: pointer; }
+a { color: inherit; }
+::selection { background: color-mix(in srgb, var(--accent) 28%, transparent); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+[hidden] { display: none !important; }
+
+/* ---------- shell ---------- */
+.app {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.topbar {
+  flex: 0 0 var(--topbar-h);
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 22px;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: relative;
+  z-index: 40;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.seal {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--ink);
+  color: var(--paper);
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: 9px;
+  line-height: 1.15;
+  letter-spacing: 0.1em;
+  text-align: center;
+  flex: 0 0 auto;
+}
+
+.brand-text { min-width: 0; }
+.brand-text h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.brand-text p {
+  margin: 3px 0 0;
+  font-size: 10.5px;
+  color: var(--muted);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper-2);
+  flex: 0 0 auto;
+}
+.tab {
+  padding: 7px 13px;
+  border-radius: 7px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  transition: color 0.18s, box-shadow 0.18s;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--ink); }
+.tab.active {
+  background: var(--card);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(31, 42, 51, 0.08);
+}
+
+.top-actions {
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.search {
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+.search svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.search input {
+  width: 210px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--ink);
+  padding: 0 11px 0 31px;
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s, width 0.2s;
+}
+.search input::placeholder { color: var(--muted); }
+.search input:focus {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  flex: 0 0 auto;
+}
+.icon-btn:hover {
+  background: var(--card);
+  border-color: var(--line);
+  color: var(--ink);
+}
+.icon-btn svg { width: 16px; height: 16px; }
+.icon-btn.wide {
+  width: auto;
+  padding: 0 10px;
+  gap: 6px;
+  font-size: 11.5px;
+}
+.icon-btn.wide svg { width: 14px; height: 14px; }
+
+#side-toggle { display: none; }
+
+/* ---------- workspace ---------- */
+.workspace {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  position: relative;
+}
+
+/* ---------- map ---------- */
+.map-pane {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.map-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  background-image: radial-gradient(var(--dot) 1.1px, transparent 1.1px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+}
+.map-viewport.dragging { cursor: grabbing; }
+.map-viewport::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 20%, color-mix(in srgb, var(--accent) 5%, transparent), transparent 34%),
+    radial-gradient(circle at 82% 70%, color-mix(in srgb, var(--ink) 4%, transparent), transparent 38%);
+  z-index: 0;
+}
+
+.map-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.connectors {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+}
+.connectors path {
+  fill: none;
+  stroke-linecap: round;
+}
+.connectors circle { opacity: 0.55; }
+
+.node-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.center-card {
+  position: absolute;
+  width: 300px;
+  height: 136px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 84% 10%, rgba(217, 119, 69, 0.18), transparent 42%),
+    linear-gradient(145deg, #26313c, #151b21);
+  color: #f7f1e5;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 18px 46px rgba(20, 28, 36, 0.22);
+  padding: 19px 22px;
+  text-align: left;
+  overflow: hidden;
+  z-index: 3;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.center-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 56px rgba(20, 28, 36, 0.28);
+}
+.center-card::after {
+  content: "04";
+  position: absolute;
+  right: -4px;
+  bottom: -30px;
+  font-family: var(--serif);
+  font-size: 104px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.055);
+  pointer-events: none;
+}
+.center-kicker {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.17em;
+  color: #dd9a70;
+  text-transform: uppercase;
+}
+.center-title {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  margin: 8px 0 5px;
+  line-height: 1.2;
+}
+.center-sub {
+  font-size: 11px;
+  line-height: 1.55;
+  color: rgba(247, 241, 229, 0.63);
+  max-width: 245px;
+}
+.center-line {
+  position: absolute;
+  left: 22px;
+  bottom: 16px;
+  width: 32px;
+  height: 2px;
+  background: #d97745;
+  border-radius: 2px;
+}
+
+.branch {
+  position: absolute;
+  border-radius: 13px;
+  border: 1px solid color-mix(in srgb, var(--bc) 28%, var(--line));
+  background: color-mix(in srgb, var(--bc) 7%, var(--card));
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 11px 0 13px;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition:
+    left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+  overflow: hidden;
+}
+.branch::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--bc);
+}
+.branch:hover {
+  background: color-mix(in srgb, var(--bc) 12%, var(--card));
+  border-color: color-mix(in srgb, var(--bc) 45%, var(--line));
+  box-shadow: var(--shadow-md);
+}
+.branch .b-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--bc);
+  background: color-mix(in srgb, var(--bc) 10%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--bc) 22%, transparent);
+  border-radius: 5px;
+  padding: 3px 5px;
+  flex: 0 0 auto;
+}
+.b-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.b-title {
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+.b-sub {
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.b-count {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--bc);
+  background: color-mix(in srgb, var(--bc) 11%, var(--card));
+  border-radius: 999px;
+  padding: 3px 6px;
+  min-width: 26px;
+  text-align: center;
+}
+
+.leaf {
+  position: absolute;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  padding: 6px 26px 6px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  justify-content: center;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition:
+    left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.18s,
+    background 0.18s,
+    box-shadow 0.18s,
+    transform 0.15s,
+    opacity 0.2s;
+  overflow: hidden;
+}
+.leaf::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 18px;
+  transform: translateY(-50%);
+  border-radius: 0 3px 3px 0;
+  background: var(--bc);
+}
+.leaf:hover {
+  border-color: color-mix(in srgb, var(--bc) 52%, var(--line));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+.leaf.selected {
+  border-color: var(--bc);
+  background: color-mix(in srgb, var(--bc) 5%, var(--card));
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--bc) 17%, transparent),
+    var(--shadow-sm);
+}
+.leaf.mastered { background: color-mix(in srgb, var(--bc) 6%, var(--card)); }
+.leaf.mastered .l-title { color: var(--ink-2); }
+.leaf .l-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.leaf .l-title {
+  font-size: 15.5px;
+  font-weight: 650;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.leaf .l-brief {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.l-tag {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 8px;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: var(--bc);
+  background: color-mix(in srgb, var(--bc) 9%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--bc) 18%, transparent);
+  border-radius: 4px;
+  padding: 0 4px;
+}
+.leaf .check {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 12px;
+  height: 12px;
+  color: var(--bc);
+  opacity: 0.9;
+}
+
+/* ---------- map chrome ---------- */
+.map-hint,
+.map-status {
+  position: absolute;
+  z-index: 10;
+  font-size: 10.5px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 11px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.map-hint { top: 16px; left: 18px; }
+.map-status {
+  left: 18px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.map-status .dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+.map-status b {
+  color: var(--ink-2);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.map-actions {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  gap: 6px;
+}
+.map-actions button {
+  font-size: 10.5px;
+  color: var(--ink-2);
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 6px 9px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.18s, color 0.18s;
+}
+.map-actions button:hover { background: var(--card); color: var(--ink); }
+
+.zoom-controls {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
+}
+.zoom-controls button {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink-2);
+  transition: background 0.15s, color 0.15s;
+}
+.zoom-controls button:hover { background: var(--paper-2); color: var(--ink); }
+.zoom-controls button svg { width: 13px; height: 13px; }
+.zoom-controls .sep { height: 1px; background: var(--line); margin: 1px 3px; }
+
+/* ---------- sidebar ---------- */
+.sidebar {
+  width: var(--sidebar-w);
+  flex: 0 0 var(--sidebar-w);
+  border-left: 1px solid var(--line);
+  background: var(--card);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  position: relative;
+  z-index: 20;
+}
+.side-inner {
+  padding: 25px 25px 44px;
+}
+.side-close {
+  display: none;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  z-index: 2;
+}
+.side-close:hover { color: var(--ink); background: var(--paper-2); }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+.side-title {
+  font-family: var(--serif);
+  font-size: 25px;
+  font-weight: 650;
+  line-height: 1.28;
+  letter-spacing: 0.015em;
+  margin: 8px 0 10px;
+}
+.side-lede {
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  margin: 0 0 18px;
+}
+
+.thread {
+  margin: 0 0 20px;
+  padding: 16px 15px 2px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.thread-step {
+  display: grid;
+  grid-template-columns: 25px 1fr;
+  gap: 10px;
+  position: relative;
+  padding-bottom: 15px;
+}
+.thread-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 27px;
+  bottom: 1px;
+  width: 1px;
+  background: var(--line-strong);
+}
+.thread-num {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--accent-ink);
+}
+.thread-step h4 {
+  margin: 1px 0 3px;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--ink);
+}
+.thread-step p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 22px;
+}
+.pill {
+  font-size: 10.5px;
+  color: var(--ink-2);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 9px;
+}
+
+.side-section-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 24px 0 9px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.side-section-title::after {
+  content: "";
+  height: 1px;
+  background: var(--line);
+  flex: 1;
+}
+
+.route {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.route li { border-bottom: 1px solid var(--line); }
+.route button {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 9px 1px;
+  text-align: left;
+  transition: padding-left 0.18s, color 0.18s;
+}
+.route button:hover { padding-left: 4px; }
+.route .n {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent-ink);
+  width: 25px;
+  flex: 0 0 auto;
+}
+.route .rt {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  flex: 1;
+  min-width: 0;
+}
+.route .rd {
+  font-size: 10px;
+  color: var(--muted);
+  max-width: 105px;
+  text-align: right;
+  line-height: 1.35;
+}
+
+.pitfalls {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: pit;
+}
+.pitfalls li {
+  counter-increment: pit;
+  position: relative;
+  padding: 0 0 10px 22px;
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+.pitfalls li::before {
+  content: counter(pit, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--accent-ink);
+}
+
+.progress-card {
+  margin-top: 20px;
+  padding: 14px 15px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.progress-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.progress-top span {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.progress-top b {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-ink);
+  font-variant-numeric: tabular-nums;
+}
+.progress-bar {
+  height: 5px;
+  margin-top: 9px;
+  background: var(--line);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 0.35s ease;
+}
+.progress-foot {
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.link-btn {
+  color: var(--accent-ink);
+  font-size: 10px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.source-note {
+  margin: 18px 0 0;
+  font-size: 9.5px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+/* ---------- detail ---------- */
+.detail-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 4px 6px 4px 2px;
+  transition: color 0.18s, background 0.18s;
+}
+.back-btn:hover { color: var(--ink); background: var(--paper-2); }
+.back-btn svg { width: 12px; height: 12px; }
+.detail-ref {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  text-align: right;
+  line-height: 1.4;
+}
+.detail-tagrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.03em;
+  color: var(--bc, var(--accent-ink));
+  background: color-mix(in srgb, var(--bc, var(--accent)) 9%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--bc, var(--accent)) 20%, transparent);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+.section-chip {
+  font-size: 10px;
+  color: var(--muted);
+}
+.detail h2 {
+  font-family: var(--serif);
+  font-size: 23px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  margin: 0 0 10px;
+}
+.detail-one {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  margin: 0 0 14px;
+}
+.formula {
+  margin: 0 0 15px;
+  padding: 12px 13px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--bc, var(--accent));
+  border-radius: 7px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.75;
+  color: var(--ink-2);
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+.formula sup,
+.formula sub { font-size: 0.72em; line-height: 0; }
+.detail-points {
+  margin: 0 0 16px;
+  padding: 0 0 0 16px;
+  font-size: 12px;
+  line-height: 1.78;
+  color: var(--ink-2);
+}
+.detail-points li { margin: 5px 0; padding-left: 2px; }
+.detail-points li::marker { color: var(--bc, var(--accent)); }
+.tip {
+  margin: 0 0 16px;
+  padding: 12px 13px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--accent) 7%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--accent) 17%, var(--line));
+}
+.tip span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin-bottom: 5px;
+}
+.tip p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+.detail-ref-line {
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.detail-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+}
+.master-btn {
+  flex: 1;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink-2);
+  font-size: 11.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+.master-btn:hover { border-color: var(--bc, var(--accent)); }
+.master-btn svg { width: 13px; height: 13px; }
+.master-btn.is-mastered {
+  color: var(--bc, var(--accent));
+  border-color: color-mix(in srgb, var(--bc, var(--accent)) 38%, var(--line));
+  background: color-mix(in srgb, var(--bc, var(--accent)) 9%, var(--card));
+  font-weight: 600;
+}
+.nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--ink-2);
+  background: var(--card);
+  transition: background 0.18s, color 0.18s;
+}
+.nav-btn:hover { background: var(--paper-2); color: var(--ink); }
+.nav-btn svg { width: 14px; height: 14px; }
+.nav-btn:disabled { opacity: 0.35; cursor: default; }
+
+/* ---------- list view ---------- */
+.list-pane {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  background: var(--paper);
+  padding: 34px 46px 90px;
+  scroll-behavior: smooth;
+}
+.list-doc {
+  max-width: 940px;
+  margin: 0 auto;
+}
+.list-head {
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+.list-head .eyebrow { margin-bottom: 8px; }
+.list-head h1 {
+  font-family: var(--serif);
+  font-size: 33px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  margin: 0 0 10px;
+}
+.list-head .list-lede {
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  max-width: 690px;
+  margin: 0 0 16px;
+}
+.list-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+}
+.list-actions button {
+  font-size: 10.5px;
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 6px;
+  padding: 6px 9px;
+  transition: background 0.18s, color 0.18s;
+}
+.list-actions button:hover { background: var(--paper-2); color: var(--ink); }
+.list-actions .spacer { flex: 1; }
+.list-progress {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.sec {
+  margin: 0 0 34px;
+  scroll-margin-top: 16px;
+}
+.sec-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--bc);
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+.sec-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--bc);
+  padding-top: 3px;
+  flex: 0 0 auto;
+}
+.sec-title-wrap { flex: 1; min-width: 0; }
+.sec-head h2 {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 650;
+  line-height: 1.35;
+  margin: 0;
+}
+.sec-head .sec-brief {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.sec-progress {
+  flex: 0 0 auto;
+  text-align: right;
+  min-width: 54px;
+}
+.sec-progress b {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.sec-progress .mini-bar {
+  width: 54px;
+  height: 3px;
+  background: var(--line);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.sec-progress .mini-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--bc);
+  border-radius: 99px;
+  transition: width 0.3s;
+}
+
+.leaf-row {
+  position: relative;
+  margin: 9px 0 0;
+  padding: 14px 16px 14px 18px;
+  border: 1px solid var(--line);
+  border-left: 3px solid color-mix(in srgb, var(--bc) 55%, var(--line));
+  border-radius: 10px;
+  background: var(--card);
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+}
+.leaf-row:hover {
+  border-color: color-mix(in srgb, var(--bc) 38%, var(--line));
+  box-shadow: var(--shadow-sm);
+}
+.leaf-row.is-mastered {
+  background: color-mix(in srgb, var(--bc) 3.5%, var(--card));
+}
+.leaf-row.is-mastered .row-title { color: var(--ink-2); }
+.row-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.row-title {
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.4;
+  margin: 0;
+}
+.row-brief {
+  font-size: 10.5px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.row-master {
+  margin-left: auto;
+  font-size: 9.5px;
+  color: var(--muted);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 3px 6px;
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
+  white-space: nowrap;
+}
+.row-master:hover { color: var(--bc); border-color: var(--line); background: var(--paper); }
+.row-master.is-mastered { color: var(--bc); font-weight: 600; }
+.row-one {
+  margin: 7px 0 0;
+  font-size: 12px;
+  line-height: 1.78;
+  color: var(--ink-2);
+}
+.row-more {
+  margin-top: 9px;
+}
+.row-more summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  font-size: 9.5px;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 1px dashed var(--line-strong);
+  padding-bottom: 1px;
+  transition: color 0.18s;
+}
+.row-more summary::-webkit-details-marker { display: none; }
+.row-more summary:hover { color: var(--bc); }
+.row-more summary::after {
+  content: "+";
+  font-family: var(--mono);
+  font-size: 10px;
+}
+.row-more[open] summary::after { content: "−"; }
+.row-body {
+  margin-top: 11px;
+  padding-top: 11px;
+  border-top: 1px solid var(--line);
+}
+.row-body .formula {
+  margin-bottom: 11px;
+  font-size: 11px;
+}
+.row-body .detail-points {
+  font-size: 11.5px;
+  margin-bottom: 11px;
+}
+.row-body .tip { margin-bottom: 10px; }
+.row-body .detail-ref-line { padding-top: 9px; }
+.print-check { display: none; }
+
+/* ---------- search pop ---------- */
+.search-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 350px;
+  max-height: min(440px, 62vh);
+  overflow-y: auto;
+  padding: 5px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  box-shadow: var(--shadow-md);
+  z-index: 80;
+}
+.search-item {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 9px;
+  border-radius: 7px;
+  text-align: left;
+  transition: background 0.15s;
+}
+.search-item:hover { background: var(--paper-2); }
+.si-num {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--bc);
+  width: 24px;
+  padding-top: 2px;
+  flex: 0 0 auto;
+}
+.si-main { min-width: 0; flex: 1; }
+.si-t {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.si-b {
+  display: block;
+  font-size: 9.5px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.search-empty {
+  padding: 16px 10px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translate(-50%, 12px);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 11.5px;
+  line-height: 1.5;
+  padding: 8px 13px;
+  border-radius: 7px;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 200;
+  max-width: 88vw;
+  text-align: center;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- scrim ---------- */
+.scrim {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 20, 0.34);
+  z-index: 25;
+  backdrop-filter: blur(2px);
+}
+.scrim.show { display: block; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1280px) {
+  :root { --sidebar-w: 348px; }
+  .search input { width: 178px; }
+  .brand-text p { display: none; }
+}
+
+@media (max-width: 1080px) {
+  .topbar { gap: 12px; padding: 0 16px; }
+  .brand-text h1 { font-size: 16px; }
+  .tab { padding: 7px 10px; }
+  .icon-btn.wide span { display: none; }
+  .icon-btn.wide { width: 34px; padding: 0; }
+  .search input { width: 150px; }
+}
+
+@media (max-width: 980px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(390px, 92vw);
+    transform: translateX(102%);
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: -18px 0 46px rgba(10, 15, 20, 0.18);
+    z-index: 60;
+  }
+  .sidebar.open { transform: none; }
+  .side-close { display: grid; place-items: center; }
+  #side-toggle { display: inline-flex; }
+}
+
+@media (max-width: 760px) {
+  :root { --topbar-h: auto; }
+  .app { height: 100dvh; }
+  .topbar {
+    height: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand actions"
+      "tabs search";
+    align-items: center;
+    padding: 9px 12px;
+    gap: 8px 10px;
+  }
+  .brand { grid-area: brand; flex: initial; }
+  .seal { width: 34px; height: 34px; border-radius: 9px; font-size: 8px; }
+  .brand-text h1 { font-size: 14px; }
+  .top-actions { margin-left: 0; gap: 3px; }
+  .tabs { grid-area: tabs; order: initial; justify-self: start; }
+  .top-actions { grid-area: actions; margin-left: 0; }
+  .search { grid-area: search; order: initial; flex: 1; min-width: 0; width: 100%; margin-left: 0; }
+  .search input { width: 100%; }
+  .wide-only { display: none !important; }
+  .map-hint {
+    display: block;
+    top: 10px;
+    left: 10px;
+    font-size: 9px;
+    padding: 5px 8px;
+  }
+  .map-status { left: 10px; bottom: 10px; font-size: 9.5px; }
+  .zoom-controls { right: 10px; bottom: 10px; }
+  .map-actions { top: 10px; right: 10px; }
+  .list-pane { padding: 22px 14px 70px; }
+  .list-head h1 { font-size: 26px; }
+  .list-head .list-lede { font-size: 12px; }
+  .sec-head { padding: 13px 14px; gap: 10px; }
+  .sec-head h2 { font-size: 18px; }
+  .sec-progress { display: none; }
+  .leaf-row { padding: 12px 13px 12px 14px; }
+  .row-brief { flex: 1 1 100%; margin-left: 0; }
+  .row-master {
+    margin-left: 0;
+    padding: 4px 8px;
+    border-color: var(--line);
+    background: var(--card);
+    color: var(--ink-2);
+  }
+  .search-pop {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: calc(var(--topbar-h) + 54px);
+    width: auto;
+    max-height: 56vh;
+  }
+  .side-inner { padding: 22px 20px 40px; }
+  .side-close { top: 10px; right: 10px; }
+}
+
+@media (max-width: 420px) {
+  .brand-text h1 { max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+  .tab { padding: 6px 8px; font-size: 11.5px; }
+  .icon-btn { width: 31px; height: 31px; }
+  .map-actions button { padding: 5px 7px; font-size: 9.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- print ---------- */
+.print-only { display: none; }
+
+@media print {
+  @page { size: A4; margin: 14mm 14mm 16mm; }
+
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+    color: #1b2228 !important;
+  }
+  .app { height: auto; display: block; overflow: visible; }
+  .topbar, .map-pane, .sidebar, .scrim, .toast, .search-pop,
+  .map-hint, .map-status, .zoom-controls, .map-actions,
+  .list-actions, .row-master, .side-close { display: none !important; }
+  .workspace { display: block; }
+  .list-pane {
+    display: block !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+  .list-doc { max-width: none; }
+  .print-only { display: block !important; }
+  .print-head {
+    margin: 0 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid #222;
+  }
+  .print-head .print-kicker {
+    font-family: var(--mono);
+    font-size: 8pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #555;
+  }
+  .print-head h1 {
+    font-family: var(--serif);
+    font-size: 22pt;
+    margin: 5px 0 4px;
+  }
+  .print-head p { font-size: 9pt; color: #555; margin: 0; }
+
+  .list-head { display: none; }
+  .sec { margin-bottom: 14px; }
+  .sec-head {
+    padding: 8px 10px;
+    border: 1px solid #bbb;
+    border-top: 2.5pt solid var(--bc);
+    background: #fff !important;
+    box-shadow: none;
+    break-after: avoid;
+  }
+  .sec-head h2 { font-size: 14pt; }
+  .sec-head .sec-brief { font-size: 8.5pt; color: #666; }
+  .sec-progress { display: none; }
+  .leaf-row {
+    margin-top: 6px;
+    padding: 8px 10px 9px 11px;
+    border: 1px solid #ccc;
+    border-left: 2.5pt solid var(--bc);
+    background: #fff !important;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+  .row-title { font-size: 10.5pt; }
+  .row-brief { font-size: 8pt; color: #666; }
+  .row-one { font-size: 9pt; line-height: 1.6; color: #333; }
+  .row-more { margin-top: 5px; }
+  .row-more summary { display: none; }
+  .row-more > .row-body { display: block !important; }
+  .row-body { margin-top: 5px; padding-top: 6px; border-top: 1px dashed #ccc; }
+  .row-body .formula {
+    padding: 6px 8px;
+    font-size: 8.5pt;
+    background: #f7f7f5 !important;
+    border: 1px solid #ddd;
+    border-left: 2pt solid var(--bc);
+  }
+  .row-body .detail-points { font-size: 8.8pt; line-height: 1.55; margin-bottom: 6px; }
+  .row-body .tip { padding: 6px 8px; background: #faf6f0 !important; border: 1px solid #e3d8c8; margin-bottom: 6px; }
+  .row-body .tip span { font-size: 7pt; }
+  .row-body .tip p { font-size: 8.5pt; line-height: 1.5; }
+  .row-body .detail-ref-line { font-size: 7.5pt; color: #777; padding-top: 4px; }
+  .print-check {
+    display: inline-block;
+    width: 9pt;
+    height: 9pt;
+    border: 1px solid #999;
+    border-radius: 1.5pt;
+    margin-right: 6px;
+    vertical-align: -1pt;
+  }
+  .detail-points li::marker { color: #333; }
+  .tag { color: #444 !important; background: #f2f2f2 !important; border-color: #ccc !important; }
+}
+
+/* ---------- app runtime additions ---------- */
+.center-kicker,
+.center-title,
+.center-sub { display: block; }
+
+.map-canvas.js-anim .leaf,
+.map-canvas.js-anim .branch,
+.map-canvas.js-anim .center-card { transition: none !important; }
+
+body.list-mode .sidebar { display: none !important; }
+
+.search-item.is-active { background: var(--paper-2); }
+
+.leaf-row.flash {
+  animation: row-flash 1.15s ease;
+}
+@keyframes row-flash {
+  0%, 100% { box-shadow: none; }
+  22% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--bc) 24%, transparent); border-color: var(--bc); }
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="seal" aria-hidden="true">AM<br>07</div>
+      <div class="brand-text">
+        <h1>高等数学上 · 第7章</h1>
+        <p>分离变量 · 齐次与线性 · 可降阶 · 常系数线性 · 欧拉与方程组</p>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="视图切换">
+      <button class="tab active" type="button" role="tab" aria-selected="true" data-view="map" id="tab-map">思维导图</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-view="list" id="tab-list">知识清单</button>
+    </div>
+
+    <div class="search">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.4"/><path d="m12.8 12.8 4 4"/></svg>
+      <input id="search-input" type="search" placeholder="搜索知识点…" autocomplete="off" aria-label="搜索知识点" aria-controls="search-pop" aria-expanded="false">
+      <div class="search-pop" id="search-pop" role="region" aria-label="搜索结果" hidden></div>
+    </div>
+
+    <div class="top-actions">
+      <button class="icon-btn wide" type="button" id="btn-export" title="导出 Markdown 笔记" aria-label="导出 Markdown 笔记">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v8.4"/><path d="m6.6 8.2 3.4 3.4 3.4-3.4"/><path d="M3.8 15.8h12.4"/></svg>
+        <span class="wide-only">Markdown</span>
+      </button>
+      <button class="icon-btn" type="button" id="btn-print" title="打印 / 另存为 PDF" aria-label="打印或另存为 PDF">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7V3.6h8V7"/><rect x="3" y="7" width="14" height="6.4" rx="1.4"/><path d="M6 11h8v5.4H6z"/></svg>
+      </button>
+      <button class="icon-btn" type="button" id="btn-theme" title="切换深色" aria-label="切换深色主题"></button>
+      <button class="icon-btn" type="button" id="side-toggle" title="打开章节导览" aria-label="打开章节导览">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3.6" width="14" height="12.8" rx="1.6"/><path d="M12.2 3.6v12.8"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="map-pane" id="map-pane" aria-label="第7章思维导图">
+      <div class="map-viewport" id="map-viewport">
+        <div class="map-canvas" id="map-canvas">
+          <svg class="connectors" id="connectors" aria-hidden="true"></svg>
+          <div class="node-layer" id="node-layer"></div>
+        </div>
+      </div>
+      <div class="map-hint">滚轮缩放 · 拖拽平移 · 点击节点头展开</div>
+      <div class="map-actions">
+        <button type="button" id="btn-expand-all">全部展开</button>
+        <button type="button" id="btn-collapse-all">收起</button>
+      </div>
+      <div class="map-status">
+        <span class="dot"></span><span><b id="stat-sections">10</b> 节</span>
+        <span class="dot"></span><span><b id="stat-leaves">29</b> 个知识点</span>
+        <span class="dot"></span><span>已掌握 <b id="stat-mastered">0</b></span>
+        <span class="dot"></span><span id="zoom-readout">100%</span>
+      </div>
+      <div class="zoom-controls" aria-label="缩放控制">
+        <button type="button" id="zoom-in" title="放大" aria-label="放大">+</button>
+        <button type="button" id="zoom-out" title="缩小" aria-label="缩小">−</button>
+        <div class="sep" aria-hidden="true"></div>
+        <button type="button" id="zoom-fit" title="适应视图" aria-label="适应视图">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.4H3.4V7M13 3.4h3.6V7M7 16.6H3.4V13M13 16.6h3.6V13"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <aside class="sidebar" id="sidebar" aria-label="章节导览与知识点详情">
+      <button class="side-close" type="button" id="side-close" aria-label="关闭导览">×</button>
+      <div class="side-inner" id="side-inner"></div>
+    </aside>
+
+    <section class="list-pane" id="list-pane" aria-label="知识清单" hidden>
+      <div class="list-doc">
+        <div class="print-only print-head">
+          <div class="print-kicker">LINEAR ALGEBRA A · CHAPTER 07</div>
+          <h1>第7章 微分方程 · 知识点清单</h1>
+          <p>从一阶初等解法到高阶线性常系数通解结构 · 共 29 个知识点</p>
+        </div>
+
+        <div class="list-head">
+          <p class="eyebrow">CHAPTER 07 · CHECKLIST</p>
+          <h1>第7章 微分方程</h1>
+          <p class="list-lede">按教材 7.1–7.10 的顺序整理。每一条先给出一句话结论，展开后是核心公式、推导要点与易错提醒；勾选「标记掌握」可以在本机记录复习进度。</p>
+          <div class="list-actions">
+            <button type="button" id="list-expand">展开全部细节</button>
+            <button type="button" id="btn-export-list">导出 Markdown</button>
+            <button type="button" id="btn-print-list">打印 / 存为 PDF</button>
+            <span class="spacer"></span>
+            <span class="list-progress" id="list-progress">已掌握 0 / 29</span>
+          </div>
+        </div>
+
+        <div id="list-sections"></div>
+      </div>
+    </section>
+
+    <div class="scrim" id="scrim"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const CHAPTER = {
+  kicker: '高等数学（第八版）上册 · 同济大学',
+  title: '第7章 微分方程',
+  subtitle: '从一阶初等解法到高阶线性常系数通解结构',
+  lede: '实际物理、工程与生物问题往往直接给出「未知函数及其导数之间的方程」（微分方程）。本章先建立通解、特解与初值条件的基本概念，再系统攻克五类一阶方程（可分离变量、齐次、一阶线性、伯努利）与三类可降阶高阶方程；随后揭示线性微分方程的叠加原理与解空间结构，给出常系数齐次与非齐次线性方程、欧拉方程及常系数方程组的标准求解套路。',
+  thread: [
+    {
+      n: '01',
+      t: '解一阶',
+      d: '识别方程类型：直接可分离变量 → 变量代换 y/x 化齐次 → 常数变易/公式解一阶线性（及伯努利）方程。'
+    },
+    {
+      n: '02',
+      t: '降高阶',
+      d: '三类可降阶高阶方程：y^{(n)}=f(x) 连积 n 次；缺 y 型令 y′=p(x)；缺 x 型令 y′=p(y) 并用 y″ = p·dp/dy。'
+    },
+    {
+      n: '03',
+      t: '搭线性',
+      d: '高阶线性方程通解 = 齐次通解 Y + 非齐次特解 y*；常系数齐次看特征根（实单/重根/共轭复根），非齐次用待定系数法，欧拉方程作 x=e^t 代换。'
+    }
+  ],
+  route: [
+    { num: '7.1', title: '微分方程的基本概念', desc: '阶、通解、特解、初值条件与积分曲线' },
+    { num: '7.2', title: '可分离变量的微分方程', desc: 'g(y)dy = f(x)dx 两端积分' },
+    { num: '7.3', title: '齐次方程', desc: 'u = y/x 代换、*可化为齐次的方程' },
+    { num: '7.4', title: '一阶线性微分方程', desc: '常数变易法与通解公式、*伯努利方程' },
+    { num: '7.5', title: '可降阶的高阶微分方程', desc: 'y^{(n)}=f(x)、缺 y 型、缺 x 型' },
+    { num: '7.6', title: '高阶线性微分方程', desc: '线性相关/无关、通解结构、叠加原理、*常数变易' },
+    { num: '7.7', title: '常系数齐次线性微分方程', desc: '特征方程三类根（单实、重实、共轭复根）' },
+    { num: '7.8', title: '常系数非齐次线性微分方程', desc: 'e^{λx}Pₘ(x) 型与 e^{λx}(P cos ωx + Q sin ωx) 型' },
+    { num: '7.9', title: '*欧拉方程', desc: '令 x = e^t 化为常系数线性方程' },
+    { num: '7.10', title: '*常系数线性微分方程组', desc: '消元法化为高阶单方程求解' }
+  ],
+  pitfalls: [
+    '通解中独立任意常数的个数必须严格等于微分方程的「阶数」！少一个常数就不是通解，多余的常数能合并成更少个也不算独立。',
+    '分离变量两端除以 g(y) 时，必须单独检查 g(y) = 0 的常数解是不是原方程的解（往往会漏掉特解 y = c）！',
+    '套用一阶线性方程通解公式 y = e^{−∫Pdx}(∫Q e^{∫Pdx}dx + C) 前，必须先把方程化为标准形 y′ + P(x)y = Q(x)（y′ 系数必须为 1，且 e^{∫Pdx} 不带 +C）！',
+    '可降阶方程「缺 x 型」y″ = f(y, y′) 令 y′ = p(y) 时，二阶导数必须是 y″ = p·(dp/dy)，千万别漏乘前面的 p！',
+    '写常系数非齐次特解 y* = x^k Qₘ(x) e^{λx} 时，k 取「λ 作为特征方程根的重数」（0, 1, 或 2），不是方程阶数！',
+    '对于 e^{λx}(P_l cos ωx + Qₙ sin ωx) 型特解，不管原式里只有 cos 还是只有 sin，特解里都必须同时设出 cos ωx 与 sin ωx 两项，且多项式次数取 m = max{l, n}！'
+  ]
+};
+
+const BRANCHES = [
+  {
+    id: 'b71',
+    num: '7.1',
+    title: '微分方程的基本概念',
+    short: '阶、通解、特解与初值问题',
+    color: '#3F6F9F',
+    side: 'left',
+    brief: '认识微分方程的语言与解的结构',
+    leaves: [
+      {
+        id: 'l71-1',
+        title: '微分方程与阶数',
+        brief: '未知函数最高阶导数的阶数',
+        tag: '§7.1',
+        one: '含有未知函数、自变量及未知函数导数（或微分）的方程称为微分方程；方程中出现的未知函数最高阶导数的阶数称为微分方程的阶。',
+        formula: 'F(x, y, y′, …, y^{(n)}) = 0 （n 阶常微分方程）',
+        points: [
+          '仅含一个自变量称常微分方程（ODE），含多个自变量偏导数称偏微分方程（PDE）。'
+        ],
+        tip: '注意区分：方程 (y′)² + y = 0 是一阶非线性方程（导数最高阶是一阶），不是二阶！',
+        ref: '§7.1'
+      },
+      {
+        id: 'l71-2',
+        title: '通解与特解',
+        brief: 'n 阶方程通解含 n 个独立任意常数',
+        tag: '§7.1',
+        one: '满足方程且所含独立任意常数个数等于方程阶数 n 的解称为通解；给任意常数赋确定值后得到的解称为特解。',
+        formula: 'n 阶通解：y = φ(x, C_{1}, …, C_{n}) （C_{1},…,C_{n} 相互独立）',
+        points: [
+          '验证常数是否独立看雅可比行列式不为 0；例如 y = C₁e^{x+C₂} = (C₁e^{C₂})eˣ 实际只有一个独立常数。'
+        ],
+        tip: '通解未必包含方程的所有解（部分非线性方程还存在无法由通解赋常数得到的「奇解」）。',
+        ref: '§7.1'
+      },
+      {
+        id: 'l71-3',
+        title: '初始条件与积分曲线',
+        brief: '用初值把通解钉死成唯一特解',
+        tag: '§7.1',
+        one: '确定通解中任意常数的条件（如 y|_{x=x₀} = y₀, y′|_{x=x₀} = y₀′）称为初始条件；特解的图形称为积分曲线。',
+        formula: '一阶初值：y(x₀) = y₀ ｜ 二阶初值：y(x₀) = y₀, y′(x₀) = y₀′',
+        points: [
+          '几何应用题套路：根据切线斜率、法线截距或面积关系先列出微分方程，再用过定点写出初值条件。'
+        ],
+        tip: '切记：n 阶初值问题需要 n 个独立初始条件来定出全部 C₁,…,Cₙ。',
+        ref: '§7.1'
+      }
+    ]
+  },
+  {
+    id: 'b72',
+    num: '7.2',
+    title: '可分离变量的微分方程',
+    short: '分离变量两端积分',
+    color: '#2E7D74',
+    side: 'left',
+    brief: '最基础的解法：x 归 dx，y 归 dy',
+    leaves: [
+      {
+        id: 'l72-1',
+        title: '标准形式与求解步骤',
+        brief: '把 y′ 拆成 dy/dx 后各归一边',
+        tag: '§7.2 · 例 1–4',
+        one: '形如 dy/dx = f(x)g(y) 的方程，当 g(y) ≠ 0 时分离为 dy/g(y) = f(x)dx，两端同时积分即得隐式通解 ∫dy/g(y) = ∫f(x)dx + C。',
+        formula: 'dy/dx = f(x)g(y) ⟹ ∫ [1/g(y)] dy = ∫ f(x) dx + C',
+        points: [
+          '两端积分时「只需在一侧加一个常数 C」即可。',
+          '若能显式解出 y 尽量解出；不能显式解出就保留隐式通解形式。'
+        ],
+        tip: '当积分结果全是 ln 项时（如 ln|y| = ln|x| + C₁），把常数写成 ln|C| 或 C 化简成 y = Cx，能消除绝对值并把 y = 0 也纳进来！',
+        ref: '§7.2'
+      },
+      {
+        id: 'l72-2',
+        title: '漏解检查与简单换元化分离',
+        brief: '别漏掉 g(y) = 0 的平衡解',
+        tag: '§7.2 · 例 5',
+        one: '除以 g(y) 时需检验使 g(y) = 0 的常数函数 y = y₀ 是否也是方程的解；形如 y′ = f(ax+by+c) 的方程令 u = ax+by+c 即可化为可分离变量方程。',
+        formula: 'y′ = f(ax + by + c) ⟹ 令 u = ax + by + c ⟹ du/dx = a + b f(u)',
+        points: [
+          '实际模型（衰减、逻辑斯蒂增长）：dP/dt = kP(M−P) 分离变量后用部分分式积分。'
+        ],
+        tip: '看到 y′ 里出现 (x+y) 或 (2x−y+1) 整体，立刻令 u = ax+by+c！',
+        ref: '§7.2'
+      }
+    ]
+  },
+  {
+    id: 'b73',
+    num: '7.3',
+    title: '齐次方程',
+    short: 'u = y/x 代换与可化齐次',
+    color: '#6B5B95',
+    side: 'left',
+    brief: '右端只依赖比值 y/x 的方程',
+    leaves: [
+      {
+        id: 'l73-1',
+        title: '齐次方程的识别与标准代换',
+        brief: '令 u = y/x（即 y = ux），化为可分离变量',
+        tag: '§7.3.1',
+        one: '形如 dy/dx = φ(y/x) 的方程称为齐次方程；令 u = y/x（即 y = xu），则 dy/dx = u + x(du/dx)，代入立即分离变量。',
+        formula: 'y = ux ⟹ u + x(du/dx) = φ(u) ⟹ du / [φ(u) − u] = dx / x',
+        points: [
+          '识别特征：分子分母各项关于 x, y 的次数完全相同（或同时出现 x/y 与 y/x）。',
+          '算完后记得把 u 换回 y/x！'
+        ],
+        tip: '如果方程写成 dx/dy = ψ(x/y) 更简单，也可以反过来令 v = x/y（即 x = vy）！',
+        ref: '§7.3.1'
+      },
+      {
+        id: 'l73-2',
+        title: '齐次方程常见简化技巧',
+        brief: '先用 e^{u}, ln 等合并，再令 u = y/x',
+        tag: '§7.3.1 · 例 1–2',
+        one: '对于 x dy − y dx 这类形式，注意到 d(y/x) = (x dy − y dx)/x² 可以直接凑微分，比硬代换更快。',
+        formula: 'd(y/x) = (x dy − y dx) / x^{2}',
+        points: [
+          '若出现 φ(u) ≡ u，即 du/dx = 0 ⟹ y = Cx。'
+        ],
+        tip: '看到 x dy − y dx 或 x dy + y dx = d(xy)，优先凑全微分！',
+        ref: '§7.3.1'
+      },
+      {
+        id: 'l73-3',
+        title: '*可化为齐次的方程',
+        brief: '两直线相交平移原点，平行直接换元',
+        tag: '§7.3.2',
+        one: '形如 dy/dx = f((a₁x+b₁y+c₁)/(a₂x+b₂y+c₂)) 的方程：两直线相交于 (h, k) 时令 X = x−h, Y = y−k 消去常数项化为齐次；两直线平行时令 u = a₁x+b₁y 化为可分离变量。',
+        formula: '交点 (h, k) → X=x−h, Y=y−k ｜ 平行 → u = a₁x + b₁y',
+        points: [
+          '核心思想：通过平移坐标系把常数项 c₁, c₂ 消成 0。'
+        ],
+        tip: '先算系数行列式 a₁b₂ − a₂b₁：≠ 0 求交点平移，= 0 说明平行直接换元！',
+        ref: '§7.3.2'
+      }
+    ]
+  },
+  {
+    id: 'b74',
+    num: '7.4',
+    title: '一阶线性微分方程',
+    short: '通解公式、常数变易与伯努利',
+    color: '#B07A2E',
+    side: 'left',
+    brief: '一阶微分方程最重要、考频最高的方程类型',
+    leaves: [
+      {
+        id: 'l74-1',
+        title: '一阶齐次与非齐次线性方程',
+        brief: '关于 y 和 y′ 都是一次的',
+        tag: '§7.4.1',
+        one: '标准形 y′ + P(x)y = Q(x)：Q(x) ≡ 0 称为齐次，可直接分离变量得通解 y = C e^{−∫P(x)dx}；Q(x) ≢ 0 称为非齐次。',
+        formula: '齐次：y′ + P(x)y = 0 ⟹ y = C e^{-∫P(x)dx}',
+        points: [
+          '如果方程关于 y 不是线性的，有时把 x 看成 y 的函数（dx/dy + P(y)x = Q(y)）反而是线性的！'
+        ],
+        tip: '看到 x 与 dx 在分子、dy 在分母且 x 只出现一次时，果断把方程倒过来写成 dx/dy 的一阶线性方程！',
+        ref: '§7.4.1'
+      },
+      {
+        id: 'l74-2',
+        title: '常数变易法与通解公式',
+        brief: '把齐次通解里的 C 换成函数 u(x)',
+        tag: '§7.4.1 · 公式 (5)',
+        one: '设 y = u(x)e^{−∫P(x)dx} 代入非齐次方程得 u′(x) = Q(x)e^{∫P(x)dx}，积分即得通解公式。',
+        formula: 'y = e^{-∫P(x)dx} [ ∫ Q(x) e^{∫P(x)dx} dx + C ]',
+        points: [
+          '结构拆解：y = C e^{−∫Pdx}（对应齐次通解） + e^{−∫Pdx}∫Q e^{∫Pdx}dx（非齐次特解）。',
+          '也可记忆积分因子法：方程两边同乘 μ(x) = e^{∫P(x)dx}，左边直接合并成 [μ(x)y]′ = μ(x)Q(x)！'
+        ],
+        tip: '计算 ∫P(x)dx 时不要加任意常数 C，且化简 e^{∫(1/x)dx} = |x| 或直接取 x 即可（符号会被前面的 C 吸收）。',
+        ref: '§7.4.1'
+      },
+      {
+        id: 'l74-3',
+        title: '*伯努利（Bernoulli）方程',
+        brief: '令 z = y^{1−n} 化为一阶线性方程',
+        tag: '§7.4.2',
+        one: '形如 y′ + P(x)y = Q(x)yⁿ（n ≠ 0, 1）的方程，两边同除 yⁿ 后令 z = y^{1−n}，即可化为关于 z 的一阶线性方程。',
+        formula: 'z = y^{1−n} ⟹ z′ + (1 − n)P(x)z = (1 − n)Q(x)',
+        points: [
+          'n = 0 时已是线性方程；n = 1 时可直接分离变量。'
+        ],
+        tip: '不要死记 z′ 系数，每次现场除 yⁿ 后令 z = y^{1−n} 求导一次，3 秒钟就推出来了，绝对不错！',
+        ref: '§7.4.2'
+      }
+    ]
+  },
+  {
+    id: 'b75',
+    num: '7.5',
+    title: '可降阶的高阶微分方程',
+    short: '三类降阶套路',
+    color: '#4C5F9E',
+    side: 'left',
+    brief: '把二阶及高阶方程降成一阶方程来解',
+    leaves: [
+      {
+        id: 'l75-1',
+        title: 'y^{(n)} = f(x) 型方程',
+        brief: '直接连续积分 n 次',
+        tag: '§7.5.1',
+        one: '右端只含自变量 x，逐次积分 n 次即可得到含 n 个独立任意常数的通解。',
+        formula: 'y^{(n)} = f(x) ⟹ 积分 n 次得 y(x) + C_{1}x^{n−1} + … + C_{n}',
+        points: [
+          '每次积分都要加上一个新的独立任意常数，不要把不同步的常数合并成一个。'
+        ],
+        tip: '如果给了初值条件，每积分一次就可以顺手用初值定出刚产生的常数，算起来更轻快。',
+        ref: '§7.5.1'
+      },
+      {
+        id: 'l75-2',
+        title: 'y″ = f(x, y′) 型（缺 y 型）',
+        brief: '令 y′ = p(x)，则 y″ = dp/dx',
+        tag: '§7.5.2',
+        one: '方程中不显含未知函数 y，令 p = y′（看作 x 的函数），则 y″ = p′，方程降为关于 p(x) 的一阶方程 dp/dx = f(x, p)。',
+        formula: '设 p = y′(x) ⟹ y″ = dp/dx ⟹ dp/dx = f(x, p)',
+        points: [
+          '解出 p = φ(x, C₁) 后，再积分一次 y = ∫φ(x, C₁)dx + C₂ 得通解。'
+        ],
+        tip: '注意区分缺 y（p 是 x 的函数）与缺 x（p 是 y 的函数）！',
+        ref: '§7.5.2'
+      },
+      {
+        id: 'l75-3',
+        title: 'y″ = f(y, y′) 型（缺 x 型）',
+        brief: '令 y′ = p(y)，则 y″ = p · dp/dy',
+        tag: '§7.5.3',
+        one: '方程中不显含自变量 x，把 p = y′ 看作 y 的函数，由链式法则 y″ = (dp/dy)(dy/dx) = p·(dp/dy)，化为关于 p(y) 的一阶方程。',
+        formula: '设 p = y′(y) ⟹ y″ = p (dp/dy) ⟹ p (dp/dy) = f(y, p)',
+        points: [
+          '解出 p = φ(y, C₁) = dy/dx 后，分离变量 dy/φ(y, C₁) = dx 再积分得通解。'
+        ],
+        tip: '开方解 p = ±√(…) 时别忘了正负号（若有初值 y′(x₀) 则由初值符号定正负）。',
+        ref: '§7.5.3'
+      }
+    ]
+  },
+  {
+    id: 'b76',
+    num: '7.6',
+    title: '高阶线性微分方程',
+    short: '解的结构与叠加原理',
+    color: '#4F7D56',
+    side: 'right',
+    brief: '揭示全部线性微分方程通解的统一代数结构',
+    leaves: [
+      {
+        id: 'l76-1',
+        title: '二阶线性齐次方程的线性性质',
+        brief: '齐次解的线性组合仍是齐次解',
+        tag: '§7.6.2 · 定理 1',
+        one: '若 y₁(x), y₂(x) 是齐次方程 y″ + P(x)y′ + Q(x)y = 0 的两个解，则对任意常数 C₁, C₂，y = C₁y₁ + C₂y₂ 也是它的解。',
+        formula: 'y_{1}, y_{2} 为齐次解 ⟹ C_{1}y_{1} + C_{2}y_{2} 仍为齐次解',
+        points: [
+          '线性无关（比值 y₁/y₂ 不为常数）的两个解 y₁, y₂ 构成二阶齐次解空间的基（基本解组）。'
+        ],
+        tip: '「线性无关」在二阶方程里就等于「y₁(x)/y₂(x) ≠ 常数」。',
+        ref: '§7.6.2 · 定理 1'
+      },
+      {
+        id: 'l76-2',
+        title: '齐次与非齐次方程的通解结构',
+        brief: '非齐次通解 = 齐次通解 + 非齐次特解',
+        tag: '§7.6.2 · 定理 2–3',
+        one: '二阶齐次方程两个线性无关解 y₁, y₂ 的组合 y = C₁y₁ + C₂y₂ 是齐次通解；非齐次方程通解等于对应齐次通解 Y 与自身任一特解 y* 之和。',
+        formula: 'y = Y + y^{*} = C_{1}y_{1}(x) + C_{2}y_{2}(x) + y^{*}(x)',
+        points: [
+          '推广到 n 阶：需 n 个线性无关齐次解，y = C₁y₁ + … + Cₙyₙ + y*。',
+          '反推技巧：任意两个非齐次特解之差 y₁* − y₂* 必是对应齐次方程的解！'
+        ],
+        tip: '已知三个非齐次特解 y₁, y₂, y₃（如二阶），立刻能用 (y₂−y₁) 与 (y₃−y₁) 拼出全部齐次通解！',
+        ref: '§7.6.2 · 定理 2–3'
+      },
+      {
+        id: 'l76-3',
+        title: '非齐次方程的叠加原理',
+        brief: '右端拆项，特解分别求再相加',
+        tag: '§7.6.2 · 定理 4',
+        one: '若 y₁* 是 y″ + Py′ + Qy = f₁(x) 的特解，y₂* 是右端为 f₂(x) 时的特解，则 y₁* + y₂* 是右端为 f₁(x) + f₂(x) 时的特解。',
+        formula: 'L[y_{1}^{*}] = f_{1}, L[y_{2}^{*}] = f_{2} ⟹ L[y_{1}^{*} + y_{2}^{*}] = f_{1} + f_{2}',
+        points: [
+          '当右端是 e^{2x} + sin x + 3 这种混合项时，务必拆成三块分别求特解再加起来！'
+        ],
+        tip: '叠加原理只对「特解」直接相加成立；如果是求通解，最后只加一次齐次通解 Y 即可。',
+        ref: '§7.6.2 · 定理 4'
+      },
+      {
+        id: 'l76-4',
+        title: '*高阶线性方程的常数变易法',
+        brief: '已知齐次基本解组求一般非齐次特解',
+        tag: '§7.6.3',
+        one: '已知二阶齐次基本解组 y₁, y₂，设非齐次特解 y* = u₁(x)y₁ + u₂(x)y₂，附加条件 u₁′y₁ + u₂′y₂ = 0，联立 u₁′y₁′ + u₂′y₂′ = f(x) 解出 u₁′, u₂′ 再积分。',
+        formula: 'u_{1}′y_{1} + u_{2}′y_{2} = 0， u_{1}′y_{1}′ + u_{2}′y_{2}′ = f(x)',
+        points: [
+          '适用于变系数线性方程（例如当待定系数法不适用，如右端是 tan x 或 1/x 时）。'
+        ],
+        tip: '用克莱姆法则解 u₁′, u₂′ 时，分母恰好是朗斯基行列式 W(y₁, y₂) = y₁y₂′ − y₁′y₂ ≠ 0。',
+        ref: '§7.6.3'
+      }
+    ]
+  },
+  {
+    id: 'b77',
+    num: '7.7',
+    title: '常系数齐次线性微分方程',
+    short: '特征方程三类根与通解',
+    color: '#B05C47',
+    side: 'right',
+    brief: '把微积分问题瞬间变成代数求根问题',
+    leaves: [
+      {
+        id: 'l77-1',
+        title: '特征方程的建立',
+        brief: '试探解 y = e^{rx} 把导数变成幂次',
+        tag: '§7.7',
+        one: '对 y″ + py′ + qy = 0 代入 y = e^{rx}，消去 e^{rx} ≠ 0 即得代数特征方程 r² + pr + q = 0。',
+        formula: 'y″ + py′ + qy = 0 ⟹ 特征方程：r^{2} + pr + q = 0',
+        points: [
+          '高阶同理：y^{(n)} + a₁y^{(n−1)} + … + aₙy = 0 对应 rⁿ + a₁r^{n−1} + … + aₙ = 0。'
+        ],
+        tip: '注意方程里的常数项 q·y 对应 r⁰ = 1，千万别把 q 写成 qr！',
+        ref: '§7.7'
+      },
+      {
+        id: 'l77-2',
+        title: '二阶特征根的三种情形与通解',
+        brief: '两异实根、二重实根、共轭复根',
+        tag: '§7.7 · 表',
+        one: '两异实根 r₁ ≠ r₂ 得 C₁e^{r₁x} + C₂e^{r₂x}；二重实根 r₁ = r₂ 得 (C₁ + C₂x)e^{r₁x}；共轭复根 α ± iβ 得 e^{αx}(C₁cos βx + C₂sin βx)。',
+        formula: 'Δ>0：C_{1}e^{r₁x}+C_{2}e^{r₂x} ｜ Δ=0：(C_{1}+C_{2}x)e^{rx} ｜ Δ<0：e^{αx}(C_{1}cos βx+C_{2}sin βx)',
+        points: [
+          '重根出现因子 x 的本质正是线性代数第 6 章的 2 阶 Jordan 块！'
+        ],
+        tip: '共轭复根 α ± iβ 写实通解时，cos/sin 里是虚部 β（不带 i），外面的指数是实部 α！',
+        ref: '§7.7'
+      },
+      {
+        id: 'l77-3',
+        title: '高阶常系数齐次方程通解规则',
+        brief: 'k 重实根乘 1, x, …, x^{k−1}',
+        tag: '§7.7',
+        one: 'k 重实根 r 贡献 (C₁ + C₂x + … + Cₖx^{k−1})e^{rx}；k 重共轭复根 α ± iβ 贡献 e^{αx}[P_{k−1}(x)cos βx + Q_{k−1}(x)sin βx]。',
+        formula: 'k 重实根 r：(C_{1} + C_{2}x + … + C_{k}x^{k−1}) e^{rx}',
+        points: [
+          '所有特征根贡献的任意常数总数恰好等于方程阶数 n。'
+        ],
+        tip: '四阶常见特征方程 r⁴ − 1 = 0 的四个根是 ±1, ±i，对应 C₁eˣ + C₂e^{−x} + C₃cos x + C₄sin x！',
+        ref: '§7.7'
+      },
+      {
+        id: 'l77-4',
+        title: '根据通解反求微分方程',
+        brief: '从特解项读出特征根再乘回特征多项式',
+        tag: '§7.7 · 逆向题',
+        one: '看到通解中的 e^{rx}、x e^{rx}、e^{αx}cos βx 即可反读特征根及其重数，乘出特征多项式即得原微分方程。',
+        formula: '读出根 r₁, r₂,… ⟹ (r − r₁)(r − r₂)… = 0 ⟹ 写回 y^{(n)}',
+        points: [
+          '注意若给出的是「非齐次通解」，先分离出含 C₁, C₂ 的齐次通解部分求特征方程，再把剩下的特解 y* 代入左边算出右端 f(x)！'
+        ],
+        tip: '反求方程高频考点：看到 (C₁ + C₂x)e^{2x} 立刻知道 r = 2 是二重根，特征多项式为 (r−2)² = r²−4r+4。',
+        ref: '§7.7'
+      }
+    ]
+  },
+  {
+    id: 'b78',
+    num: '7.8',
+    title: '常系数非齐次线性微分方程',
+    short: '两类标准右端的待定系数法',
+    color: '#7A6A55',
+    side: 'right',
+    brief: '不用积分就能直接猜出非齐次特解形式',
+    leaves: [
+      {
+        id: 'l78-1',
+        title: '类型 I：f(x) = e^{λx} Pₘ(x) 型',
+        brief: '特解设 y* = x^k Qₘ(x) e^{λx}',
+        tag: '§7.8.1',
+        one: '对于 y″ + py′ + qy = e^{λx}Pₘ(x)，特解形式为 y* = x^k Qₘ(x) e^{λx}，其中 Qₘ(x) 是与 Pₘ 同次的待定多项式，k 为 λ 作为特征方程根的重数。',
+        formula: 'y^{*} = x^{k} Q_{m}(x) e^{λx} （k = 0 若 λ 非根；k = 1 若 λ 为单根；k = 2 若 λ 为二重根）',
+        points: [
+          '若右端仅为多项式 Pₘ(x)，等价于 λ = 0 的情况（此时看 0 是不是特征根，如 y″ + y′ = x 中 0 是单根，k = 1）。'
+        ],
+        tip: '算待定系数时先代入简化：设 y* = e^{λx}·u(x)，把 e^{λx} 消掉再比较 x 的同次幂系数，不容易算错！',
+        ref: '§7.8.1'
+      },
+      {
+        id: 'l78-2',
+        title: '类型 II：f(x) = e^{λx}[Pₗ(x)cos ωx + Qₙ(x)sin ωx] 型',
+        brief: '看 λ + iω 是否为特征根（k = 0 或 1）',
+        tag: '§7.8.2',
+        one: '设 m = max{l, n}，特解形式为 y* = x^k e^{λx}[Rₘ^{(1)}(x)cos ωx + Rₘ^{(2)}(x)sin ωx]，其中 k 为 λ + iω 作为特征根的重数（二阶时为 0 或 1）。',
+        formula: 'y^{*} = x^{k} e^{λx} [R_{m}^{(1)}(x) cos ωx + R_{m}^{(2)}(x) sin ωx] （k = λ+iω 的重数）',
+        points: [
+          '当右端只有 cos ωx（如 y″ + y = cos x）时，λ = 0, ω = 1，因 i 是特征单根，k = 1，需设 y* = x(A cos x + B sin x)（共振现象的数学来源！）。'
+        ],
+        tip: '哪怕右端只出现 sin ωx 或 cos ωx 其中一个，特解里「cos 和 sin 必须同时出现」！',
+        ref: '§7.8.2'
+      },
+      {
+        id: 'l78-3',
+        title: '先拆叠加再设特解',
+        brief: '三角积化或和差先拆分',
+        tag: '§7.8 · 综合',
+        one: '若右端出现 cos²x、sin x cos 2x 或 eˣ + x² 等非标准型，先用倍角/积化和差公式拆成标准型之和，再按叠加原理分别设特解。',
+        formula: 'cos^{2}x = (1 + cos 2x)/2 ｜ 拆成 λ=0 常数项 + λ=0, ω=2 三角项',
+        points: [
+          '遇到右端不在上述两类里（如 1/x 或 tan x），待定系数法无效，必须改用 7.6 节常数变易法。'
+        ],
+        tip: '看到 cos²x 绝对不要直接猜 (A cos x + B sin x)²，一定要先降次成 (1 + cos 2x)/2！',
+        ref: '§7.8'
+      }
+    ]
+  },
+  {
+    id: 'b79',
+    num: '7.9',
+    title: '*欧拉方程',
+    short: '令 x = e^t 化为常系数方程',
+    color: '#3F6F9F',
+    side: 'right',
+    brief: '一类特殊的变系数方程 xⁿ y^{(n)}',
+    leaves: [
+      {
+        id: 'l79-1',
+        title: '欧拉方程的定义与变量代换',
+        brief: 'x = e^t（t = ln x）把 x^k y^{(k)} 变成常数系数算子',
+        tag: '§7.9',
+        one: '形如 xⁿy^{(n)} + p₁x^{n−1}y^{(n−1)} + … + pₙy = f(x)（pᵢ 为常数）的方程，作自变量代换 x = e^t（x > 0 时 t = ln x）即化为以 t 为自变量的常系数线性方程。',
+        formula: 'x = e^{t} ⟹ xy′ = Dy， x^{2}y″ = D(D−1)y， x^{3}y‴ = D(D−1)(D−2)y （D = d/dt）',
+        points: [
+          '记好算子替换：x^k y^{(k)} = D(D−1)…(D−k+1)y，直接把二阶欧拉方程 x²y″ + p₁xy′ + p₂y = f(x) 变成 d²y/dt² + (p₁−1)dy/dt + p₂y = f(e^t)。'
+        ],
+        tip: '最容易漏掉的是 x²y″ 变换后的一次导数项是「(p₁ − 1)dy/dt」，不是 p₁！',
+        ref: '§7.9'
+      },
+      {
+        id: 'l79-2',
+        title: '欧拉方程的求解与回代',
+        brief: '求出 y(t) 后把 e^t 换回 x，t 换回 ln x',
+        tag: '§7.9 · 例 1–2',
+        one: '按常系数方程求出 y(t) 后，将 e^{rt} 换回 x^r、t 换回 ln|x|，即得原方程的通解。',
+        formula: 'e^{rt} → x^{r} ｜ t → ln|x| （x < 0 时令 x = −e^{t}，通式用 |x|）',
+        points: [
+          '特征根 r 为共轭复根 α ± iβ 时，e^{αt}cos(βt) 回代为 x^α cos(β ln|x|)。'
+        ],
+        tip: '也可以直接试探解 y = x^r 求齐次特征方程 r(r−1) + p₁r + p₂ = 0，速度更快。',
+        ref: '§7.9'
+      }
+    ]
+  },
+  {
+    id: 'b710',
+    num: '7.10',
+    title: '*常系数线性微分方程组解法举例',
+    short: '消元法化为单变量高阶方程',
+    color: '#2E7D74',
+    side: 'right',
+    brief: '多个未知函数联立的线性常微分方程组',
+    leaves: [
+      {
+        id: 'l710-1',
+        title: '消元法求解步骤',
+        brief: '求导消元得单变量高阶常系数方程',
+        tag: '§7.10 · 例 1–2',
+        one: '对含 x(t), y(t) 的一阶常系数方程组，从其中一个方程解出 y（用 x, x′ 表示），代入另一方程消去 y，得到关于 x(t) 的二阶常系数线性方程。',
+        formula: '消元得 x(t) 高阶方程 → 求通解 x(t) → 回代（不需再积分）直接得 y(t)',
+        points: [
+          '回代求另一个函数 y(t) 时直接用代数式代入求导即可，不要再从原方程积分以免多出不独立的任意常数！'
+        ],
+        tip: '最后检查：两个一阶方程组成的系统，通解里独立任意常数的总数应该恰好是 2 个！',
+        ref: '§7.10'
+      },
+      {
+        id: 'l710-2',
+        title: '与线性代数矩阵对角化/Jordan 形的联系',
+        brief: 'z′ = Az 系统的两种视角',
+        tag: '§7.10 · 拓展',
+        one: '一阶常系数方程组可写成矩阵形式 z′ = Az；与消元法等价，也可利用第 4–6 章的特征值对角化或 Jordan 标准形（如阻尼振动）直接解耦求解。',
+        formula: 'z′ = Az ⟹ 消元法（标量高阶） ⟺ z = P e^{Jt} P^{-1} z_{0}（矩阵视角）',
+        points: [
+          '消元法适合 2×2 或 3×3 手算；矩阵指数法适合一般 n 维理论分析与动力系统稳定性判定。'
+        ],
+        tip: '把高数第 7 章和线代第 6 章结合起来看，你会发现「特征方程根的重数」与「Jordan 块」是一回事！',
+        ref: '§7.10'
+      }
+    ]
+  }
+];
+
+
+'use strict';
+
+(() => {
+  /* ================= data ================= */
+  const BRANCH_BY_ID = new Map(BRANCHES.map(b => [b.id, b]));
+  const ALL_LEAVES = [];
+  BRANCHES.forEach((b, bi) => {
+    b.leaves.forEach((l, li) => {
+      ALL_LEAVES.push(Object.assign({}, l, {
+        branchId: b.id,
+        branchNum: b.num,
+        branchTitle: b.title,
+        branchShort: b.short,
+        color: b.color,
+        side: b.side,
+        localIndex: li,
+        globalIndex: ALL_LEAVES.length
+      }));
+    });
+  });
+  const LEAF_BY_ID = new Map(ALL_LEAVES.map(l => [l.id, l]));
+  const PREVIEW = 2;
+  const TOTAL = ALL_LEAVES.length;
+
+  /* ================= storage ================= */
+  const LS_MASTERED = 'am-ch7-mastered-v1';
+  const LS_THEME = 'am-ch7-theme-v1';
+  const LS_VIEW = 'am-ch7-view-v1';
+
+  function readLS(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function writeLS(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* private mode */ }
+  }
+  function loadMastered() {
+    try {
+      const raw = readLS(LS_MASTERED);
+      const arr = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(arr)) return new Set();
+      return new Set(arr.filter(id => LEAF_BY_ID.has(id)));
+    } catch (e) { return new Set(); }
+  }
+
+  const state = {
+    view: readLS(LS_VIEW) === 'list' || readLS(LS_VIEW) === 'map'
+      ? readLS(LS_VIEW)
+      : (window.innerWidth < 900 ? 'list' : 'map'),
+    expanded: new Set(),
+    selectedId: null,
+    guideMode: 'chapter',
+    guideBranch: null,
+    mastered: loadMastered(),
+    theme: readLS(LS_THEME) === 'dark' ? 'dark' : 'light',
+    viewport: { x: 0, y: 0, scale: 1 },
+    isFit: true,
+    sidebarOpen: false
+  };
+
+  /* ================= helpers ================= */
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+  const esc = (value) => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[ch]));
+  const plain = (value) => String(value == null ? '' : value).replace(/<[^>]*>/g, '');
+  const mathHTML = (value) => esc(value)
+    .replace(/\^\{([^{}]+)\}/g, '<sup>$1</sup>')
+    .replace(/_\{([^{}]+)\}/g, '<sub>$1</sub>')
+    .replace(/\^([A-Za-z0-9θ])/g, '<sup>$1</sup>')
+    .replace(/_([A-Za-z0-9θ])/g, '<sub>$1</sub>');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReduced = reducedMotion;
+
+  const ICON = {
+    search: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.4"/><path d="m12.8 12.8 4 4"/></svg>',
+    moon: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.8 6.8 0 0 1 7.6 3.8a6.8 6.8 0 1 0 8.6 8.6Z"/></svg>',
+    sun: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 1.8v1.7M10 16.5v1.7M1.8 10h1.7M16.5 10h1.7M4.2 4.2l1.2 1.2M14.6 14.6l1.2 1.2M15.8 4.2l-1.2 1.2M5.4 14.6l-1.2 1.2"/></svg>',
+    printer: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7V3.6h8V7"/><rect x="3" y="7" width="14" height="6.4" rx="1.4"/><path d="M6 11h8v5.4H6z"/></svg>',
+    download: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v8.4"/><path d="m6.6 8.2 3.4 3.4 3.4-3.4"/><path d="M3.8 15.8h12.4"/></svg>',
+    panel: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3.6" width="14" height="12.8" rx="1.6"/><path d="M12.2 3.6v12.8"/></svg>',
+    fit: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.4H3.4V7M13 3.4h3.6V7M7 16.6H3.4V13M13 16.6h3.6V13"/></svg>',
+    left: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.4 4.6 7 10l5.4 5.4"/></svg>',
+    right: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.6 4.6 13 10l-5.4 5.4"/></svg>',
+    check: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4.6 10.3 3.4 3.4 7.4-7.4"/></svg>'
+  };
+
+  /* ================= map geometry ================= */
+  const L = {
+    width: 1580,
+    top: 56,
+    minH: 580,
+    leafW: 272,
+    leafH: 52,
+    leafGap: 8,
+    branchW: 238,
+    branchH: 56,
+    headerGap: 14,
+    leafBranchGap: 34,
+    branchCenterGap: 50,
+    centerW: 300,
+    centerH: 136,
+    blockGap: 24
+  };
+  const CENTER_X = (L.width - L.centerW) / 2;
+  const LEFT_BRANCH_X = CENTER_X - L.branchCenterGap - L.branchW;
+  const RIGHT_BRANCH_X = CENTER_X + L.centerW + L.branchCenterGap;
+  const LEFT_LEAF_X = LEFT_BRANCH_X - L.leafBranchGap - L.leafW;
+  const RIGHT_LEAF_X = RIGHT_BRANCH_X + L.branchW + L.leafBranchGap;
+
+  const mapPane = $('#map-pane');
+  const mapViewport = $('#map-viewport');
+  const mapCanvas = $('#map-canvas');
+  const nodeLayer = $('#node-layer');
+  const connectors = $('#connectors');
+  const sidebar = $('#sidebar');
+  const sideInner = $('#side-inner');
+  const scrim = $('#scrim');
+  const sideToggle = $('#side-toggle');
+  const listPane = $('#list-pane');
+  const listSections = $('#list-sections');
+  const searchInput = $('#search-input');
+  const searchPop = $('#search-pop');
+  const toastEl = $('#toast');
+  const themeBtn = $('#btn-theme');
+
+  const nodes = new Map();
+  let currentGeo = new Map();
+  let lastTargets = new Map();
+  let layoutRaf = 0;
+  let viewRaf = 0;
+  let lastDragEnd = 0;
+  let mapReady = false;
+
+  function visibleLeaves(branch) {
+    return state.expanded.has(branch.id)
+      ? branch.leaves
+      : branch.leaves.slice(0, PREVIEW);
+  }
+  function blockHeight(n) {
+    return L.branchH + L.headerGap + n * L.leafH + Math.max(0, n - 1) * L.leafGap;
+  }
+  function stackHeight(branches) {
+    if (!branches.length) return 0;
+    return branches.reduce((sum, b) => sum + blockHeight(visibleLeaves(b).length), 0)
+      + (branches.length - 1) * L.blockGap;
+  }
+  function isDraggingRecently() {
+    return performance.now() - lastDragEnd < 320;
+  }
+
+  /* ================= map nodes ================= */
+  function makeCheck() {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'check');
+    svg.setAttribute('viewBox', '0 0 16 16');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.innerHTML = '<path d="M3 8.4 6.2 11.6 13 4.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>';
+    return svg;
+  }
+
+  function initMap() {
+    const center = document.createElement('button');
+    center.type = 'button';
+    center.className = 'center-card';
+    center.setAttribute('aria-label', '第7章 微分方程，返回章节导览');
+    center.innerHTML = [
+      '<span class="center-kicker">第 7 章 · CHAPTER 07</span>',
+      '<span class="center-title">线性变换</span>',
+      '<span class="center-sub">' + esc(CHAPTER.subtitle) + '</span>',
+      '<span class="center-line" aria-hidden="true"></span>'
+    ].join('');
+    center.addEventListener('click', () => {
+      if (isDraggingRecently()) return;
+      state.selectedId = null;
+      updateSelection();
+      renderChapterGuide();
+    });
+    nodeLayer.appendChild(center);
+    nodes.set('center', center);
+
+    BRANCHES.forEach(b => {
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'branch';
+      el.dataset.id = b.id;
+      el.style.setProperty('--bc', b.color);
+      el.style.width = L.branchW + 'px';
+      el.style.height = L.branchH + 'px';
+      el.innerHTML = [
+        '<span class="b-num">' + esc(b.num) + '</span>',
+        '<span class="b-main">',
+        '  <span class="b-title">' + esc(b.title) + '</span>',
+        '  <span class="b-sub">' + esc(b.short) + '</span>',
+        '</span>',
+        '<span class="b-count"></span>'
+      ].join('');
+      el.addEventListener('click', () => {
+        if (isDraggingRecently()) return;
+        toggleBranchExpansion(b.id);
+        renderBranchGuide(b.id);
+      });
+      nodeLayer.appendChild(el);
+      nodes.set(b.id, el);
+
+      b.leaves.forEach(leaf => {
+        const n = document.createElement('button');
+        n.type = 'button';
+        n.className = 'leaf';
+        n.dataset.id = leaf.id;
+        n.style.setProperty('--bc', b.color);
+        n.style.width = L.leafW + 'px';
+        n.style.height = L.leafH + 'px';
+        n.style.display = 'none';
+        n.title = leaf.title;
+        const tag = String(leaf.tag || '').split(' / ')[0];
+        n.innerHTML = [
+          '<span class="l-top">',
+          '  <span class="l-tag">' + esc(tag) + '</span>',
+          '  <span class="l-title">' + esc(leaf.title) + '</span>',
+          '</span>',
+          '<span class="l-brief">' + esc(leaf.brief) + '</span>'
+        ].join('');
+        n.appendChild(makeCheck());
+        n.addEventListener('click', () => {
+          if (isDraggingRecently()) return;
+          selectLeaf(leaf.id, { focus: false });
+        });
+        nodeLayer.appendChild(n);
+        nodes.set(leaf.id, n);
+      });
+    });
+  }
+
+  function computeLayout() {
+    const left = BRANCHES.filter(b => b.side === 'left');
+    const right = BRANCHES.filter(b => b.side === 'right');
+    const leftH = stackHeight(left);
+    const rightH = stackHeight(right);
+    const contentH = Math.max(leftH, rightH, L.minH);
+    const H = contentH + L.top * 2;
+    const targets = new Map();
+
+    targets.set('center', {
+      x: CENTER_X,
+      y: L.top + (contentH - L.centerH) / 2,
+      w: L.centerW,
+      h: L.centerH,
+      opacity: 1
+    });
+
+    [left, right].forEach(group => {
+      if (!group.length) return;
+      const total = stackHeight(group);
+      let y = L.top + (contentH - total) / 2;
+      group.forEach(b => {
+        const leaves = visibleLeaves(b);
+        const branchX = b.side === 'left' ? LEFT_BRANCH_X : RIGHT_BRANCH_X;
+        const leafX = b.side === 'left' ? LEFT_LEAF_X : RIGHT_LEAF_X;
+        targets.set(b.id, {
+          x: branchX,
+          y,
+          w: L.branchW,
+          h: L.branchH,
+          opacity: 1
+        });
+        let leafY = y + L.branchH + L.headerGap;
+        leaves.forEach(leaf => {
+          targets.set(leaf.id, {
+            x: leafX,
+            y: leafY,
+            w: L.leafW,
+            h: L.leafH,
+            opacity: 1
+          });
+          leafY += L.leafH + L.leafGap;
+        });
+        y += blockHeight(leaves.length) + L.blockGap;
+      });
+    });
+
+    return { targets, W: L.width, H };
+  }
+
+  function applyGeo(el, geo) {
+    el.style.left = geo.x + 'px';
+    el.style.top = geo.y + 'px';
+    el.style.opacity = String(geo.opacity == null ? 1 : geo.opacity);
+  }
+
+  function syncBranchChrome() {
+    BRANCHES.forEach(b => {
+      const el = nodes.get(b.id);
+      if (!el) return;
+      const shown = visibleLeaves(b).length;
+      const count = $('.b-count', el);
+      count.textContent = shown + '/' + b.leaves.length;
+      el.setAttribute('aria-label', b.num + ' ' + b.title + '，显示 ' + shown + ' / ' + b.leaves.length + ' 个知识点');
+      el.setAttribute('aria-expanded', state.expanded.has(b.id) ? 'true' : 'false');
+    });
+  }
+
+  function anchorFor(key, targets) {
+    const leaf = LEAF_BY_ID.get(key);
+    if (leaf) {
+      const bg = targets.get(leaf.branchId);
+      const g = targets.get(key);
+      if (bg && g) {
+        return {
+          x: leaf.side === 'left' ? bg.x + bg.w : bg.x - g.w,
+          y: bg.y + bg.h / 2 - g.h / 2
+        };
+      }
+    }
+    const t = targets.get(key);
+    return t ? { x: t.x, y: t.y } : { x: 0, y: 0 };
+  }
+
+  function applyLayout(animate) {
+    const { targets, W, H } = computeLayout();
+    lastTargets = targets;
+    mapCanvas.style.width = W + 'px';
+    mapCanvas.style.height = H + 'px';
+    connectors.setAttribute('width', String(W));
+    connectors.setAttribute('height', String(H));
+    connectors.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    syncBranchChrome();
+
+    if (!animate || prefersReduced) {
+      cancelAnimationFrame(layoutRaf);
+      mapCanvas.classList.remove('js-anim');
+      const all = new Set([...targets.keys(), ...currentGeo.keys()]);
+      all.forEach(key => {
+        const el = nodes.get(key);
+        if (!el) return;
+        if (targets.has(key)) {
+          const g = targets.get(key);
+          el.style.display = '';
+          applyGeo(el, g);
+        } else {
+          el.style.display = 'none';
+        }
+      });
+      currentGeo = new Map(targets);
+      drawConnectors(currentGeo);
+      return targets;
+    }
+
+    const from = new Map();
+    const to = new Map();
+    const hide = [];
+    targets.forEach((g, key) => {
+      const el = nodes.get(key);
+      if (!el) return;
+      el.style.display = '';
+      const prev = currentGeo.get(key);
+      if (prev) {
+        from.set(key, Object.assign({}, prev));
+      } else {
+        const a = anchorFor(key, targets);
+        const start = { x: a.x, y: a.y, w: g.w, h: g.h, opacity: 0 };
+        from.set(key, start);
+        applyGeo(el, start);
+      }
+      to.set(key, g);
+    });
+    currentGeo.forEach((prev, key) => {
+      if (targets.has(key)) return;
+      const el = nodes.get(key);
+      if (!el) return;
+      const a = anchorFor(key, targets);
+      from.set(key, Object.assign({}, prev));
+      to.set(key, { x: a.x, y: a.y, w: prev.w, h: prev.h, opacity: 0 });
+      hide.push(key);
+    });
+
+    cancelAnimationFrame(layoutRaf);
+    mapCanvas.classList.add('js-anim');
+    const started = performance.now();
+    const duration = 430;
+
+    const tick = now => {
+      const t = Math.min(1, (now - started) / duration);
+      const e = 1 - Math.pow(1 - t, 3);
+      const frame = new Map();
+      to.forEach((target, key) => {
+        const start = from.get(key);
+        const g = {
+          x: start.x + (target.x - start.x) * e,
+          y: start.y + (target.y - start.y) * e,
+          w: target.w,
+          h: target.h,
+          opacity: (start.opacity == null ? 1 : start.opacity)
+            + ((target.opacity == null ? 1 : target.opacity) - (start.opacity == null ? 1 : start.opacity)) * e
+        };
+        frame.set(key, g);
+        const el = nodes.get(key);
+        if (el) applyGeo(el, g);
+      });
+      currentGeo = frame;
+      drawConnectors(frame);
+      if (t < 1) {
+        layoutRaf = requestAnimationFrame(tick);
+      } else {
+        hide.forEach(key => {
+          const el = nodes.get(key);
+          if (el) el.style.display = 'none';
+        });
+        currentGeo = new Map(targets);
+        mapCanvas.classList.remove('js-anim');
+        drawConnectors(currentGeo);
+      }
+    };
+    layoutRaf = requestAnimationFrame(tick);
+    return targets;
+  }
+
+  function drawConnectors(geo) {
+    const center = geo.get('center');
+    if (!center) { connectors.innerHTML = ''; return; }
+    const parts = [];
+    const cx = center.x;
+    const cy = center.y + center.h / 2;
+    BRANCHES.forEach(b => {
+      const bg = geo.get(b.id);
+      if (!bg) return;
+      const bop = bg.opacity == null ? 1 : bg.opacity;
+      const sx = b.side === 'left' ? cx : cx + center.w;
+      const ex = b.side === 'left' ? bg.x + bg.w : bg.x;
+      const ey = bg.y + bg.h / 2;
+      const mx = (sx + ex) / 2;
+      parts.push('<path d="M' + sx + ' ' + cy + ' C ' + mx + ' ' + cy + ', ' + mx + ' ' + ey + ', ' + ex + ' ' + ey + '" stroke="' + b.color + '" stroke-width="1.25" opacity="' + (0.5 * bop).toFixed(3) + '"/>');
+      parts.push('<circle cx="' + ex + '" cy="' + ey + '" r="2.4" fill="' + b.color + '" opacity="' + (0.55 * bop).toFixed(3) + '"/>');
+
+      b.leaves.forEach(leaf => {
+        const lg = geo.get(leaf.id);
+        if (!lg) return;
+        const lop = (lg.opacity == null ? 1 : lg.opacity) * bop;
+        if (lop < 0.01) return;
+        const lx1 = b.side === 'left' ? bg.x : bg.x + bg.w;
+        const lx2 = b.side === 'left' ? lg.x + lg.w : lg.x;
+        const ly = lg.y + lg.h / 2;
+        parts.push('<path d="M' + lx1 + ' ' + ly + ' L ' + lx2 + ' ' + ly + '" stroke="' + b.color + '" stroke-width="1" opacity="' + (0.42 * lop).toFixed(3) + '"/>');
+        parts.push('<circle cx="' + lx2 + '" cy="' + ly + '" r="1.9" fill="' + b.color + '" opacity="' + (0.5 * lop).toFixed(3) + '"/>');
+      });
+    });
+    connectors.innerHTML = parts.join('');
+  }
+
+  /* ================= map view transform ================= */
+  function applyView() {
+    const v = state.viewport;
+    mapCanvas.style.transform = 'translate(' + v.x + 'px, ' + v.y + 'px) scale(' + v.scale + ')';
+    const readout = $('#zoom-readout');
+    if (readout) readout.textContent = Math.round(v.scale * 100) + '%';
+  }
+
+  function fitView(animate) {
+    if (mapPane.hidden || !mapViewport.clientWidth) return;
+    const pw = mapViewport.clientWidth;
+    const ph = mapViewport.clientHeight;
+    const target = lastTargets;
+    const W = parseFloat(mapCanvas.style.width) || L.width;
+    const H = parseFloat(mapCanvas.style.height) || 1200;
+    const scale = clamp(Math.min((pw - 28) / W, (ph - 28) / H), 0.24, 1.02);
+    const next = {
+      x: (pw - W * scale) / 2,
+      y: (ph - H * scale) / 2,
+      scale
+    };
+    state.isFit = true;
+    if (animate) {
+      animateViewTo(next, 360);
+    } else {
+      cancelAnimationFrame(viewRaf);
+      state.viewport = next;
+      applyView();
+    }
+  }
+
+  function animateViewTo(next, duration = 320) {
+    if (prefersReduced) {
+      cancelAnimationFrame(viewRaf);
+      state.viewport = next;
+      applyView();
+      return;
+    }
+    const from = Object.assign({}, state.viewport);
+    const started = performance.now();
+    cancelAnimationFrame(viewRaf);
+    const tick = now => {
+      const t = Math.min(1, (now - started) / duration);
+      const e = 1 - Math.pow(1 - t, 3);
+      state.viewport = {
+        x: from.x + (next.x - from.x) * e,
+        y: from.y + (next.y - from.y) * e,
+        scale: from.scale + (next.scale - from.scale) * e
+      };
+      applyView();
+      if (t < 1) viewRaf = requestAnimationFrame(tick);
+    };
+    viewRaf = requestAnimationFrame(tick);
+  }
+
+  function zoomAt(mx, my, factor) {
+    const v = state.viewport;
+    const nextScale = clamp(v.scale * factor, 0.24, 2.2);
+    const k = nextScale / v.scale;
+    state.viewport = {
+      x: mx - (mx - v.x) * k,
+      y: my - (my - v.y) * k,
+      scale: nextScale
+    };
+    state.isFit = false;
+    applyView();
+  }
+
+  function focusLeaf(id) {
+    const g = lastTargets.get(id);
+    if (!g) return;
+    const pw = mapViewport.clientWidth;
+    const ph = mapViewport.clientHeight;
+    const scale = clamp(Math.max(state.viewport.scale, 0.88), 0.24, 1.2);
+    state.isFit = false;
+    animateViewTo({
+      scale,
+      x: pw / 2 - (g.x + g.w / 2) * scale,
+      y: ph / 2 - (g.y + g.h / 2) * scale
+    }, 340);
+  }
+
+  function toggleBranchExpansion(bid) {
+    if (state.expanded.has(bid)) state.expanded.delete(bid);
+    else state.expanded.add(bid);
+    const before = lastTargets.get(bid) ? lastTargets.get(bid).y : null;
+    const targets = applyLayout(true);
+    if (before != null && state.view === 'map') {
+      const after = targets.get(bid) ? targets.get(bid).y : before;
+      const dy = (after - before) * state.viewport.scale;
+      if (Math.abs(dy) > 0.5) {
+        state.isFit = false;
+        animateViewTo(Object.assign({}, state.viewport, { y: state.viewport.y - dy }), 390);
+      }
+    }
+  }
+
+  /* ================= map interactions ================= */
+  const pointers = new Map();
+  let panStart = null;
+  let pinch = null;
+  let didDrag = false;
+
+  function setupMapEvents() {
+    mapViewport.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pointers.size === 1) {
+        panStart = {
+          x: e.clientX,
+          y: e.clientY,
+          vx: state.viewport.x,
+          vy: state.viewport.y
+        };
+        didDrag = false;
+      } else if (pointers.size === 2) {
+        const pts = Array.from(pointers.values());
+        const dx = pts[0].x - pts[1].x;
+        const dy = pts[0].y - pts[1].y;
+        pinch = {
+          dist: Math.hypot(dx, dy) || 1,
+          mx: (pts[0].x + pts[1].x) / 2 - mapViewport.getBoundingClientRect().left,
+          my: (pts[0].y + pts[1].y) / 2 - mapViewport.getBoundingClientRect().top,
+          vx: state.viewport.x,
+          vy: state.viewport.y,
+          scale: state.viewport.scale
+        };
+        panStart = null;
+      }
+    });
+
+    mapViewport.addEventListener('pointermove', e => {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      if (pointers.size === 2 && pinch) {
+        const pts = Array.from(pointers.values());
+        const dx = pts[0].x - pts[1].x;
+        const dy = pts[0].y - pts[1].y;
+        const dist = Math.hypot(dx, dy) || 1;
+        const rect = mapViewport.getBoundingClientRect();
+        const mx = (pts[0].x + pts[1].x) / 2 - rect.left;
+        const my = (pts[0].y + pts[1].y) / 2 - rect.top;
+        const scale = clamp(pinch.scale * dist / pinch.dist, 0.24, 2.2);
+        const k = scale / pinch.scale;
+        state.viewport = {
+          scale,
+          x: mx - (pinch.mx - pinch.vx) * k,
+          y: my - (pinch.my - pinch.vy) * k
+        };
+        state.isFit = false;
+        didDrag = true;
+        applyView();
+        return;
+      }
+
+      if (panStart && pointers.size === 1) {
+        const dx = e.clientX - panStart.x;
+        const dy = e.clientY - panStart.y;
+        if (!didDrag && Math.hypot(dx, dy) > 4) {
+          didDrag = true;
+          mapViewport.classList.add('dragging');
+          mapViewport.setPointerCapture(e.pointerId);
+          state.isFit = false;
+        }
+        if (didDrag) {
+          state.viewport.x = panStart.vx + dx;
+          state.viewport.y = panStart.vy + dy;
+          applyView();
+        }
+      }
+    });
+
+    const endPointer = e => {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.delete(e.pointerId);
+      if (didDrag) lastDragEnd = performance.now();
+      if (pointers.size < 2) pinch = null;
+      if (pointers.size === 1) {
+        const p = Array.from(pointers.values())[0];
+        panStart = { x: p.x, y: p.y, vx: state.viewport.x, vy: state.viewport.y };
+        didDrag = false;
+      } else if (pointers.size === 0) {
+        panStart = null;
+        mapViewport.classList.remove('dragging');
+      }
+    };
+    mapViewport.addEventListener('pointerup', endPointer);
+    mapViewport.addEventListener('pointercancel', endPointer);
+
+    mapViewport.addEventListener('wheel', e => {
+      e.preventDefault();
+      const rect = mapViewport.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+      zoomAt(mx, my, Math.exp(-dy * 0.0015));
+    }, { passive: false });
+
+    mapViewport.addEventListener('dblclick', e => {
+      if (e.target.closest('.leaf, .branch, .center-card')) return;
+      fitView(true);
+    });
+
+    $('#zoom-in').addEventListener('click', () => {
+      const rect = mapViewport.getBoundingClientRect();
+      zoomAt(rect.width / 2, rect.height / 2, 1.22);
+    });
+    $('#zoom-out').addEventListener('click', () => {
+      const rect = mapViewport.getBoundingClientRect();
+      zoomAt(rect.width / 2, rect.height / 2, 1 / 1.22);
+    });
+    $('#zoom-fit').addEventListener('click', () => fitView(true));
+
+    $('#btn-expand-all').addEventListener('click', () => {
+      BRANCHES.forEach(b => state.expanded.add(b.id));
+      applyLayout(true);
+      fitView(true);
+      toast('已展开全部 ' + TOTAL + ' 个知识点');
+    });
+    $('#btn-collapse-all').addEventListener('click', () => {
+      state.expanded.clear();
+      applyLayout(true);
+      fitView(true);
+      toast('已收起到章节预览');
+    });
+  }
+
+  /* ================= sidebar ================= */
+  function clearSidebarScope() {
+    sidebar.style.removeProperty('--bc');
+  }
+  function setSidebarScope(color) {
+    sidebar.style.setProperty('--bc', color);
+  }
+  function progressCardHTML(scope) {
+    const leaves = scope === 'all' ? ALL_LEAVES : BRANCH_BY_ID.get(scope).leaves;
+    const done = leaves.filter(l => state.mastered.has(l.id)).length;
+    return [
+      '<div class="progress-card" data-scope="' + scope + '">',
+      '  <div class="progress-top"><span>掌握进度</span><b class="progress-count">' + done + ' / ' + leaves.length + '</b></div>',
+      '  <div class="progress-bar"><i style="width:' + (leaves.length ? done / leaves.length * 100 : 0) + '%"></i></div>',
+      '  <div class="progress-foot">在详情或清单中勾选「标记掌握」，进度只保存在本机浏览器。</div>',
+      '</div>'
+    ].join('');
+  }
+
+  function renderChapterGuide() {
+    state.guideMode = 'chapter';
+    state.guideBranch = null;
+    state.selectedId = null;
+    clearSidebarScope();
+    sideInner.innerHTML = [
+      '<p class="eyebrow">CHAPTER 07 · 导览</p>',
+      '<h2 class="side-title">' + esc(CHAPTER.title) + '</h2>',
+      '<p class="side-lede">' + esc(CHAPTER.lede) + '</p>',
+      '<div class="pills">',
+      '  <span class="pill">' + BRANCHES.length + ' 节</span>',
+      '  <span class="pill">' + TOTAL + ' 个知识点</span>',
+      '  <span class="pill">' + CHAPTER.pitfalls.length + ' 条易错提醒</span>',
+      '  <span class="pill">A4 可打印</span>',
+      '</div>',
+      '<div class="thread">',
+      CHAPTER.thread.map(step => [
+        '<div class="thread-step">',
+        '  <div class="thread-num">' + esc(step.n) + '</div>',
+        '  <div><h4>' + esc(step.t) + '</h4><p>' + esc(step.d) + '</p></div>',
+        '</div>'
+      ].join('')).join(''),
+      '</div>',
+      '<p class="side-section-title">章节路线</p>',
+      '<ul class="route">',
+      CHAPTER.route.map(item => {
+        const branch = BRANCHES.find(b => b.num === item.num);
+        return [
+          '<li><button type="button" data-branch-link="' + (branch ? branch.id : '') + '">',
+          '  <span class="n">' + esc(item.num) + '</span>',
+          '  <span class="rt">' + esc(item.title) + '</span>',
+          '  <span class="rd">' + esc(item.desc) + '</span>',
+          '</button></li>'
+        ].join('');
+      }).join(''),
+      '</ul>',
+      '<p class="side-section-title">易错清单</p>',
+      '<ul class="pitfalls">',
+      CHAPTER.pitfalls.map(p => '<li>' + esc(p) + '</li>').join(''),
+      '</ul>',
+      progressCardHTML('all'),
+      '<p class="source-note">内容依据《高等数学（第八版）上册》第 7 章（第 289–354 页）整理。标有「拓展」的知识点属于正文之外的补充说明，考试要求以课堂为准。</p>'
+    ].join('');
+
+    $$('[data-branch-link]', sideInner).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.branchLink;
+        if (id) renderBranchGuide(id);
+      });
+    });
+    sidebar.scrollTop = 0;
+  }
+
+  function renderBranchGuide(bid) {
+    const b = BRANCH_BY_ID.get(bid);
+    if (!b) return;
+    state.guideMode = 'branch';
+    state.guideBranch = bid;
+    state.selectedId = null;
+    updateSelection();
+    setSidebarScope(b.color);
+    const expanded = state.expanded.has(bid);
+    const onMap = state.view === 'map';
+    sideInner.innerHTML = [
+      '<p class="eyebrow">SECTION ' + esc(b.num) + ' · 导览</p>',
+      '<h2 class="side-title">' + esc(b.num) + ' ' + esc(b.title) + '</h2>',
+      '<p class="side-lede">' + esc(b.brief) + '</p>',
+      '<div class="pills">',
+      '  <span class="pill">' + b.leaves.length + ' 个知识点</span>',
+      '  <span class="pill">' + (expanded ? '已在图中展开' : '图中先展示 2 条') + '</span>',
+      '</div>',
+      '<p class="side-section-title">本节知识点</p>',
+      '<ul class="route">',
+      b.leaves.map((leaf, i) => [
+        '<li><button type="button" data-leaf-link="' + leaf.id + '">',
+        '  <span class="n">' + String(i + 1).padStart(2, '0') + '</span>',
+        '  <span class="rt">' + esc(leaf.title) + '</span>',
+        '  <span class="rd">' + esc(leaf.brief) + '</span>',
+        '</button></li>'
+      ].join('')).join(''),
+      '</ul>',
+      onMap
+        ? '<div class="detail-actions"><button class="master-btn" type="button" id="branch-toggle">' + (expanded ? '收起本节节点' : '展开本节全部 ' + b.leaves.length + ' 个知识点') + '</button></div>'
+        : '<p class="source-note">当前是清单视图。切换到「思维导图」后，可以展开本节节点查看结构。</p>',
+      progressCardHTML(bid),
+      '<p class="source-note">点击上方任一条目查看完整讲解；在图中点击节点头可以展开或收起其下节点。</p>'
+    ].join('');
+
+    $$('[data-leaf-link]', sideInner).forEach(btn => {
+      btn.addEventListener('click', () => selectLeaf(btn.dataset.leafLink, { focus: false }));
+    });
+    const toggle = $('#branch-toggle', sideInner);
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const scroll = sidebar.scrollTop;
+        toggleBranchExpansion(bid);
+        renderBranchGuide(bid);
+        sidebar.scrollTop = scroll;
+      });
+    }
+    sidebar.scrollTop = 0;
+  }
+
+  function renderDetail(leaf) {
+    const b = BRANCH_BY_ID.get(leaf.branchId);
+    state.guideMode = 'leaf';
+    state.guideBranch = b.id;
+    setSidebarScope(b.color);
+    const index = leaf.globalIndex;
+    const prev = ALL_LEAVES[index - 1];
+    const next = ALL_LEAVES[index + 1];
+    const on = state.mastered.has(leaf.id);
+    sideInner.innerHTML = [
+      '<div class="detail">',
+      '  <div class="detail-top">',
+      '    <button class="back-btn" type="button" id="back-guide">' + ICON.left + ' 章节导览</button>',
+      '    <div class="detail-ref">' + esc(leaf.branchNum) + ' · ' + esc(leaf.branchTitle) + '<br>' + esc(leaf.ref) + '</div>',
+      '  </div>',
+      '  <div class="detail-tagrow">',
+      '    <span class="tag">' + esc(leaf.tag) + '</span>',
+      '    <span class="section-chip">第 ' + (index + 1) + ' / ' + TOTAL + ' 个知识点</span>',
+      '  </div>',
+      '  <h2>' + esc(leaf.title) + '</h2>',
+      '  <p class="detail-one">' + esc(leaf.one) + '</p>',
+      '  <div class="formula">' + mathHTML(leaf.formula) + '</div>',
+      '  <ul class="detail-points">',
+      leaf.points.map(p => '<li>' + esc(p) + '</li>').join(''),
+      '  </ul>',
+      '  <div class="tip"><span>易错 / 提示</span><p>' + esc(leaf.tip) + '</p></div>',
+      '  <div class="detail-ref-line">教材出处 · ' + esc(leaf.ref) + '</div>',
+      '  <div class="detail-actions">',
+      '    <button class="master-btn' + (on ? ' is-mastered' : '') + '" type="button" data-master-toggle="' + leaf.id + '" aria-pressed="' + on + '">' + ICON.check + '<span class="label">' + (on ? '已掌握 · 点击取消' : '标记为已掌握') + '</span></button>',
+      '    <button class="nav-btn" type="button" id="prev-leaf" aria-label="上一个知识点"' + (prev ? '' : ' disabled') + '>' + ICON.left + '</button>',
+      '    <button class="nav-btn" type="button" id="next-leaf" aria-label="下一个知识点"' + (next ? '' : ' disabled') + '>' + ICON.right + '</button>',
+      '  </div>',
+      '</div>'
+    ].join('');
+
+    $('#back-guide', sideInner).addEventListener('click', renderChapterGuide);
+    const master = $('[data-master-toggle]', sideInner);
+    if (master) {
+      master.addEventListener('click', () => toggleMastery(leaf.id));
+    }
+    const prevBtn = $('#prev-leaf', sideInner);
+    const nextBtn = $('#next-leaf', sideInner);
+    if (prevBtn && prev) prevBtn.addEventListener('click', () => selectLeaf(prev.id, { focus: true }));
+    if (nextBtn && next) nextBtn.addEventListener('click', () => selectLeaf(next.id, { focus: true }));
+    sidebar.scrollTop = 0;
+    openSidebarIfNeeded();
+  }
+
+  function updateSelection() {
+    nodes.forEach((el, key) => {
+      if (!el.classList.contains('leaf')) return;
+      el.classList.toggle('selected', key === state.selectedId);
+    });
+  }
+
+  function selectLeaf(id, options) {
+    const leaf = LEAF_BY_ID.get(id);
+    if (!leaf) return;
+    const opts = options || {};
+    let changed = false;
+    if (!state.expanded.has(leaf.branchId) && leaf.localIndex >= PREVIEW) {
+      state.expanded.add(leaf.branchId);
+      changed = true;
+    }
+    state.selectedId = id;
+    if (changed) applyLayout(true);
+    updateSelection();
+    if (state.view === 'list') {
+      revealRow(id, !!opts.openDetails);
+      return;
+    }
+    renderDetail(leaf);
+    if (opts.focus) {
+      requestAnimationFrame(() => focusLeaf(id));
+    }
+  }
+
+  /* ================= list view ================= */
+  function rowHTML(b, leaf) {
+    const on = state.mastered.has(leaf.id);
+    return [
+      '<article class="leaf-row' + (on ? ' is-mastered' : '') + '" id="row-' + leaf.id + '" data-leaf="' + leaf.id + '" style="--bc:' + b.color + '">',
+      '  <div class="row-head">',
+      '    <span class="print-check" aria-hidden="true"></span>',
+      '    <h3 class="row-title">' + esc(leaf.title) + '</h3>',
+      '    <span class="row-brief">' + esc(leaf.brief) + '</span>',
+      '    <button class="row-master' + (on ? ' is-mastered' : '') + '" type="button" data-master-leaf="' + leaf.id + '" aria-pressed="' + on + '"><span class="label">' + (on ? '已掌握' : '标记掌握') + '</span></button>',
+      '  </div>',
+      '  <p class="row-one">' + esc(leaf.one) + '</p>',
+      '  <details class="row-more">',
+      '    <summary>公式 · 要点 · 提示</summary>',
+      '    <div class="row-body">',
+      '      <div class="formula">' + mathHTML(leaf.formula) + '</div>',
+      '      <ul class="detail-points">',
+      leaf.points.map(p => '<li>' + esc(p) + '</li>').join(''),
+      '      </ul>',
+      '      <div class="tip"><span>易错 / 提示</span><p>' + esc(leaf.tip) + '</p></div>',
+      '      <div class="detail-ref-line">教材出处 · ' + esc(leaf.ref) + '</div>',
+      '    </div>',
+      '  </details>',
+      '</article>'
+    ].join('');
+  }
+
+  function renderList() {
+    listSections.innerHTML = BRANCHES.map(b => {
+      return [
+        '<section class="sec" id="sec-' + b.id + '" data-branch="' + b.id + '" style="--bc:' + b.color + '">',
+        '  <div class="sec-head">',
+        '    <div class="sec-num">' + esc(b.num) + '</div>',
+        '    <div class="sec-title-wrap">',
+        '      <h2>' + esc(b.title) + '</h2>',
+        '      <p class="sec-brief">' + esc(b.brief) + '</p>',
+        '    </div>',
+        '    <div class="sec-progress"><b>0 / ' + b.leaves.length + '</b><div class="mini-bar"><i></i></div></div>',
+        '  </div>',
+        b.leaves.map(leaf => rowHTML(b, leaf)).join(''),
+        '</section>'
+      ].join('');
+    }).join('');
+
+    listSections.addEventListener('click', e => {
+      const btn = e.target.closest('[data-master-leaf]');
+      if (!btn) return;
+      toggleMastery(btn.dataset.masterLeaf);
+    });
+    updateProgressUI();
+  }
+
+  function revealRow(id, openDetails) {
+    const row = document.getElementById('row-' + id);
+    if (!row) return;
+    if (openDetails) {
+      const details = $('.row-more', row);
+      if (details) details.open = true;
+    }
+    row.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'center' });
+    row.classList.remove('flash');
+    void row.offsetWidth;
+    row.classList.add('flash');
+    window.setTimeout(() => row.classList.remove('flash'), 1300);
+  }
+
+  /* ================= mastery ================= */
+  function toggleMastery(id) {
+    const leaf = LEAF_BY_ID.get(id);
+    if (!leaf) return;
+    const wasOn = state.mastered.has(id);
+    if (wasOn) state.mastered.delete(id);
+    else state.mastered.add(id);
+    writeLS(LS_MASTERED, JSON.stringify(Array.from(state.mastered)));
+    updateMasteryUI();
+    toast(wasOn ? '已取消掌握标记' : '已标记「' + leaf.title + '」为掌握');
+  }
+
+  function updateMasteryUI() {
+    nodes.forEach((el, key) => {
+      if (!el.classList.contains('leaf')) return;
+      const on = state.mastered.has(key);
+      el.classList.toggle('mastered', on);
+      const check = $('.check', el);
+      if (check) check.hidden = !on;
+      const leaf = LEAF_BY_ID.get(key);
+      if (leaf) {
+        el.setAttribute('aria-label', leaf.title + '，' + leaf.brief + (on ? '，已掌握' : ''));
+      }
+    });
+
+    $$('.leaf-row').forEach(row => {
+      const on = state.mastered.has(row.dataset.leaf);
+      row.classList.toggle('is-mastered', on);
+      const btn = $('[data-master-leaf]', row);
+      if (btn) {
+        btn.classList.toggle('is-mastered', on);
+        btn.setAttribute('aria-pressed', String(on));
+        const label = $('.label', btn);
+        if (label) label.textContent = on ? '已掌握' : '标记掌握';
+      }
+    });
+
+    $$('[data-master-toggle]').forEach(btn => {
+      const on = state.mastered.has(btn.dataset.masterToggle);
+      btn.classList.toggle('is-mastered', on);
+      btn.setAttribute('aria-pressed', String(on));
+      const label = $('.label', btn);
+      if (label) label.textContent = on ? '已掌握 · 点击取消' : '标记为已掌握';
+    });
+
+    updateProgressUI();
+  }
+
+  function updateProgressUI() {
+    const done = ALL_LEAVES.filter(l => state.mastered.has(l.id)).length;
+    const stat = $('#stat-mastered');
+    if (stat) stat.textContent = String(done);
+    const listProgress = $('#list-progress');
+    if (listProgress) listProgress.textContent = '已掌握 ' + done + ' / ' + TOTAL;
+
+    $$('.progress-card').forEach(card => {
+      const scope = card.dataset.scope;
+      const leaves = scope === 'all' ? ALL_LEAVES : (BRANCH_BY_ID.get(scope) || { leaves: [] }).leaves;
+      const n = leaves.filter(l => state.mastered.has(l.id)).length;
+      const count = $('.progress-count', card);
+      if (count) count.textContent = n + ' / ' + leaves.length;
+      const bar = $('.progress-bar i', card);
+      if (bar) bar.style.width = (leaves.length ? n / leaves.length * 100 : 0) + '%';
+    });
+
+    $$('.sec').forEach(sec => {
+      const b = BRANCH_BY_ID.get(sec.dataset.branch);
+      if (!b) return;
+      const n = b.leaves.filter(l => state.mastered.has(l.id)).length;
+      const count = $('.sec-progress b', sec);
+      if (count) count.textContent = n + ' / ' + b.leaves.length;
+      const bar = $('.sec-progress .mini-bar i', sec);
+      if (bar) bar.style.width = (n / b.leaves.length * 100) + '%';
+    });
+  }
+
+  /* ================= search ================= */
+  const SEARCH_INDEX = ALL_LEAVES.map(l => ({
+    leaf: l,
+    blob: [l.title, l.brief, l.one, l.formula, l.points.join(' '), l.tip, l.ref, l.tag, l.branchTitle, l.branchNum]
+      .join(' ')
+      .toLowerCase()
+      .replace(/\s+/g, '')
+  }));
+  let searchResults = [];
+  let searchActive = -1;
+
+  function normalizeQuery(q) {
+    return q.trim().toLowerCase().replace(/\s+/g, '');
+  }
+
+  function positionSearchPop() {
+    if (window.innerWidth <= 760) {
+      const rect = $('.search', document).getBoundingClientRect();
+      searchPop.style.top = (rect.bottom + 8) + 'px';
+    } else {
+      searchPop.style.removeProperty('top');
+    }
+  }
+
+  function runSearch() {
+    const q = normalizeQuery(searchInput.value);
+    if (!q) {
+      searchResults = [];
+      searchActive = -1;
+      searchPop.hidden = true;
+      return;
+    }
+    searchResults = SEARCH_INDEX.filter(item => item.blob.includes(q)).map(item => item.leaf);
+    searchActive = searchResults.length ? 0 : -1;
+    renderSearchResults();
+    positionSearchPop();
+    searchPop.hidden = false;
+    searchInput.setAttribute('aria-expanded', 'true');
+  }
+
+  function renderSearchResults() {
+    if (!searchResults.length) {
+      searchPop.innerHTML = '<div class="search-empty">没有匹配的知识点，试试「行列式」「秩」「Cramer」。</div>';
+      return;
+    }
+    const shown = searchResults.slice(0, 24);
+    const items = shown.map((leaf, i) => [
+      '<button class="search-item' + (i === searchActive ? ' is-active' : '') + '" type="button" data-search-leaf="' + leaf.id + '" style="--bc:' + leaf.color + '">',
+      '  <span class="si-num">' + esc(leaf.branchNum) + '</span>',
+      '  <span class="si-main"><span class="si-t">' + esc(leaf.title) + '</span><span class="si-b">' + esc(leaf.brief) + ' · ' + esc(leaf.branchTitle) + '</span></span>',
+      '</button>'
+    ].join('')).join('');
+    const more = searchResults.length > shown.length
+      ? '<div class="search-empty">还有 ' + (searchResults.length - shown.length) + ' 条结果，请再具体一些。</div>'
+      : '';
+    searchPop.innerHTML = items + more;
+    $$('[data-search-leaf]', searchPop).forEach(btn => {
+      btn.addEventListener('click', () => chooseSearchResult(btn.dataset.searchLeaf));
+    });
+  }
+
+  function moveSearchActive(delta) {
+    if (!searchResults.length) return;
+    searchActive = (searchActive + delta + Math.min(searchResults.length, 24)) % Math.min(searchResults.length, 24);
+    renderSearchResults();
+    const active = $('.search-item.is-active', searchPop);
+    if (active) active.scrollIntoView({ block: 'nearest' });
+  }
+
+  function chooseSearchResult(id) {
+    hideSearch();
+    searchInput.blur();
+    if (state.view === 'list') {
+      revealRow(id, true);
+    } else {
+      selectLeaf(id, { focus: true });
+    }
+  }
+
+  function hideSearch() {
+    searchPop.hidden = true;
+    searchActive = -1;
+    searchInput.setAttribute('aria-expanded', 'false');
+  }
+
+  function setupSearch() {
+    searchInput.addEventListener('input', runSearch);
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim()) runSearch();
+    });
+    searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        hideSearch();
+        searchInput.blur();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        moveSearchActive(1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        moveSearchActive(-1);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (searchResults.length) {
+          chooseSearchResult(searchResults[Math.max(0, searchActive)].id);
+        }
+      }
+    });
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.search')) hideSearch();
+    });
+  }
+
+  /* ================= tabs / sidebar / theme ================= */
+  function setView(next, options) {
+    const opts = options || {};
+    state.view = next;
+    document.body.classList.toggle('list-mode', next === 'list');
+    mapPane.hidden = next !== 'map';
+    listPane.hidden = next !== 'list';
+    sidebar.hidden = next !== 'map';
+    sideToggle.hidden = next !== 'map';
+    $$('.tab').forEach(tab => {
+      const on = tab.dataset.view === next;
+      tab.classList.toggle('active', on);
+      tab.setAttribute('aria-selected', String(on));
+    });
+    if (opts.persist !== false) writeLS(LS_VIEW, next);
+    if (next === 'list') {
+      closeSidebar();
+      hideSearch();
+    } else {
+      if (opts.refit !== false && state.isFit) {
+        requestAnimationFrame(() => fitView(false));
+      }
+    }
+  }
+
+  function openSidebar() {
+    if (window.innerWidth > 980 || state.view !== 'map') return;
+    sidebar.classList.add('open');
+    scrim.classList.add('show');
+    state.sidebarOpen = true;
+  }
+  function openSidebarIfNeeded() {
+    if (window.innerWidth <= 980) openSidebar();
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    scrim.classList.remove('show');
+    state.sidebarOpen = false;
+  }
+
+  function applyTheme() {
+    document.documentElement.dataset.theme = state.theme;
+    const dark = state.theme === 'dark';
+    themeBtn.innerHTML = dark ? ICON.sun : ICON.moon;
+    themeBtn.title = dark ? '切换到浅色' : '切换到深色';
+    themeBtn.setAttribute('aria-label', themeBtn.title);
+  }
+
+  function toggleTheme() {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    writeLS(LS_THEME, state.theme);
+    applyTheme();
+    toast(state.theme === 'dark' ? '已切换到深色主题' : '已切换到浅色主题');
+  }
+
+  /* ================= export / print ================= */
+  function buildMarkdown() {
+    const lines = [];
+    lines.push('# ' + plain(CHAPTER.title), '', '> ' + plain(CHAPTER.subtitle), '', plain(CHAPTER.lede), '');
+    lines.push('## 学习主线', '');
+    CHAPTER.thread.forEach(step => {
+      lines.push(step.n + '. **' + plain(step.t) + '**：' + plain(step.d), '');
+    });
+    BRANCHES.forEach(b => {
+      lines.push('---', '', '## ' + b.num + ' ' + plain(b.title), '', '> ' + plain(b.brief), '');
+      b.leaves.forEach(leaf => {
+        const mark = state.mastered.has(leaf.id) ? ' [已掌握]' : '';
+        lines.push('### ' + plain(leaf.title) + mark, '');
+        lines.push('`' + plain(leaf.tag) + '` · ' + plain(leaf.one), '');
+        lines.push('**核心公式**', '', '```', plain(leaf.formula), '```', '');
+        lines.push('**要点**', '');
+        leaf.points.forEach(p => lines.push('- ' + plain(p)));
+        lines.push('', '> 提示：' + plain(leaf.tip), '');
+        lines.push('出处：' + plain(leaf.ref), '');
+      });
+    });
+    lines.push('---', '', '## 易错清单', '');
+    CHAPTER.pitfalls.forEach((p, i) => lines.push((i + 1) + '. ' + plain(p)));
+    lines.push('', '> 依据《高等数学（第八版）上册》第 7 章（第 289–354 页）整理。');
+    return lines.join('\n');
+  }
+
+  function exportMarkdown() {
+    const text = buildMarkdown();
+    const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '高等数学上第7章-知识点总结.md';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1200);
+    toast('已导出 Markdown 笔记');
+  }
+
+  let printRestoreView = null;
+
+  function preparePrint() {
+    if (state.view !== 'list') {
+      printRestoreView = state.view;
+      setView('list', { persist: false, refit: false });
+    }
+    $$('.row-more').forEach(d => { d.open = true; });
+  }
+
+  function printPage() {
+    preparePrint();
+    window.setTimeout(() => window.print(), 80);
+  }
+
+  function setupPrint() {
+    window.addEventListener('beforeprint', () => {
+      preparePrint();
+    });
+    window.addEventListener('afterprint', () => {
+      if (printRestoreView) {
+        const back = printRestoreView;
+        printRestoreView = null;
+        setView(back, { persist: false });
+      }
+    });
+    $('#btn-print').addEventListener('click', printPage);
+    $('#btn-print-list').addEventListener('click', printPage);
+  }
+
+  /* ================= misc UI ================= */
+  let toastTimer = 0;
+  function toast(message) {
+    toastEl.textContent = message;
+    toastEl.classList.add('show');
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => toastEl.classList.remove('show'), 1900);
+  }
+
+  function setupListControls() {
+    $('#list-expand').addEventListener('click', () => {
+      const all = $$('.row-more');
+      const anyClosed = all.some(d => !d.open);
+      all.forEach(d => { d.open = anyClosed; });
+      $('#list-expand').textContent = anyClosed ? '收起全部细节' : '展开全部细节';
+    });
+    $('#btn-export-list').addEventListener('click', exportMarkdown);
+    $('#btn-export').addEventListener('click', exportMarkdown);
+  }
+
+  function syncMapHint() {
+    const hint = $('.map-hint');
+    if (!hint) return;
+    hint.textContent = window.innerWidth <= 760
+      ? '双指缩放 · 拖动查看'
+      : '滚轮缩放 · 拖拽平移 · 点击节点头展开';
+  }
+
+  function setupViewportWatcher() {
+    let timer = 0;
+    const onResize = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (window.innerWidth > 980) closeSidebar();
+        if (state.view === 'map' && state.isFit) fitView(false);
+        syncMapHint();
+        positionSearchPop();
+      }, 120);
+    };
+    window.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
+  }
+
+  function setupKeyboard() {
+    document.addEventListener('keydown', e => {
+      const typing = e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable);
+      if (!typing && (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'))) {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+        return;
+      }
+      if (e.key === 'Escape') {
+        if (!searchPop.hidden) {
+          hideSearch();
+          searchInput.blur();
+        } else if (state.sidebarOpen) {
+          closeSidebar();
+        }
+      }
+    });
+  }
+
+  function setupTabs() {
+    $$('.tab').forEach(tab => {
+      tab.addEventListener('click', () => setView(tab.dataset.view));
+    });
+    $('#btn-theme').addEventListener('click', toggleTheme);
+    sideToggle.addEventListener('click', openSidebar);
+    $('#side-close').addEventListener('click', closeSidebar);
+    scrim.addEventListener('click', closeSidebar);
+  }
+
+  /* ================= init ================= */
+  function init() {
+    applyTheme();
+    renderList();
+    initMap();
+    setupMapEvents();
+    setupSearch();
+    setupTabs();
+    setupListControls();
+    setupPrint();
+    setupKeyboard();
+    setupViewportWatcher();
+    applyLayout(false);
+    updateMasteryUI();
+    renderChapterGuide();
+    setView(state.view, { persist: false, refit: false });
+    if (state.view === 'map') {
+      requestAnimationFrame(() => fitView(false));
+    }
+    syncMapHint();
+    // seed a guide-visible detail only when arriving through a hash
+    const hash = decodeURIComponent(window.location.hash.replace(/^#/, ''));
+    if (hash && LEAF_BY_ID.has(hash)) {
+      setView('map', { persist: false, refit: false });
+      requestAnimationFrame(() => {
+        fitView(false);
+        selectLeaf(hash, { focus: true });
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+</body>
+</html>
